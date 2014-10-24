@@ -1,0 +1,232 @@
+The original Meld was
+implemented as an ensemble programming language, targeting modular robotic systems such as
+Claytronics~\cite{ashley-rollman-derosa-iros07wksp}. In such systems, there is a natural matching
+between computation and processing units, since each robot is represented by a node. This distribution
+of data leaves little choice to be made in the division of computation to the various nodes.
+
+On the other hand, LM has no natural matching of data and computation to workers (processes, threads),
+since nodes are a program abstraction and part of the program's logic.
+We view the set of nodes as a graph data structure where workers will perform work.
+A worker is able to process any node, although a node cannot be computed by more than one worker
+at the same time. This disallows the manipulation of a node by multiple workers.
+
+Since LM uses linear logic, the order in which nodes are scheduled can impact the
+performance and even the results of the program. When only using
+classical logic, no matter how computation is done, the end result will be the same since the program
+is strictly monotonic.
+LM introduces the concept of \emph{coordination} that allows the programmer
+to write code that changes how the runtime system schedules nodes.
+
+Randomized and approximation
+algorithms can obtain significant benefits from coordination directives because although the final
+program results will not be exact, they follow important statistical properties and can be computed faster.
+Examples of such programs are PageRank~\cite{Lubachevsky:1986:CAA:4904.4801} and
+Loopy Belief Propagation~\cite{Gonzalez+al:aistats09paraml}.
+
+\subsection{Scheduling Facts}
+
+We can use action facts to change the order in which nodes are evaluated by adding
+\emph{priorities}. Node priority works at the worker level
+so that each worker can make a local decision about which node of the graph to run next.
+Note that, by default, nodes are picked arbitrarily (a FIFO approach is used).
+
+The following list presents the action facts available to manipulate the scheduling decisions of the system:
+
+\begin{description}
+   \item[\texttt{type linear action set-priority(node, float)}]: This sets the priority of a node. If the node already has some priority, we only change the priority if the new one is higher priority. The programmer can decide if priorities are to be ordered in ascending or descending order.
+   \item[\texttt{type linear action add-priority(node, float)}]: This gets the current node's priority and increases or decreases it.
+   \item[\texttt{type linear action schedule-next(node)}]: The work will fetch the highest priority node's priority $P$ from its set of nodes and set the action's argument node's priority as $P + 1.0$. If using the priorities
+   in ascending order, we pick the lowest priority and subtract $1.0$.
+   \item[\texttt{type linear action unset-priority(node)}]: Removes the priority, if any, of a given node.
+   \item[\texttt{type linear action stop-program(node)}]: Immediately stops the execution of the whole program.
+\end{description}
+
+When the highest priority node is picked up for execution, its priority is reset to 0 (the default priority value). This means that
+the programmer must set the node's priority again if he wants to prioritize that node.
+
+We intend to add more action facts in the near future. For example, we want the programmer to be able to place specific nodes in workers. This will permit good use of
+memory locality by forcing certain computations to be performed in the same worker.
+
+Sensing facts provide information about node placement and node priority. We can use those facts
+to express coordination policies. LM provides the following two
+sensing facts:
+
+\begin{description}
+   \item[\texttt{type linear cpu-id(node, node, int)}]: The third argument indicates the worker's ID where the node of the second argument is currently running.
+   \item[\texttt{type linear priority(node, node, float)}]: The third argument is the current priority of the node in the second argument.
+\end{description}
+
+Note that when sensing facts are consumed, they are re-derived automatically, except if the programmer explicitly tells the compiler otherwise. 
+
+\subsubsection{Global Directives}
+
+We also provide a few global coordination statements:
+
+\begin{description}
+   \item[\texttt{priority @order ORDER.}] \texttt{ORDER} can be either \texttt{asc} or \texttt{desc}. This defines if node's are to be selected by the smallest or the greatest priority, respectively.
+   \item[\texttt{priority @initial P.}] The \texttt{initial} statement informs the runtime system that all nodes must start with priority $P$. Alternatively, the programmer can define an \texttt{set-priority(A, P)} axiom.
+   \item[\texttt{priority @static.}] The \texttt{static} priority tells the runtime system that the partition of nodes among workers is to be used until the end of program. 
+\end{description}
+
+\subsection{Implementation}
+
+How the virtual machine and coordinaction facts are implemented.
+
+\subsection{Programs}
+
+To better understand how coordination directives work, we next present some programs that
+take advantage of them.
+
+\subsubsection{Graph Search}
+
+talk about a-star
+
+\subsubsection{Single Source Shortest Path}
+
+The Single Source Shortest Path (SSSP) is a graph algorithm where we want to compute the
+distance of all nodes to a single node. The full code is presented in Fig.~\ref{code:shortest_path_program}.
+The graph is represented using the \texttt{edge(A,~B,~W)} predicate (line 1), where
+\texttt{A} $\rightarrow$ \texttt{B} is a directed edge from node \texttt{A} to \texttt{B}
+with distance \texttt{W}. The second predicate is \texttt{path(A,~D,~F)} (line 2), where
+\texttt{D} is the distance of node \texttt{A} to our initial node and \texttt{F}
+indicates if this path has been processed.
+
+Every node may have several \texttt{path} facts. From this set of facts, the node will select
+the path with the least distance (rules in lines 11-13) and then propagate it using the third rule (lines 15-19).
+When a path is used for propagation, we make sure that the path flag is \texttt{notused} (line 15)
+because we do not want to propagate the same distance twice. When the rule is fired, the flag
+then changes to \texttt{used} (line 19).
+
+We start with the axiom \texttt{path(startnode,~0,~notused)} in line 9 (the distance to the starting
+node is \texttt{0}). This will kickstart the computation by propagating the initial distance to the
+neighbor nodes using rule 3. We also use 2 coordination directives:
+
+\begin{itemize}
+   \item \texttt{priority~@order~asc}: paths are picked in ascending order (line 4).
+   \item \texttt{set-priority(B,~D~+~W)}: to change the node's priority upon the computation of
+a new distance (line 18).
+\end{itemize}
+
+With these directives, we ensure that we pick the node with the smallest distance
+first. If we are only using 1 thread, then our algorithm will behave like Dijkstra's shortest
+path algorithm~\cite{Dijkstra}. When using more than 1 thread, each thread will pick the smallest
+path from a subset of nodes. This is an example where using coordination directives will
+improve the speed of execution since we avoid propagating some of the paths.
+
+\begin{figure}[h!]
+\small\begin{Verbatim}[numbers=left,commandchars=&\[\]]
+type route edge(node, node, int).
+type linear path(node, int, int).
+
+&underline[priority @order asc].
+
+relax(@0, 0).
+path(A, +00).
+
+relax(A, D1), path(A, D2),
+D1 < D2
+   -o path(A, D1),
+      {B, W | !edge(A, B, W) |
+         relax(B, D + W),
+         &underline[set-priority(B, D + W))]},
+
+relax(A, D1), path(A, D2),
+D1 >= D2
+   -o path(A, D2).
+\end{Verbatim}
+  \caption{Shortest Path Program.}
+  \label{code:shortest_path_program}
+\end{figure}
+\normalsize
+
+\subsubsection{Heat Transfer}
+
+\subsubsection{MiniMax}
+
+\subsubsection{Splash BP}
+
+Loopy Belief Propagation~\cite{Murphy99loopybelief} (LBP) is an approximate inference algorithm
+used in graphical models with cycles. In its essence, LBP is a sum-product message passing algorithm
+where nodes exchange messages with their immediate neighbors and apply some computations to the messages
+received.
+
+LBP is an algorithm that maps very well to the graph based model of LM. In its original form, we need to compute
+the belief of all nodes for several iterations and also synchronize after each iteration.
+However, it is still possible to apply
+some optimizations in order to take advantage of the fact that LBP will converge even when using
+an asynchronous approach. So, instead of computing the belief iteratively,
+we first keep track of all messages sent/received (and overwrite them when we receive a new one)
+and recompute the belief when we want, instead of synchronizing between nodes.
+This way, we can prioritize the computation of beliefs when
+a node's belief value changes significantly. When that happens, we set the priority of its
+neighbors so that they can recompute their beliefs.
+
+The asynchronous approach proves to be a nice improvement over the synchronous version. Still, it
+is possible to do even better. Gonzalez et al~\cite{Gonzalez+al:aistats09paraml} developed an optimal
+algorithm to compute this algorithm by first building a tree and then updating the beliefs of each node twice, first from the leaves to the root and then from the root to the leaves. The root of this tree
+is the node with the highest priority (based on belief) while the other nodes in the tree
+must have a non-zero priority. Note that the priorities are updated whenever a neighbor updates
+their belief. These splash trees are built iteratively until we reach convergence.
+
+The code in Fig.~\ref{code:sbp} presents the coordination code of the Belief Propagation problem.
+Please note that we just appended the code in Fig.~\ref{code:sbp} to a working but
+unoptimized version of the algorithm.
+In the coordination code we have three sections:
+\begin{description}
+   \item[Tree building]: Each node has a \texttt{waiting} fact that is used to start the tree building process. When the highest priority is picked we create a token that will navigate through the tree. Note that in the rule located in lines 11-18 we check if the priority of the new node to add to the tree is positive and that both nodes are in the same worker. We want the tree to be kept in the same worker.
+   \item[First phase]: In the third rule (lines 8-9), when we reach a certain number of nodes in the tree, we generate \texttt{first-phase} in order to update the beliefs of all nodes in tree starting from the leaves and ending at the root. As we update the nodes, we generate \texttt{update} to update the belief values (line 29).
+   \item[Second phase]: In the second phase we go from the root to the leaves and update the beliefs a second time (line 39).
+\end{description}
+
+When we have several workers, every worker will generate their own trees by taking into account the highest priority node in their own queues.
+
+\begin{figure}[h!]
+\small\begin{Verbatim}[numbers=left,commandchars=*\{\}]
+// TREE BUILDING
+// continue tree
+waiting(A), token(A, All, Next) -o token(A, All, Next).
+// start tree
+waiting(A), *underline{@priority(A, A, P)}, P > 0.0
+   -o token(A, [A], [A]).
+// end tree building
+token(A, All, Next), length(All) > maxnodes
+   -o first-phase(A, All, reverse(All)).
+// expand tree
+token(A, All, [A | Next])
+   -o [collect => L | Side | !edge(A, L, Side),
+         0 = count(All, L),
+         0 = count(Next, L),
+         *underline{priority(A, L, P)}, P > 0.0,
+         *underline{cpu-id(A, L, Id1)},
+         *underline{cpu-id(A, A, Id2)}, Id1 = Id2 |
+         send-token(A, All, Next ++ L)].
+
+send-token(A, All, [])
+   -o first-phase(A, All, reverse(All)).
+send-token(A, All, [B | Next])
+   -o *underline{schedule-next(B)},
+      token(B, All ++ [B], [B | Next]).
+
+// FIRST PHASE
+first-phase(A, [A], [A]) -o second-phase(A, [], A).
+first-phase(A, [A, B | Next], [A])
+   -o update(A), *underline{schedule-next(B)},
+      second-phase(B, [B | Next], A).
+first-phase(A, All, [A, B | Next])
+   -o update(A), *underline{schedule-next(B)},
+      first-phase(B, All, [B | Next]).
+
+// SECOND PHASE
+second-phase(A, [], _)
+   -o *underline{set-priority(A, 0.0)}, waiting(A), update(A).
+second-phase(A, [A], Back)
+   -o update(A), waiting(Back),
+      waiting(A), *underline{set-priority(A, 0.0)}.
+second-phase(A, [A, B | Next], Back)
+   -o update(A), waiting(Back), *underline{schedule-next(B)},
+      second-phase(B, [B | Next], A).
+\end{Verbatim}
+  \caption{Coordination code for the Splash Belief Propagation program.}
+  \label{code:sbp}
+\end{figure}
+\normalsize
