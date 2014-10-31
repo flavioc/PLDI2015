@@ -1,6 +1,6 @@
 
 Writing parallel programs in sequential languages is hard because manipulating
-shared state using multiple threads of execution may result in data race
+shared state using multiple threads may result in data race
 conditions. Such issues are handled with low level constructs such as locks and
 condition variables, requiring a fair amount of effort to get right.
 Declarative programming has been hailed as a solution to this issue, since the
@@ -16,12 +16,14 @@ future looks promising for this particular approach.
 
 We argue, however, that declarative programming leaves little to no programmer control
 over how execution is scheduled or how data is laid out. This introduces some
-performance issues since a runtime system may be able to parallelize the program
-up to a point, using a general algorithm, but lacks some specific information that would make
-execution better in terms of execution time, memory usage and scalability.
+performance issues because even if the runtime system is able to reasonably
+parallelize the program using a general algorithm, there is a lack of specific
+information about the program that a compiler does not easily understand. In
+turn, such information would make execution better in terms of run time time,
+memory usage and scalability.
 
 In this paper, we extend Linear Meld (LM), a declarative language by
-\cite{cruz-iclp14}, with coordination facts that give programmer control over
+\cite{cruz-iclp14,cruz-ppdp14}, with coordination facts that give programmer control over
 scheduling and data placement. LM is a linear logic programming language
 intended for programs over graph structures and with
 support for structured manipulation of mutable state using 
@@ -44,11 +46,11 @@ consumed to apply a scheduling operation during execution. This allows the
 programmer to prioritize node computation or place nodes in different threads.
 Both kinds of facts are \emph{linear facts} since they are consumed and/or change.
 
-To the best of our knowledge, this is the first time that a declarative language allows so much
-control over execution without a significant change in the language itself.
-Our main contributions of this paper are then two-fold: a novel way to coordinate
-declarative programs through user control with or without modifications to the
-original algorithm, introducing measurable performance improvements; several
-examples that take simple declarative algorithms and make them more
-efficient through the introduction of coordination facts in the algorithmic
-logic.
+To the best of our knowledge, this is the first time that a declarative language allows 
+control over execution without a significant change in the language itself and
+without using non-declarative operations. This proves specially important since
+programs can proven to be correct even in the presence of coordination facts.
+Our other two main contributions are as follows: a novel way to coordinate
+declarative programs through user control that introduce measurable performance
+improvements; several application where we add programmer control to declarative
+programs in order to make them perform better.

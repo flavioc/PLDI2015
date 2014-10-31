@@ -1,63 +1,112 @@
-The original Meld was
-implemented as an ensemble programming language, targeting modular robotic systems such as
-Claytronics~\cite{ashley-rollman-derosa-iros07wksp}. In such systems, there is a natural matching
-between computation and processing units, since each robot is represented by a node. This distribution
-of data leaves little choice to be made in the division of computation to the various nodes.
+Since LM uses linear logic and supports deletion of facts, the order in which
+nodes are scheduled can impact the performance and even the results of the
+program.
 
-On the other hand, LM has no natural matching of data and computation to workers (processes, threads),
-since nodes are a program abstraction and part of the program's logic.
-We view the set of nodes as a graph data structure where workers will perform work.
-A worker is able to process any node, although a node cannot be computed by more than one worker
-at the same time. This disallows the manipulation of a node by multiple workers.
+The SSSP program present in Fig.~\ref{code:shortest_path_program} is concise and
+declarative but its performance may depend in the order in which nodes are
+executed. If nodes with greater distances are prioritized over other nodes, the
+program will generate more \texttt{relax} facts since it will take longer to
+reach the shortest distances. From Fig.~\ref{fig:shortest_path_program}, it is
+clear that the best computational ordering is the following: \texttt{@1},
+\texttt{@3}, \texttt{@2} and then \texttt{@4}, where only 4 \texttt{relax}
+facts are generated. If we had decided to process nodes in order
+\texttt{@1}, \texttt{@2}, \texttt{@4}, \texttt{@3}, \texttt{@4},
+\texttt{@2}, then 6 \texttt{relax} facts would have been generated.
+Therefore, the optimal solution for SSSP is to schedule the node with the
+shortest distance, which is essentially the Dijkstra shortest path
+algorithm~\cite{Dijkstra}. Note how it is possible to change the nature of
+the algorithm by simply changing the order of node computation, but still
+retain the declarative nature of the program.
 
-Since LM uses linear logic, the order in which nodes are scheduled can impact the
-performance and even the results of the program. When only using
-classical logic, no matter how computation is done, the end result will be the same since the program
-is strictly monotonic.
-LM introduces the concept of \emph{coordination} that allows the programmer
-to write code that changes how the runtime system schedules nodes.
+We introduce the concept of \emph{coordination facts} that allow the programmer
+to change how the run time schedules nodes and partitions the nodes among
+threads of execution. Coordination facts can be used in the body or head of the
+rules to allow the programmer to reason and change how execution is to be done.
+In this fashion, we keep the language declaratively because we reason logically
+about the state of execution, without the need to introduce extra-logical
+operators into the language that would reduce problems when attempting to prove
+properties about programs.
 
-Randomized and approximation
-algorithms can obtain significant benefits from coordination directives because although the final
-program results will not be exact, they follow important statistical properties and can be computed faster.
-Examples of such programs are PageRank~\cite{Lubachevsky:1986:CAA:4904.4801} and
-Loopy Belief Propagation~\cite{Gonzalez+al:aistats09paraml}.
+There are two kinds of coordination facts. The first kind of coordination facts are
+called \emph{sensing facts} and are used to sense information about data
+placement (where is the node being executed) or scheduled (what is the priority
+of the node). The second kind of coordination facts are \emph{action facts} that,
+when derived, are consumed to apply a coordination operation during execution.
+These logical rules that use coordination are implemented efficiently in the run
+time system and are hidden from the programmer.
 
 \subsection{Scheduling Facts}
 
 We can use action facts to change the order in which nodes are evaluated by adding
-\emph{priorities}. Node priority works at the worker level
-so that each worker can make a local decision about which node of the graph to run next.
+\emph{priorities}. Node priority works at the thread level
+so that each thread can make a local decision about which node of the graph to run next.
 Note that, by default, nodes are picked arbitrarily (a FIFO approach is used).
 
-The following list presents the action facts available to manipulate the scheduling decisions of the system:
+We have two kinds of priorities: a \emph{temporary priority} and a \emph{default
+priority}. A default priority is used indefinitely, while a temporary priority
+is only used once, so that when node with a temporary priority $P$ is picked to
+run, the priority will default back to $D$, the default priority. Initially,
+all nodes have a default priority of $0$.
 
-\begin{description}
-   \item[\texttt{type linear action set-priority(node, float)}]: This sets the priority of a node. If the node already has some priority, we only change the priority if the new one is higher priority. The programmer can decide if priorities are to be ordered in ascending or descending order.
-   \item[\texttt{type linear action add-priority(node, float)}]: This gets the current node's priority and increases or decreases it.
-   \item[\texttt{type linear action schedule-next(node)}]: The work will fetch the highest priority node's priority $P$ from its set of nodes and set the action's argument node's priority as $P + 1.0$. If using the priorities
-   in ascending order, we pick the lowest priority and subtract $1.0$.
-   \item[\texttt{type linear action unset-priority(node)}]: Removes the priority, if any, of a given node.
-   \item[\texttt{type linear action stop-program(node)}]: Immediately stops the execution of the whole program.
-\end{description}
+The following list presents the action facts available to manipulate the scheduling
+decisions of the system:
 
-When the highest priority node is picked up for execution, its priority is reset to 0 (the default priority value). This means that
-the programmer must set the node's priority again if he wants to prioritize that node.
+\begin{itemize}
+   \item \texttt{type linear set-priority(node, float)}: This sets the
+   temporary priority of a node. If the node already has a priority, we only
+   change the priority if the new one is higher priority. The programmer can
+   decide if priorities are to be ordered in ascending or descending order.
+   \item \texttt{type linear action add-priority(node, float)}: Increments,
+   temporarily, the current priority of the node.
+   \item\texttt{type linear schedule-next(node)}: The work will fetch the
+   highest priority node's priority $P$ from its set of nodes and set the
+   action's argument node's priority as $P + 1.0$. If using the priorities in
+   ascending order, we pick the lowest priority and subtract $1.0$.
+   \item\texttt{type linear set-default-priority(node, float)}: Sets the default
+   priority of the node.
+   \item \texttt{type linear action stop-program(node)}: Immediately stops the
+   execution of the whole program.
+\end{itemize}
 
-We intend to add more action facts in the near future. For example, we want the programmer to be able to place specific nodes in workers. This will permit good use of
-memory locality by forcing certain computations to be performed in the same worker.
+LM provides the sensing fact \texttt{type linear priority(node, node, float)},
+where the second argument is the target node and the third argument is the
+node priority. Sensing facts are only used in the body of the rules in order
+to fetch information from the runtime system.
+Note that when sensing facts are consumed, they are re-derived automatically,
+except if the programmer explicitly tells the compiler otherwise. 
+Logically, \texttt{set-priority} and \texttt{set-default-priority} update the
+value of \texttt{priority} facts, but this done seamlessly by the runtime
+system.
 
-Sensing facts provide information about node placement and node priority. We can use those facts
-to express coordination policies. LM provides the following two
-sensing facts:
+\subsubsection{Partitioning facts}
 
-\begin{description}
-   \item[\texttt{type linear cpu-id(node, node, int)}]: The third argument indicates the worker's ID where the node of the second argument is currently running.
-   \item[\texttt{type linear priority(node, node, float)}]: The third argument is the current priority of the node in the second argument.
-\end{description}
+We provide several coordination facts for dealing with node partitioning among
+the available threads executing the program. In terms of action
+facts, we have the following:
 
-Note that when sensing facts are consumed, they are re-derived automatically, except if the programmer explicitly tells the compiler otherwise. 
+\begin{itemize}
+   \item \texttt{type linear set-cpu(node, int)}: Moves the node to a
+   thread of execution.
+   \item \texttt{type linear set-affinity(node, node)}: Places the first node in
+   the same thread as the second node.
+   \item \texttt{type linear set-moving(node)}: Allows the node to move freely
+   between threads.
+   \item \texttt{type linear set-static(node)}: Forces the node to stay in the
+   same thread indefinitely.
+\end{itemize}
 
+For sensing facts, we have the following set of coordination facts:
+
+\begin{itemize}
+   \item \texttt{type linear cpu-id(node, node, int)}: The third argument
+   indicates the thread where the node of the second argument is currently running.
+   \item \texttt{type linear moving(node)}: Fact available if the node in the
+   second argument is allowed to move between threads.
+   \item \texttt{type linear static(node, node)}: Fact available if the node in
+   the second argument is not allowed to move between threads.
+\end{itemize}
+
+\iffalse
 \subsubsection{Global Directives}
 
 We also provide a few global coordination statements:
@@ -68,3 +117,4 @@ We also provide a few global coordination statements:
    \item[\texttt{priority @static.}] The \texttt{static} priority tells the runtime system that the partition of nodes among workers is to be used until the end of program. 
 \end{description}
 
+\fi

@@ -70,6 +70,12 @@ D1 >= D2
 
 \subsubsection{Splash BP}
 
+Randomized and approximation
+algorithms can obtain significant benefits from coordination directives because although the final
+program results will not be exact, they follow important statistical properties and can be computed faster.
+Examples of such programs are PageRank~\cite{Lubachevsky:1986:CAA:4904.4801} and
+Loopy Belief Propagation~\cite{Gonzalez+al:aistats09paraml}.
+
 Loopy Belief Propagation~\cite{Murphy99loopybelief} (LBP) is an approximate inference algorithm
 used in graphical models with cycles. In its essence, LBP is a sum-product message passing algorithm
 where nodes exchange messages with their immediate neighbors and apply some computations to the messages
@@ -107,6 +113,8 @@ When we have several workers, every worker will generate their own trees by taki
 
 \begin{figure}[h!]
 \scriptsize\begin{Verbatim}[numbers=left,commandchars=*\{\}]
+set-static(A). // all nodes are static.
+
 // TREE BUILDING
 // continue tree
 waiting(A), token(A, All, Next) -o token(A, All, Next).

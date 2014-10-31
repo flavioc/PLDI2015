@@ -162,3 +162,10 @@ goes to zero, the global flag is set to idle. Since every thread will be
 busy-waiting and checking the global flag, they will detect the change and exit
 the program.
 
+\subsubsection{Node collection}
+
+Whenever a node has an empty database and no references from other nodes, it is
+deleted from the graph. The virtual machine detects such cases by keeping a
+count of fact references to every node. Once the count drops to zero and the
+database is empty, the node is immediatelly deleted in order to reduce memory
+usage.
