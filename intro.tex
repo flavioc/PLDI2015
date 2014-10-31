@@ -1,5 +1,54 @@
-talk about declarative programming and how hard it is for the programmer to
-control how the program is scheduled or how data is laid out.
 
-we took the work made by \cite{cruz-iclp14} and extended it with action and
-sensing facts.
+Writing parallel programs in sequential languages is hard because manipulating
+shared state using multiple threads of execution may result in data race
+conditions. Such issues are handled with low level constructs such as locks and
+condition variables, requiring a fair amount of effort to get right.
+Declarative programming has been hailed as a solution to this issue, since the
+problem of implementing the details of parallelism is moved away from the programmer to the
+compiler and runtime of the language. The programmer writes code
+without having to deal with parallel programming constructs and the compiler
+automatically parallelizes the program in order to take advantage of
+multiple threads of execution.
+The programming paradigm has been adopted with huge success in domain specific
+languages such as SQL and MapReduce~\cite{Dean:2008:MSD:1327452.1327492}.
+Although more general declarative languages have yet to be as successful, the
+future looks promising for this particular approach.
+
+We argue, however, that declarative programming leaves little to no programmer control
+over how execution is scheduled or how data is laid out. This introduces some
+performance issues since a runtime system may be able to parallelize the program
+up to a point, using a general algorithm, but lacks some specific information that would make
+execution better in terms of execution time, memory usage and scalability.
+
+In this paper, we extend Linear Meld (LM), a declarative language by
+\cite{cruz-iclp14}, with coordination facts that give programmer control over
+scheduling and data placement. LM is a linear logic programming language
+intended for programs over graph structures and with
+support for structured manipulation of mutable state using 
+linear logic~\cite{girard-87}. In LM, the nodes of the graph perform computation
+through derivation of rules and communicate with other nodes when logical facts
+are derived.
+
+The operational semantics of LM allow for plenty of
+non-determinism since nodes execute independently and can be executed with
+any specific order. Since LM uses mutable state, the order in which nodes are
+executed may be crucial in terms of performance. We extended the language with
+coordination facts that can be used as a regular fact in the program logic to
+improve program execution.
+The first kind of coordination facts are
+called \emph{sensing facts} and are used to sense information about data
+placement (where is the node being executed). This allows the programmer to
+write logical rules that depend on the current state of the program. The second
+kind of coordination facts are \emph{action facts} that, when deriving, will be
+consumed to apply a scheduling operation during execution. This allows the
+programmer to prioritize node computation or place nodes in different threads.
+Both kinds of facts are \emph{linear facts} since they are consumed and/or change.
+
+To the best of our knowledge, this is the first time that a declarative language allows so much
+control over execution without a significant change in the language itself.
+Our main contributions of this paper are then two-fold: a novel way to coordinate
+declarative programs through user control with or without modifications to the
+original algorithm, introducing measurable performance improvements; several
+examples that take simple declarative algorithms and make them more
+efficient through the introduction of coordination facts in the algorithmic
+logic.
