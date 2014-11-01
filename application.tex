@@ -1,74 +1,88 @@
 
-To better understand how coordination directives work, we next present some programs that
+To better understand how coordination facts are used, we next present some programs that
 take advantage of them.
 
-\subsubsection{Graph Search}
+\subsection{Single Source Shortest Path}
 
-talk about a-star
+The Single Source Shortest Path (SSSP) program was already presented in
+Section~\ref{sec:language}. We are going to update the code in
+Fig.~\ref{code:shortest_path_program} so that nodes with the shortest distances
+are selected to run before others nodes. The coordinated version of the same
+algorithm is presented in Fig.~\ref{code:shortest_path_program_coord} and it
+uses one coordination fact, namely \texttt{set-priority} (line 15). Note that we
+also use a global program directive to order priorities in ascending order (line
+5).
 
-\subsubsection{Single Source Shortest Path}
-
-The Single Source Shortest Path (SSSP) is a graph algorithm where we want to compute the
-distance of all nodes to a single node. The full code is presented in Fig.~\ref{code:shortest_path_program}.
-The graph is represented using the \texttt{edge(A,~B,~W)} predicate (line 1), where
-\texttt{A} $\rightarrow$ \texttt{B} is a directed edge from node \texttt{A} to \texttt{B}
-with distance \texttt{W}. The second predicate is \texttt{path(A,~D,~F)} (line 2), where
-\texttt{D} is the distance of node \texttt{A} to our initial node and \texttt{F}
-indicates if this path has been processed.
-
-Every node may have several \texttt{path} facts. From this set of facts, the node will select
-the path with the least distance (rules in lines 11-13) and then propagate it using the third rule (lines 15-19).
-When a path is used for propagation, we make sure that the path flag is \texttt{notused} (line 15)
-because we do not want to propagate the same distance twice. When the rule is fired, the flag
-then changes to \texttt{used} (line 19).
-
-We start with the axiom \texttt{path(startnode,~0,~notused)} in line 9 (the distance to the starting
-node is \texttt{0}). This will kickstart the computation by propagating the initial distance to the
-neighbor nodes using rule 3. We also use 2 coordination directives:
-
-\begin{itemize}
-   \item \texttt{priority~@order~asc}: paths are picked in ascending order (line 4).
-   \item \texttt{set-priority(B,~D~+~W)}: to change the node's priority upon the computation of
-a new distance (line 18).
-\end{itemize}
-
-With these directives, we ensure that we pick the node with the smallest distance
-first. If we are only using 1 thread, then our algorithm will behave like Dijkstra's shortest
-path algorithm~\cite{Dijkstra}. When using more than 1 thread, each thread will pick the smallest
-path from a subset of nodes. This is an example where using coordination directives will
-improve the speed of execution since we avoid propagating some of the paths.
+When using a single thread, the algorithm behaves like
+Dijkstra's shortest path algorithm~\cite{Dijkstra}. However, when using multiple
+threads, each thread will pick the smallest distance from their subset of nodes.
+While this is not optimal since threads do not share a global view of priorities,
+many rule derivations are going to be avoided.
 
 \begin{figure}[h!]
 \scriptsize\begin{Verbatim}[numbers=left,commandchars=&\[\]]
 type route edge(node, node, int).
-type linear path(node, int, int).
+type linear shortest(node, int, list int).
+type linear relax(node, int, list int).
 
 &underline[priority @order asc].
 
-relax(@0, 0).
-path(A, +00).
+shortest(A, +00, \[\]).
+relax(@1, 0, [@1]).
 
-relax(A, D1), path(A, D2),
+relax(A, D1, P1), shortest(A, D2, P2),
 D1 < D2
-   -o path(A, D1),
+   -o shortest(A, D1, P1),
       {B, W | !edge(A, B, W) |
-         relax(B, D + W),
-         &underline[set-priority(B, D + W))]},
+         relax(B, D1 + W, P1 ++ \[B\]),
+         &underline[set-priority(B, float(D1 + W))]}.
 
-relax(A, D1), path(A, D2),
+relax(A, D1, P1), shortest(A, D2, P2),
 D1 >= D2
-   -o path(A, D2).
+   -o path(A, D2, P2).
 \end{Verbatim}
   \caption{Shortest Path Program.}
-  \label{code:shortest_path_program}
+  \label{code:shortest_path_program_coord}
 \end{figure}
 \normalsize
 
-\subsubsection{Heat Transfer}
+\begin{figure}[h!]
+   \begin{center}
+      \subfloat[]{\includegraphics[width=4cm]{results/shortest-uspowergrid.png}}
+      \subfloat[]{ \scriptsize\begin{tabular}{ | c | c | c | }
+         \hline                       
+         \textbf{\# T} & \textbf{R} & \textbf{C} \\ \hline \hline
+         1 & 333K & 206K \\
+         2 & 300K & 210K \\
+         4 & 316K & 208K \\
+         8 & 328K & 211K \\
+         16 & 343K & 212K \\
+         \hline  
+         \end{tabular}
+         \normalsize
+      }
+   \end{center}
+   \caption{Single Source Shortest Path program code.}
+   \label{results:sssp_uspowergrid}
+\end{figure}
 
-\subsubsection{MiniMax}
+\subsection{Graph Search}
 
-\subsubsection{Splash BP}
+
+\subsection{MiniMax}
+
+\begin{figure}[h!]
+   \begin{center}
+      \includegraphics[width=5cm]{figures/minimax_tree}
+   \end{center}
+   \caption{Single Source Shortest Path program code.}
+   \label{minimax}
+\end{figure}
+
+
+\subsection{Heat Transfer}
+
+\subsection{Splash BP}
 
 Randomized and approximation
 algorithms can obtain significant benefits from coordination directives because although the final
@@ -99,17 +113,26 @@ is the node with the highest priority (based on belief) while the other nodes in
 must have a non-zero priority. Note that the priorities are updated whenever a neighbor updates
 their belief. These splash trees are built iteratively until we reach convergence.
 
+\begin{figure}[h!]
+   \begin{center}
+      \includegraphics[width=6.5cm]{figures/splash_bp}
+   \end{center}
+   \caption{Single Source Shortest Path program code.}
+   \label{splash_bp}
+\end{figure}
+
+
 The code in Fig.~\ref{code:sbp} presents the coordination code of the Belief Propagation problem.
 Please note that we just appended the code in Fig.~\ref{code:sbp} to a working but
 unoptimized version of the algorithm.
 In the coordination code we have three sections:
 \begin{description}
-   \item[Tree building]: Each node has a \texttt{waiting} fact that is used to start the tree building process. When the highest priority is picked we create a token that will navigate through the tree. Note that in the rule located in lines 11-18 we check if the priority of the new node to add to the tree is positive and that both nodes are in the same worker. We want the tree to be kept in the same worker.
+   \item[Tree building]: Each node has a \texttt{waiting} fact that is used to start the tree building process. When the highest priority is picked we create a token that will navigate through the tree. Note that in the rule located in lines 11-18 we check if the priority of the new node to add to the tree is positive and that both nodes are in the same thread. We want the tree to be kept in the same thread.
    \item[First phase]: In the third rule (lines 8-9), when we reach a certain number of nodes in the tree, we generate \texttt{first-phase} in order to update the beliefs of all nodes in tree starting from the leaves and ending at the root. As we update the nodes, we generate \texttt{update} to update the belief values (line 29).
    \item[Second phase]: In the second phase we go from the root to the leaves and update the beliefs a second time (line 39).
 \end{description}
 
-When we have several workers, every worker will generate their own trees by taking into account the highest priority node in their own queues.
+When we have several threads, every thread will generate their own trees by taking into account the highest priority node in their own queues.
 
 \begin{figure}[h!]
 \scriptsize\begin{Verbatim}[numbers=left,commandchars=*\{\}]

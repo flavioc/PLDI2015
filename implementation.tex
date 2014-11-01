@@ -9,7 +9,6 @@ to exist to satisfy the rule. This procedure is executed by the virtual
 machine whenever we have enough facts to satisfy the rule. The procedure
 loops over all possible combinations of the rule, retrieving facts from the
 database, performing join operations and then consuming and deriving facts.
-
 Optimizations such as join optimizations (to allow rule filtering invalid
 combinations) and fact updates are implemented by the compiler. The latter
 transforms fact derivations of the same predicate to a simple update operation,
