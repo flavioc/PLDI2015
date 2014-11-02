@@ -20,36 +20,53 @@ While this is not optimal since threads do not share a global view of priorities
 many rule derivations are going to be avoided.
 
 \begin{figure}[h!]
-\scriptsize\begin{Verbatim}[numbers=left,commandchars=&\[\]]
+\scriptsize\begin{Verbatim}[numbers=left,commandchars=\\\{\}]
 type route edge(node, node, int).
 type linear shortest(node, int, list int).
 type linear relax(node, int, list int).
 
-&underline[priority @order asc].
+\underline{priority @order asc}.
 
-shortest(A, +00, \[\]).
+shortest(A, +00, []).
 relax(@1, 0, [@1]).
 
 relax(A, D1, P1), shortest(A, D2, P2),
 D1 < D2
    -o shortest(A, D1, P1),
-      {B, W | !edge(A, B, W) |
-         relax(B, D1 + W, P1 ++ \[B\]),
-         &underline[set-priority(B, float(D1 + W))]}.
+      \{B, W | !edge(A, B, W) |
+         relax(B, D1 + W, P1 ++ [B]),
+         \underline{set-priority(B, float(D1 + W))}\}.
 
 relax(A, D1, P1), shortest(A, D2, P2),
 D1 >= D2
-   -o path(A, D2, P2).
+   -o shortest(A, D2, P2).
 \end{Verbatim}
   \caption{Shortest Path Program.}
   \label{code:shortest_path_program_coord}
 \end{figure}
 \normalsize
 
+The most interesting property of the SSSP program presented in
+Fig.~\ref{code:shortest_path_program_coord} is that it remains provably correct,
+although it applies rules using smarter ordering. The derivation of
+\texttt{set-priority} does not change the behavior of the logical rules and the
+code remains declarative.
+
+Figure~\ref{results:sssp_uspowergrid} shows experimental results for a variant of
+the SSSP program that computes the SSSP for many of the nodes of the graph.
+There are some situations where unecessary facts are propagated
+because although the shortest distance is selected, sub-optimal distances may be
+propagated because many SSSP distances are computed at the same time.
+However, we see a reduction of over 50\% in the number of
+derived facts when using the coordinated version \textbf{C} over the regular
+version \textbf{R}. The results also show that the cordinated
+version using 16 threads is 1.3 times faster than the regular version using 16
+threads. In turn, this makes the coordinated version 20 times faster
+than the regular version using 1 thread.
+
 \begin{figure}[h!]
    \begin{center}
-      \subfloat[]{\includegraphics[width=4cm]{results/shortest-uspowergrid.png}}
-      \subfloat[]{ \scriptsize\begin{tabular}{ | c | c | c | }
+      \subfloat[]{ \begin{tabular}[b]{ | c | c | c | }
          \hline                       
          \textbf{\# T} & \textbf{R} & \textbf{C} \\ \hline \hline
          1 & 333K & 206K \\
@@ -61,24 +78,127 @@ D1 >= D2
          \end{tabular}
          \normalsize
       }
+      \subfloat[]{\includegraphics[width=5cm]{results/shortest-uspowergrid.png}}
    \end{center}
-   \caption{Single Source Shortest Path program code.}
+   \caption{Experimental results for the SSSP program using US powergrid network.
+   On the left we show the number of facts derived for the regular \textbf{R}
+   and coordinated version \textbf{C} using a variable number of threads
+   \textbf{\# T}. On the right, we have the scalability of the regular version
+   and coordinated version. The speedup values are computed using the execution
+   time of the regular version for 1 thread.}
    \label{results:sssp_uspowergrid}
 \end{figure}
 
-\subsection{Graph Search}
-
-
 \subsection{MiniMax}
+
+The MiniMax algorithm is a decision rule algorithm for minimizing the
+possible loss for a worst case (maximum loss) scenario in a zero sum
+game for 2 (or more) players that play in
+turns~\cite{Edwards54}.
+
+The algorithm proceeds by building a game tree, where each tree node represents a
+game state and the children represent the possible game moves that can
+be made by either player 1 or player 2. The
+tree levels are built in a way that each player plays in turns and the
+first level represents the moves made by player 1.  An
+evaluation function \texttt{f(State)} is used to compute the score of
+the board for each leaf of the tree. A node is a leaf when it can no longer be
+expanded since the state represents a possible end of the game.  Finally, the
+algorithm recursively minimizes or maximizes the scores of each node.
+To select the best move for player 1, the
+algorithm picks the move maximized at the root node.
+
+In LM, the program starts with a root node (with the initial game state)
+that is expanded with the available moves at each level. The graph of the
+program is dynamic since nodes are created and eventually deleted once they
+have nore more facts or no more references to them. The latter happens when the
+leaves scores are computed or when a node fully minimizes or maximizes the
+children scores. When the program ends, only the root node is have facts in its
+database.
+
+The LM code in Fig.~\ref{minimax:check-end} implements
+the initial expansion of the tree. The first three rules (lines 1-10) deal
+with the cases where no children nodes are created and the last three rules
+(12-29) deal with cases where new nodes may be created.
+Thes rule in lines 12-25 generate new nodes using the
+\texttt{exists} language construct, which creates a new node address
+\texttt{B}, where a new \texttt{play} fact is created with the new
+board. A \texttt{parent(B,A)} fact is derived to allow node \texttt{B} to
+communicate with its parent.
+
+Since our implementation
+uses a FIFO ordering for nodes, meaning that when children are expanded, we
+first expand each children and then the children of the children. The default
+ordering of the system works well enough for most practical purposes. We note
+however, that this is not optimal for this program since the complete tree needs
+to be expanded before computing the scores at the leaves. This introduces memory
+issues since, in the worst case, the memory needs of the program are
+$\mathcal{O}(n)$, where $n$ is the number of nodes in the tree.
+
+\begin{figure}[h!]
+\scriptsize\begin{Verbatim}[numbers=left,commandchars=\\\{\}]
+expand(A, Board, [], 0, P, \underline{Depth})
+  -o leaf(A, Board).
+
+expand(A, Board, [], N, P, \underline{Depth}),
+N > 0
+  -o maximize(A, N, -00, 0).
+
+expand(A, Board, [], N, P, \underline{Depth}),
+N > 0, NextPlayer <> RootPlayer
+  -o minimize(A, N, +00, 0).
+
+expand(A, Board, [0 | Xs], N, P, Depth),
+Depth >= 5
+  -o exists B. (\underline{set-static(B)},
+       \underline{set-default-priority(B, float(Depth + 1))},
+       play(B, Board ++ [P | Xs], next(P), \underline{Depth + 1}),
+       expand(A, Board ++ [0], Xs, N + 1, P, \underline{Depth}),
+       parent(B, A)).
+
+expand(A, Board, [0 | Xs], N, P, Depth),
+Depth < 5
+  -o exists B. (\underline{set-default-priority(B, float(Depth + 1))},
+       play(B, Board ++ [P | Xs], next(P), \underline{Depth + 1}),
+       expand(A, Board ++ [0], Xs, N + 1, P, \underline{Depth}),
+       parent(B, A)).
+
+expand(A, Board, [C | Xs], N, P, \underline{Depth})
+C <> 0
+  -o expand(A, Board ++ [C], Xs, N, P, \underline{Depth}).
+\end{Verbatim}
+\caption{MiniMax: checking if the game has ended and expanding the tree}
+\label{minimax:check-end}
+\end{figure}
+\normalsize
+
+With coordination, we set the priority nodes to be the same as the
+depth so that the tree is expanded in a depth-first fashion (lines 15 and 22).
+The memory complexity of the program then becomes $\mathcal{O}(d t)$, where $d$
+is the depth of the tree and $t$ is the number of threads. In
+Fig.~\ref{fig:minimax}, we have two threads (squares) and the first one has
+expanded the tree on the left side. When a second thread comes up, it steals the
+first unexpanded node and expands the tree from that position. Since threads
+prioritize deeper nodes, the scores of the first leaves are immediatelly
+computed and then sent to the parent node. At this point, the leaves are deleted
+and reused for other nodes in the tree, resulting in minimal memory usage.
 
 \begin{figure}[h!]
    \begin{center}
-      \includegraphics[width=5cm]{figures/minimax_tree}
+      \includegraphics[width=4.5cm]{figures/minimax_tree}
    \end{center}
-   \caption{Single Source Shortest Path program code.}
-   \label{minimax}
+   \caption{Expanding the MiniMax tree using coordination. By prioritizing
+      deeper nodes, threads are forced to expand the tree using a depth-first
+      approach, which is superior since there is no need to expand the whole
+      tree before computing the node scores.}
+   \label{fig:minimax}
 \end{figure}
 
+We also take advantage of memory locality by using \texttt{set-static} (line
+14), so that nodes after a certain level are not stolen by other threads. While
+this is not critical for performance in shared memory systems where node
+stealing is fairly efficient, we expect that such coordination to be critical in
+distributed systems.
 
 \subsection{Heat Transfer}
 

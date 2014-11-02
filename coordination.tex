@@ -100,7 +100,7 @@ For sensing facts, we have the following set of coordination facts:
 \begin{itemize}
    \item \texttt{type linear cpu-id(node, node, int)}: The third argument
    indicates the thread where the node of the second argument is currently running.
-   \item \texttt{type linear moving(node)}: Fact available if the node in the
+   \item \texttt{type linear moving(node, node)}: Fact available if the node in the
    second argument is allowed to move between threads.
    \item \texttt{type linear static(node, node)}: Fact available if the node in
    the second argument is not allowed to move between threads.
