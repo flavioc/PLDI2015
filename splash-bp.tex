@@ -21,12 +21,18 @@ leaves. The root of this tree is the node with the highest priority (based on
 belief) while the other nodes in the tree must have a non-zero priority.
 Note that the priorities are updated whenever a neighbor updates their belief.
 These \emph{splash trees} are built iteratively until we reach convergence.
+In Fig.~\ref{splash_bp} we represent two threads creating two different splash
+trees. It is encouraged to create several splash trees concurrently as long as
+we have threads to create them.
 
 \begin{figure}[h!]
    \begin{center}
       \includegraphics[width=6.5cm]{figures/splash_bp}
    \end{center}
-   \caption{Single Source Shortest Path program code.}
+   \caption{Creating splash trees for belief propagation. Each threads picks the
+   highest priority node and creates a tree from that node. The belief values
+   are updated in two phases: first from the leaves to the root and then from
+   the root to the leaves.}
    \label{splash_bp}
 \end{figure}
 
@@ -56,10 +62,9 @@ the creation and execution of the splash trees:
    second time (line 41).
 \end{description}
 
-When we have several threads, every thread will generate their own trees by
-taking into account the highest priority node in their own queues. This is the
-reason we use \texttt{set-static} in line 1 to force all nodes to remain in the
-original threads.
+Note that the \texttt{set-static} action fact is used in line 1 in order to
+force all nodes to remain in the original threads, so that each thread has a
+well defined area of nodes to build splash trees on.
 
 \begin{figure}[h!]
 \scriptsize\begin{Verbatim}[numbers=left,commandchars=*\{\}]
@@ -79,9 +84,9 @@ token(A, All, [A | Next])
    -o [collect => L | Side | !edge(A, L, Side),
          0 = count(All, L),
          0 = count(Next, L),
-         *underline{priority(A, L, P)}, P > 0.0,
-         *underline{cpu-id(A, L, Id1)},
-         *underline{cpu-id(A, A, Id2)}, Id1 = Id2 |
+         *underline{@priority(A, L, P)}, P > 0.0,
+         *underline{@cpu-id(A, L, Id1)},
+         *underline{@cpu-id(A, A, Id2)}, Id1 = Id2 |
          send-token(A, All, Next ++ L)].
 
 send-token(A, All, [])
@@ -109,7 +114,9 @@ second-phase(A, [A, B | Next], Back)
    -o update(A), waiting(Back), *underline{schedule-next(B)},
       second-phase(B, [B | Next], A).
 \end{Verbatim}
-  \caption{Coordination code for the Splash Belief Propagation program.}
+  \caption{Coordination code for the Splash Belief Propagation program. When a
+     linear fact is prefixed by \texttt{@}, it indicates that the fact is going
+  to be re-derived.}
   \label{code:sbp}
 \end{figure}
 \normalsize
@@ -124,3 +131,14 @@ GraphLab provides the splash scheduler for these types of inferences as part of
 the framework. This particular scheduler is around 350 lines of complicated C++ code.
 With our coordination facts, it is possible to create fairly complicated coordination
 patterns with only 12 simple logical rules.
+
+\begin{figure*}[]
+   \begin{center}
+      \subfloat[]{\includegraphics[width=5cm]{results/system_belief-propagation-400.png}}
+      \subfloat[]{\includegraphics[width=5cm]{results/system_splash-bp-400.png}}
+      \subfloat[]{\includegraphics[width=5cm]{results/system_improve_belief-propagation-400.png}}
+   \end{center}
+   \caption{Memory usage and scalability of the regular and coordinated versions
+      of MiniMax.}
+   \label{results:splash_bp}
+\end{figure*}
