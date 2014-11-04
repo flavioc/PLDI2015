@@ -1,6 +1,9 @@
 The implementation of LM includes a compiler and a virtual machine that runs
 byte-code. The virtual machine uses 32 registers for
 operations and executes procedures to iterate over the database in order to match facts.
+The implementation of the original machine is described in ~\cite{cruz-ppdp14}.
+Here, we resume the most important details of that paper, while focusing on the
+changes for efficiently implementing coordination.
 
 \subsection{Compilation}
 
@@ -70,9 +73,9 @@ values. Each predicate is stored using one of the following data structures:
   indexed by the appropriate argument.
 \end{itemize}
 
-A node goes through different states during execution. The state machine in
-Fig.~\ref{fig:node_states} represents the valid state transitions with the
-following states:
+In order to facilitate the implementation of coordination, we added a state
+variable for each node. The state machine in
+Fig.~\ref{fig:node_states} represents the valid state transitions of a node:
 
 \begin{description}
    \item[working]: the node is being executed.
@@ -105,7 +108,8 @@ incoming facts that are later processed by the owner thread.
 \subsubsection{Threads}
 
 Threads pop active nodes from their queues and execute new candidate rules. 
-Each thread has 2 queues, a doubly linked list known as the \emph{standard
+In order to allow node priorities, we use 2 queues per thread: a doubly linked
+list known as the \emph{standard
 queue} and a min/max heap known as the \emph{priority queue}. The regular queue
 contains nodes without priorities and
 implements the operations \texttt{push\_tail(node)} (push to the tail),

@@ -16,17 +16,19 @@ Fig.~\ref{code:ht} shows the HT logical rules that send new heat values to
 neighbor nodes. We added the first rule to increase the priority of the neighbor
 nodes if the current node has a large $\delta$. The idea is to prioritize the
 computation of heat values of nodes (using \texttt{update}) that have a neighbor
-node that changed significantly. With \texttt{set-priority} the node is
-temporarily prioritized and selected to execute before others.
+node that changed significantly. Multiple \texttt{add-priority} facts will
+increase the priority of a node so that nodes with multiple large deltas will
+have more priority. Note that the LM compiler will merge the three rules in
+Fig.~\ref{code:ht} into a single one that handles the 3 branches.
 
 \begin{figure}[h!]
-\scriptsize\begin{Verbatim}[numbers=left,commandchars=*\[\]]
+\scriptsize\begin{Verbatim}[numbers=left,commandchars=\\\[\]]
 new-heat(A, New, Old),
 Delta = fabs(New - Old),
 Delta > epsilon * 2.0
    -o {B, W | !edge(A, B, W) |
          new-neighbor-heat(B, A, New),
-         update(B), *underline[set-priority(B, Delta)]}.
+         update(B), \underline[add-priority(B, Delta)]}.
 
 new-heat(A, New, Old),
 Delta = fabs(New - Old)
@@ -49,3 +51,18 @@ Delta < epsilon
   \label{code:ht}
 \end{figure}
 \normalsize
+
+Fig.~\ref{results:ht} presents the scalability results for the uncoordinated
+and coordinated version. The dataset used is a square grid with an inner square
+with high heat nodes. With 1 thread, there's a 33\% reduction in run time, while
+for 16 threads, there's a 18\% reduction.
+
+\begin{figure}[ht!]
+   \begin{center}
+      \subfloat[]{\includegraphics[width=5cm]{results/new-heat-transfer-80}}
+   \end{center}
+   \caption{Experimental results for the HT program. Speedup values for the
+      coordinated and uncoordinated version are computed using the run time of
+      the uncoordinated version using 1 thread.}
+   \label{results:ht}
+\end{figure}
