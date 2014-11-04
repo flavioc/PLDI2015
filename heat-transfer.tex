@@ -3,5 +3,49 @@ algorithms can obtain significant benefits from coordination directives because 
 program results will not be exact, they follow important statistical properties and can be computed faster.
 Examples of such programs are Loopy Belief
 Propagation~\cite{Gonzalez+al:aistats09paraml} (shown in the next section) and
-Heat Transfer.
+Heat Transfer~(HT).
 
+In HT, we have a graph of nodes that exchange heat values between them. The goal
+of the program is to exchange heat to a point where new heat value $\delta = |H_i -
+H_{i-1}| \le \epsilon$ for all nodes of the graph. The algorithm works
+asynchronously since heat values can be updated by using new partial information
+coming from neighbor nodes. This increases parallelism since nodes do not need
+to synchronize if we had to compute heat values using iterations.
+
+Fig.~\ref{code:ht} shows the HT logical rules that send new heat values to
+neighbor nodes. We added the first rule to increase the priority of the neighbor
+nodes if the current node has a large $\delta$. The idea is to prioritize the
+computation of heat values of nodes (using \texttt{update}) that have a neighbor
+node that changed significantly. With \texttt{set-priority} the node is
+temporarily prioritized and selected to execute before others.
+
+\begin{figure}[h!]
+\scriptsize\begin{Verbatim}[numbers=left,commandchars=*\[\]]
+new-heat(A, New, Old),
+Delta = fabs(New - Old),
+Delta > epsilon * 2.0
+   -o {B, W | !edge(A, B, W) |
+         new-neighbor-heat(B, A, New),
+         update(B), *underline[set-priority(B, Delta)]}.
+
+new-heat(A, New, Old),
+Delta = fabs(New - Old)
+Delta < epsilon * 2.0,
+Delta > epsilon
+   -o {B, W | !edge(A, B, W) |
+         new-neighbor-heat(B, A, New), update(B)}.
+
+new-heat(A, New, Old)
+Delta = fabs(New - Old)
+Delta < epsilon
+   -o {B, W | !edge(A, B, W) |
+         new-neighbor-heat(B, A, New)}.
+\end{Verbatim}
+  \caption{Coordination code for the Heat Transfer program. We added one rule
+     that covers cases where $\Delta$ is at least $2 \epsilon$ in order to
+     increase the priority of neighbors nodes. The code logic remains exactly
+     the same as before, however bigger changes in heat values are now
+     propagated faster.}
+  \label{code:ht}
+\end{figure}
+\normalsize

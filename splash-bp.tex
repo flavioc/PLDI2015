@@ -47,28 +47,30 @@ the creation and execution of the splash trees:
    \item[Tree building]: Each node has a \texttt{waiting} fact that is used to
    start the tree building process. When the highest priority is picked, a token
    is created that will navigate through the tree. Note that in the rule located
-   in lines 13-20, newly added nodes to the tree must have a positive priority
+   in lines 14-21, newly added nodes to the tree must have a positive priority
    (due to new belief updates) and must be residing in the same thread.
    We want the tree to be kept in the same thread in order to maximize
    parallelism with 1 tree per thread.
-   \item[First phase]: In the third rule (lines 10-11), when the number of nodes
+   \item[First phase]: In the third rule (lines 11-12), when the number of nodes
    of the tree reaches a certain limit, a 
    \texttt{first-phase} is generated in order to update the beliefs of all nodes
    in the tree, starting from the leaves and ending at the root
    As the nodes are updated, an \texttt{update} fact is derived to update
-   the belief values (line 34).
+   the belief values (line 35).
    \item[Second phase]: In the second phase, the computation of beliefs is
    performed from the root to the leaves and the belief values are updated a
-   second time (line 41).
+   second time (line 42).
 \end{description}
 
-Note that the \texttt{set-static} action fact is used in line 1 in order to
-force all nodes to remain in the original threads, so that each thread has a
-well defined area of nodes to build splash trees on.
+Note that the \texttt{set-static} and \texttt{set-cpu} action fact are used in
+line 2 in order to (1) force nodes to stay in the thread and (2) to partition
+nodes as a grid of threads. This setups a well defined area of nodes
+for threads to build splash trees on.
 
 \begin{figure}[h!]
 \scriptsize\begin{Verbatim}[numbers=left,commandchars=*\{\}]
-*underline{set-static(A)}. // all nodes are static.
+!coord(A, X, Y), start(A)
+   -o *underline{set-static(A), set-cpu(A, grid(X, Y))}.
 
 // TREE BUILDING
 // continue tree
@@ -121,6 +123,21 @@ second-phase(A, [A, B | Next], Back)
 \end{figure}
 \normalsize
 
+\begin{figure*}[ht!]
+   \begin{center}
+      \subfloat[]{\includegraphics[width=5cm]{results/system_belief-propagation-400.png}}
+      \subfloat[]{\includegraphics[width=5cm]{results/system_splash-bp-400.png}}
+      \subfloat[]{\includegraphics[width=5cm]{results/system_improve_belief-propagation-400.png}}
+   \end{center}
+   \caption{Experimental results for LBP and SBP. Figure (a) shows the
+      scalability of LBP for both LM and GraphLab and Figure (b) shows the
+      scalability of SBP. Figure (c) presents the
+      improvements seen in SBP against LBP, where SBP runs, on average, 1.5 to 2.5
+      times faster than LBP.}
+   \label{results:splash_bp}
+\end{figure*}
+
+
 In this program, coordination assumes a far more important role than we have
 seen before. Coordination rules fully drive the behavior of the algorithm and
 although the final result of the algorithm is identical to the original
@@ -132,13 +149,10 @@ the framework. This particular scheduler is around 350 lines of complicated C++ 
 With our coordination facts, it is possible to create fairly complicated coordination
 patterns with only 12 simple logical rules.
 
-\begin{figure*}[]
-   \begin{center}
-      \subfloat[]{\includegraphics[width=5cm]{results/system_belief-propagation-400.png}}
-      \subfloat[]{\includegraphics[width=5cm]{results/system_splash-bp-400.png}}
-      \subfloat[]{\includegraphics[width=5cm]{results/system_improve_belief-propagation-400.png}}
-   \end{center}
-   \caption{Memory usage and scalability of the regular and coordinated versions
-      of MiniMax.}
-   \label{results:splash_bp}
-\end{figure*}
+We measured the behavior of LBP and SBP for both LM and GraphLab.
+Fig.~\ref{results:splash_bp} shows that both systems have very similar behavior
+when using a variable number of threads.
+Note that GraphLab avoids message passing between nodes since new neighbor
+belief updates are changed immediatelly, resulting in slightly better
+scalability for GraphLab.
+

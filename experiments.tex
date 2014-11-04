@@ -1,1 +1,74 @@
 \subsection{Absolute runtime}
+
+The measures of absolute run time performance for the VM were done
+~\cite{cruz-ppdp14}.
+To put our VM in perspective, we first compare it in terms of absolute
+
+execution time with other competing systems using a single thread.
+
+In Table~\ref{tbl:comp_nqueens}, we compare LM's version of the
+classic N-Queens puzzle against 3 other versions: a straightforward
+sequential program implemented in C using backtracking; a sequential
+Python implementation~\cite{vanRossum:1995:PRM}; and a Prolog
+implementation executed in YAP
+Prolog~\cite{DBLP:journals/corr/abs-1102-3896}, an efficient
+implementation of Prolog. Numbers less than 1 mean that LM is faster
+and larger than 1 mean that LM is slower. We can observe that LM
+easily beats Python, but is 5 to 10 times slower than YAP Prolog and
+around 15 times slower than C. Note however that, as we will see next,
+if we use at least 16 threads in LM, we can beat the sequential
+implementation written in C.
+
+\begin{table}[ht]
+\centering
+{\begin{tabular}{c|c|c|c}
+\textbf{Problem} & \multicolumn{3}{c}{\textbf{System}} \\
+\textbf{Size} & \textbf{C} & \textbf{Python} & \textbf{YAP Prolog} \\
+\hline\hline
+\textbf{10x10} & 16.92 & 0.62 & 5.42 \\
+\textbf{11x11} & 21.59 & 0.64 & 6.47 \\
+\textbf{12x12} & 10.32 & 0.73 & 7.61 \\
+\textbf{13x13} & 14.35 & 0.88 & 10.38 \\
+\end{tabular}}
+\caption{Comparing the absolute execution times (LM/System) for the
+  N-Queens program}
+\label{tbl:comp_nqueens}
+\end{table}
+
+In Table~\ref{tbl:comp_bp}, we compare LM's Belief Propagation (BP)
+program, a machine learning algorithm to denoise images, against a
+sequential C, Python and GraphLab~\cite{GraphLab2010} version of the
+algorithm. GraphLab is a parallel C++ library used to solve
+graph-based problems in machine learning. C and GraphLab perform about
+the same since they are both compiled to machine code, although
+the GraphLab version is highly optimized to run on multicore architectures.
+Python runs very slowly since it is a
+dynamic programming language and BP has many mathematical
+computations. We should note, however, that LM's version uses some
+external functions written in C++ in order to improve execution time,
+therefore the comparison is not totally fair.
+
+\begin{table}[ht]
+\centering
+{\begin{tabular}{c|c|c|c}
+\textbf{Problem} & \multicolumn{3}{c}{\textbf{System}} \\
+\textbf{Size} & \textbf{C} & \textbf{Python} & \textbf{GraphLab} \\
+\hline\hline
+\textbf{10}  & 1.00 & 0.03 & 1.00 \\
+\textbf{50}  & 1.77 & 0.04 & 1.73 \\
+\textbf{200} & 1.99 & 0.05 & 1.79 \\
+\textbf{400} & 2.00 & 0.04 & 1.80 \\
+\end{tabular}}
+\caption{Comparing the absolute execution times (LM/System) for the
+  Belief Propagation program}
+\label{tbl:comp_bp}
+\end{table}
+
+We also compared a LM's version of the PageRank program against a
+similar GraphLab version and LM showed to be around 4 to 6 times
+slower. Our worse results were obtained for the all-pairs shortest
+distance algorithm where a LM's version of the problem was around 50
+times slower than a C sequential implementation of the Dijkstra
+algorithm, but almost twice as fast when compared to the same
+implementation in Python.
+

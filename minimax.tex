@@ -127,3 +127,12 @@ distributed systems.
    \label{results:memory_minmax}
 \end{figure}
 
+In Fig.~\ref{results:memory_minmax} we compare the memory usage and scalability
+of the coordinated MiniMax against the regular MiniMax. The coordinated version
+sees a huge reduction of memory usage, needing at most 8MB for 16 threads, while
+the regular versio nneeds around 14GB. There is also some
+correlation between memory usage and number of threads. This is explained by the
+need for more data structures for handling multiple threads, specially
+concerning the memory allocator used by the virtual machine. In terms of run
+time, our experimental results show linear scalability for the coordinated
+version and a 20\% run time reduction when using 16 threads.
