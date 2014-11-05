@@ -1,0 +1,22 @@
+
+shortest-uspowergrid th1 72570 -> 72570
+shortest-uspowergrid th2 35865 -> 35865
+shortest-uspowergrid th4 20802 -> 20802
+shortest-uspowergrid th6 12382 -> 12382
+shortest-uspowergrid th8 8781 -> 8781
+shortest-uspowergrid th10 7859 -> 7859
+shortest-uspowergrid th12 6017 -> 6017
+shortest-uspowergrid th14 5428 -> 5428
+shortest-uspowergrid th16 4800 -> 4800
+shortest-uspowergrid th20 3779 -> 3779
+shortest-uspowergrid th24 3217 -> 3217
+
+shortest-uspowergrid-coord th1 52744 -> 52744
+shortest-uspowergrid-coord th2 26487 -> 26487
+shortest-uspowergrid-coord th4 11956 -> 11956
+shortest-uspowergrid-coord th6 8577 -> 8577
+shortest-uspowergrid-coord th8 6396 -> 6396
+shortest-uspowergrid-coord th10 5576 -> 5576
+shortest-uspowergrid-coord th12 4443 -> 4443
+shortest-uspowergrid-coord th14 3737 -> 3737
+shortest-uspowergrid-coord th16 3651 -> 3651

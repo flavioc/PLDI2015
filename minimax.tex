@@ -131,6 +131,8 @@ of the coordinated MiniMax against the regular MiniMax. The coordinated version
 sees a huge reduction of memory usage, needing at most 8MB for 16 threads, while
 the regular version needs around 14GB. Note that as the number of threads goes
 up, memory usage also goes up. This is an artifact of our parallel memory
-allocator that allocates large chunks of memory before hand.
-In terms of run time, our experimental results show linear scalability for the coordinated
-version and a 20\% run time reduction when using 16 threads.
+allocator that allocates large chunks of memory beforehand.
+In terms of run time, our experimental results show a 14-fold speedup for the
+coordinated version against a 12-fold for the regular version when using 16
+threads. When comparing the two versions directly, there is a 20\% run time
+reduction when using 16 threads in the coordinated version.

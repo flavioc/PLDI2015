@@ -1,0 +1,19 @@
+min-max-tictactoe th1 190024 -> 190024
+min-max-tictactoe th2 100065 -> 100065
+min-max-tictactoe th4 52659 -> 52659
+min-max-tictactoe th6 36610 -> 36610
+min-max-tictactoe th8 26363 -> 26363
+min-max-tictactoe th10 20809 -> 20809
+min-max-tictactoe th12 19372 -> 19372
+min-max-tictactoe th14 17284 -> 17284
+min-max-tictactoe th16 14950 -> 14950
+
+min-max-tictactoe-coord th1 170547 -> 170547
+min-max-tictactoe-coord th2 88660 -> 88660
+min-max-tictactoe-coord th4 44959 -> 44959
+min-max-tictactoe-coord th6 30485 -> 30485
+min-max-tictactoe-coord th8 22249 -> 22249
+min-max-tictactoe-coord th10 18641 -> 18641
+min-max-tictactoe-coord th12 16263 -> 16263
+min-max-tictactoe-coord th14 13723 -> 13723
+min-max-tictactoe-coord th16 12073 -> 12073
