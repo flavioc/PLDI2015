@@ -1,13 +1,25 @@
-Recently, there has been an increasing interest in declarative and data-centric
+There has been an increasing interest in declarative and data-centric
 languages. MapReduce~\cite{Dean:2008:MSD:1327452.1327492}, for instance, is a
 popular data-centric programming model that is optimized for large clusters. The
 scheduling and data sharing model is very simple: in the \emph{map phase}, data
 is transformed at each node and the result reduced to a final result in the
-\emph{reduce phase}. Like LM, many programming systems model the program as a
-graph where computation will be performed. The Dryad
-system~\cite{Isard:2007:DDD:1272996.1273005} combines computational vertices
+\emph{reduce phase}. In order to facilitate the writing of programs over large
+datasets, SQL-like languages such as
+PigLatin~\cite{Olston:2008:PLN:1376616.1376726} have been developed.
+PigLatin automatically compiles declarative code into physical plans
+that are executed over Hadoop but provides very little control to the
+programmer.
+
+A declarative approach that is regaining popularity is
+Datalog~\cite{Ullman:1990:PDK:533142}, also a forward-chaining logic programming
+language. Traditionally used in deductive databases, it is now being increasingly used in different fields
+such as distributed networking~\cite{Loo-condie-garofalakis-p2}, sensor
+nets~\cite{Chu:2007:DID:1322263.1322281} and cloud computing~\cite{alvaro:boom}.
+LM itself is inspired in P2~\cite{Loo-condie-garofalakis-p2} since it also models
+programs as a graph structure. Another programming system that uses the graph
+abstraction is Dryad~\cite{Isard:2007:DDD:1272996.1273005}, which combines computational vertices
 with communication channels (edges) to form a data-flow graph. The program is
-scheduled to run on multiple computers or cores and data is partitioned
+then scheduled to run on multiple computers/cores and data is partitioned
 automatically during runtime.
 
 Many programming languages follow the so-called \emph{coordination
@@ -19,30 +31,30 @@ to clearly distinguish between these two parts by providing abstractions for
 coordination in an attempt to provide architecture and system-independent forms
 of communication.  
 
-Linda~\cite{linda} is probably the most famous coordination model. Linda
+Linda~\cite{linda} is arguably the most famous coordination model. Linda
 implements a data-driven coordination model and features a \emph{tuple space}
 that can be manipulated using the following coordination directives:
-\texttt{out(t)} writes a tuple \texttt{t} into the tuple space; \texttt{in(t)}
-reads a tuple using the template \texttt{t}; \texttt{rd(t)} retrieves a copy of
-the tuple \texttt{t} from the tuple space; and \texttt{eval(p)} puts a process
-\texttt{p} in the tuple space and executes it in parallel. 
+\texttt{out(t)} to write a tuple \texttt{t} into the tuple space; \texttt{in(t)}
+to read a tuple using the template \texttt{t}; \texttt{rd(t)} to retrieve a copy of
+the tuple \texttt{t} from the tuple space; and \texttt{eval(p)} to add a process
+\texttt{p} in the tuple space and execute it in parallel. 
 Linda is be implemented on top of many
 popular languages by simply creating a communication and storage mechanism for
 the tuple space and then adding the directives as a language library.
 
-Another coordination language is Delirium~\cite{Delirium}, where instead of being
-embbeded in another language like Linda, it actually embeds operators other
-languages inside Delirium. The advantages of Delirium are improved abstraction
+Another important coordination language is Delirium~\cite{Delirium}. Unlike
+Linda which is embbeded into another language, Delirium actually embeds
+operators written in other languages inside the Delirium language.
+The advantages of Delirium are improved abstraction
 and easier debugging because sequential operators are isolated from the
 coordination language.
 
 Linda and Delirium are limited in the sense that the programmer can only
 coordinate the scheduling of processing units, while the placement of data is
 left to the implementation. LM also differs from those languages since it
-raises the abstraction level from the processing units to nodes of a graph,
-which are part of the program logic.
-Furthermore, the language LM is both the coordination and the computation
-language and there is no distinction between them.
+raises the abstraction level from the processing units to nodes of a graph.
+Furthermore, the LM language is both a coordination language and a computation
+language and there is no distinction between the two components.
 
 \iffalse
 GraphLab~\cite{GraphLab2010} is a C++ framework for developing parallel machine
