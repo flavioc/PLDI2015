@@ -1,0 +1,39 @@
+graphlab th1 198000
+graphlab th2 66000
+graphlab th4 26000
+graphlab th6 15500
+graphlab th8 10300
+graphlab th10 9625
+graphlab th12 7475
+graphlab th14 7140
+graphlab th16 6490
+
+graphlab-coord th1 45000
+graphlab-coord th2 23826
+graphlab-coord th4 11818
+graphlab-coord th6 8423
+graphlab-coord th8 6023
+graphlab-coord th10 4649
+graphlab-coord th12 4449
+graphlab-coord th14 4449
+graphlab-coord th16 3165
+
+belief-propagation-400 th1 262508 -> 262508
+belief-propagation-400 th2 140579 -> 140579
+belief-propagation-400 th4 64714 -> 64714
+belief-propagation-400 th6 33717 -> 33717
+belief-propagation-400 th8 23511 -> 23511
+belief-propagation-400 th10 15995 -> 15995
+belief-propagation-400 th12 14517 -> 14517
+belief-propagation-400 th14 10183 -> 10183
+belief-propagation-400 th16 9294 -> 9294
+
+splash-bp-400 th1 91467 -> 91467
+splash-bp-400 th2 53922 -> 53922
+splash-bp-400 th4 27475 -> 27475
+splash-bp-400 th6 19997 -> 19997
+splash-bp-400 th8 14749 -> 14749
+splash-bp-400 th10 13247 -> 13247
+splash-bp-400 th12 9727 -> 9727
+splash-bp-400 th14 8238 -> 8238
+splash-bp-400 th16 7069 -> 7069
