@@ -9,38 +9,37 @@ be made by either player 1 or player 2. The
 tree levels are built in a way that each player plays in turns and the
 first level represents the moves made by player 1.  An
 evaluation function \texttt{f(State)} is used to compute the score of
-the board for each leaf of the tree. A node is a leaf when it can no longer be
-expanded since the state represents a possible end of the game.  Finally, the
+the board for each leaf of the tree. A node is a leaf when the game state can no longer be
+expanded. Finally, the
 algorithm recursively minimizes or maximizes the scores of each node.
 To select the best move for player 1, the
 algorithm picks the move maximized at the root node.
 
 In LM, the program starts with a root node (with the initial game state)
 that is expanded with the available moves at each level. The graph of the
-program is dynamic since nodes are created and eventually deleted once they
-have nore more facts or no more references to them. The latter happens when the
-leaves scores are computed or when a node fully minimizes or maximizes the
-children scores. When the program ends, only the root node is have facts in its
+program is dynamic since nodes are created and then deleted once they are no
+longer needed. The latter happens when the
+leaf scores are computed or when a node fully minimizes or maximizes the
+children scores. When the program ends, only the root node has facts in its
 database.
 
 The LM code in Fig.~\ref{minimax:check-end} implements
 the initial expansion of the tree. The first three rules (lines 1-10) deal
 with the cases where no children nodes are created and the last three rules
 (12-29) deal with cases where new nodes may be created.
-Thes rule in lines 12-25 generate new nodes using the
+The rule in lines 12-25 generate new nodes using the
 \texttt{exists} language construct, which creates a new node address
 \texttt{B}, where a new \texttt{play} fact is created with the new
 board. A \texttt{parent(B,A)} fact is derived to allow node \texttt{B} to
 communicate with its parent.
 
-Since our implementation
-uses a FIFO ordering for nodes, meaning that when children are expanded, we
-first expand each children and then the children of the children. The default
-ordering of the system works well enough for most practical purposes. We note
+As noted before in Section~\ref{sec:fifo}, we use a FIFO ordering for nodes,
+meaning that when children are expanded, we first expand the children and
+then the children of the children. We note
 however, that this is not optimal for this program since the complete tree needs
-to be expanded before computing the scores at the leaves. This introduces memory
-issues since, in the worst case, the space complexity of the program are
-$\mathcal{O}(n)$, where $n$ is the number of nodes in the tree.
+to be expanded before computing the scores at the leaves. The memory
+complexity of the program is $\mathcal{O}(n)$, where $n$ is the number of nodes
+in the tree.
 
 \begin{figure}[h!]
 \scriptsize\begin{Verbatim}[numbers=left,commandchars=\\\{\}]
@@ -48,11 +47,11 @@ expand(A, Board, [], 0, P, \underline{Depth})
   -o leaf(A, Board).
 
 expand(A, Board, [], N, P, \underline{Depth}),
-N > 0
+N > 0, P = player1
   -o maximize(A, N, -00, 0).
 
 expand(A, Board, [], N, P, \underline{Depth}),
-N > 0, NextPlayer <> RootPlayer
+N > 0, P = player2
   -o minimize(A, N, +00, 0).
 
 expand(A, Board, [0 | Xs], N, P, Depth),
@@ -84,7 +83,7 @@ depth so that the tree is expanded in a depth-first fashion (lines 15 and 22).
 The memory complexity of the program then becomes $\mathcal{O}(d t)$, where $d$
 is the depth of the tree and $t$ is the number of threads. In
 Fig.~\ref{fig:minimax}, we have two threads (squares) and the first one has
-expanded the tree on the left side. When a second thread comes up, it steals the
+expanded the tree on the left side. When a second thread is idle, it steals the
 first unexpanded node and expands the tree from that position. Since threads
 prioritize deeper nodes, the scores of the first leaves are immediatelly
 computed and then sent to the parent node. At this point, the leaves are deleted
@@ -109,7 +108,7 @@ distributed systems.
 
 \begin{figure}[h!]
    \begin{center}
-      \subfloat[]{ \begin{tabular}[b]{ | c | c | c |}
+      \subfloat[]{\small\begin{tabular}[b]{ | c | c | c |}
          \hline                       
          \textbf{\# T} & \textbf{R} & \textbf{C} \\ \hline \hline
          1 & 11.80GB & 0.50MB \\ \hline
@@ -120,7 +119,7 @@ distributed systems.
          \end{tabular}
          \normalsize
       }
-      \subfloat[]{\includegraphics[width=5cm]{results/min-max-tictactoe.png}}
+      \subfloat[]{\includegraphics[width=4.5cm]{results/min-max-tictactoe.png}}
    \end{center}
    \caption{Memory usage and scalability of the regular and coordinated versions
       of MiniMax.}
@@ -130,9 +129,8 @@ distributed systems.
 In Fig.~\ref{results:memory_minmax} we compare the memory usage and scalability
 of the coordinated MiniMax against the regular MiniMax. The coordinated version
 sees a huge reduction of memory usage, needing at most 8MB for 16 threads, while
-the regular versio nneeds around 14GB. There is also some
-correlation between memory usage and number of threads. This is explained by the
-need for more data structures for handling multiple threads, specially
-concerning the memory allocator used by the virtual machine. In terms of run
-time, our experimental results show linear scalability for the coordinated
+the regular version needs around 14GB. Note that as the number of threads goes
+up, memory usage also goes up. This is an artifact of our parallel memory
+allocator that allocates large chunks of memory before hand.
+In terms of run time, our experimental results show linear scalability for the coordinated
 version and a 20\% run time reduction when using 16 threads.

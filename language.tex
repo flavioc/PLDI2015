@@ -1,28 +1,33 @@
 
 Linear Meld (LM) is a forward-chaining linear logic programming
 language~\cite{cruz-iclp14} with roots on Datalog~\cite{Ramakrishnan93asurvey}.
-Programs are written as a set of rules of the form
-\texttt{a(X), b(Y) -o c(Z)} and are read as following: if \texttt{a(X), b(Y)} (the body of
-the rule) is satisfied using some facts \texttt{a(X)} and \texttt{b(Y)} then
-\texttt{c(Z)} (the head of the rule) is true.
-The facts used during rule derivation are placed in a \emph{database of facts}.
-Logical facts are composed of a predicate and a tuple of concrete values,
-representing the arguments.
-Since LM uses linear logic as its foundation, rule derivations
-may delete facts used in the body of the rule. Program execution starts by
-adding the \emph{axioms} (the initial facts) of the program to the database.
+Programs consist of a set of \emph{rules} and a \emph{database of facts}.
+Rules such as \texttt{a(X), b(Y) -o c(X, Y)} can be read as follows: if fact \texttt{a(X)}
+and fact \texttt{b(Y)} exist in the database then \texttt{c(X, Y)} is added to
+the database. The expression \texttt{a(X), b(Y)} is called the \emph{body} of
+the rule and \texttt{c(X, Y)} is the \emph{head} of the rule.
+A fact is a predicate and its associated tuple of values, representing the
+arguments. Since LM uses linear logic as its foundation, we distinguish between
+\emph{linear} and \emph{persistent facts}. Linear facts are deleted during the
+process of deriving rule, while persistent facts are not.
+Program execution starts by adding the \emph{axioms} (the initial facts) of the program to the database.
 Next, the rules are recursively applied and the database is updated with new and
-deleted facts. When nore more rules are applicable, the program terminates.
+deleted facts. When no more rules are applicable, the program terminates.
 
-LM has been designed for writing graph-based programs. LM accomplishes this by
-partitioning the logical facts by the first argument (the \emph{node}) and by
-restricting the body of every rule to only refer to the same first argument.
-This allows rules to be executed using only facts of a single node. Although the
-body of rules is restricted, the head of the rule may refer to any other node as
-long as the node variable is refered somewhere in the body of the rule. This allows
-derivations of facts in other nodes. The whole database is then composed of smaller
-databases (the nodes) and rule derivations allows smaller databases to derive
-facts in other databases, creating edges in the graph.
+LM has been designed for writing programs that operate on graphs. LM partitions
+the database by using the first argument of each fact. The first argument is
+typed as a \emph{node} and represents a node in the graph. For instance, the
+fact \texttt{f(@1, 2)} is stored in node \texttt{@1}, while fact \texttt{p(@2)}
+is stored in node \texttt{@2}. LM restricts
+the body of every rule to only refer to the same node so that nodes can derive
+rules independently. Although the body is restricted, the head of the
+rule may refer to any node as long as the node is refered somewhere in the
+body. This allows communication between nodes during rule derivation, since a
+node must send a fact to another node.
+Rule restrictions in turn make LM implicitly parallel because nodes are able to
+compute independently as long as they have new facts to be applied in rules.
+This makes LM non-deterministic since nodes can be picked to run in any order,
+affecting which rules are applied and which facts are deleted or derived.
 
 In order to fully understand how the language works, we present a very simple
 algorithm: the single source shortest path program~(SSSP). Later in the paper, we
@@ -30,11 +35,13 @@ add coordination facts to improve the execution of the program.
 
 The SSSP program in Fig.~\ref{code:shortest_path_program} starts (lines 1-3)
 with the declaration of the predicates. Predicates specify the kinds of facts
-used in the program. The first predicate, \texttt{edge}, specifies edges between
-nodes of the graph, where the third argument represents the weight of the edge.
-The \texttt{route} modifier informs the compiler about the structure of the
-program graph. The predicates \texttt{shortest} and \texttt{relax} are specified
-as linear facts and thus are deleted when used in rules.
+used in the program. The first predicate, \texttt{edge}, is a persistent
+predicate that describes the
+relationship between the nodes of the graph, where the third argument represents
+the weight of the edge
+(the \texttt{route} modifier informs the compiler about the structure of the
+program graph). The predicates \texttt{shortest} and \texttt{relax} are specified
+as linear facts and thus are deleted when deriving new facts.
 The idea of the algorithm is to compute the shortest distance from node
 \texttt{@1} to all other nodes in the graph. Every node has a \texttt{shortest}
 fact that is improved with new \texttt{relax} facts.
@@ -84,7 +91,9 @@ applying the same rule but at node \texttt{2}.
 \begin{figure*}[ht]
 \begin{center}
   \subfloat[]{\includegraphics[width=0.3\textwidth]{figures/shortest2}}
+  \hspace{0.4cm}
   \subfloat[]{\includegraphics[width=0.3\textwidth]{figures/shortest3}}
+  \hspace{0.4cm}
   \subfloat[]{\includegraphics[width=0.3\textwidth]{figures/shortest8}}
 \end{center}
 \caption{Graphical representation of the SSSP program. Figure (a) represents the

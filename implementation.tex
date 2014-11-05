@@ -2,7 +2,7 @@ The implementation of LM includes a compiler and a virtual machine that runs
 byte-code. The virtual machine uses 32 registers for
 operations and executes procedures to iterate over the database in order to match facts.
 The implementation of the original machine is described in ~\cite{cruz-ppdp14}.
-Here, we resume the most important details of that paper, while focusing on the
+Here, we review the most important details of that paper, while focusing on the
 changes for efficiently implementing coordination.
 
 \subsection{Compilation}
@@ -12,21 +12,14 @@ to exist to satisfy the rule. This procedure is executed by the virtual
 machine whenever we have enough facts to satisfy the rule. The procedure
 loops over all possible combinations of the rule, retrieving facts from the
 database, performing join operations and then consuming and deriving facts.
-Optimizations such as join optimizations (to allow rule filtering invalid
-combinations) and fact updates are implemented by the compiler. The latter
+Optimizations such as join optimizations (to support efficient rule filtering)
+and fact updates are implemented by the compiler. The latter
 transforms fact derivations of the same predicate to a simple update operation,
 avoiding a deallocation operation followed by an allocation of the new fact.
 
-\subsection{Node partitioning}
-
-The compiler builds a representation of the graph by inspecting axioms of the
-program. Next, it orders the nodes of the graph using a breadth-first
-topological sort. This node ordering is written to the byte-code file and then
-used to initially partition nodes across available threads.
-
 \subsubsection{Coordination directives}
 
-Coordination directives are compiled in two different ways, depending whether they
+Coordination directives are compiled in two different ways, depending on whether they
 appear in the body or in the head of the rule. Coordination facts in the body
 are compiled into special instructions that inspect the state of the virtual
 machine. For example, the directive \texttt{node-priority} will inspect the
@@ -34,7 +27,7 @@ target node, retrieve the current priority and assign the priority to a
 register. Coordination facts in the head of the rule are also implemented as
 special instructions of the virtual machine, but they perform some action,
 instead of returning something. While these are still facts from the point of
-view of the language, they are consumed immediatelly in order to apply the
+view of the language, they are deleted immediatelly in order to apply the
 operation, instead of being derived like any other regular fact. This is more
 efficient since we do not need to create a new fact.
 
@@ -46,8 +39,8 @@ for executing a subset of nodes. Nodes are either inactive, with no new facts,
 or active, where they will be placed in the corresponding thread's queue.
 Threads do useful work by processing the nodes in their queues. Whenever a
 thread becomes idle, it attempts to steal nodes from a random thread into its
-own queues. If unsuccessful, the thread synchronizes with the other threads to
-become inactive.
+own queues. If sucessful, the thread becomes idle and waits for program
+termination while periodically attempting to steal nodes.
 
 \subsubsection{Nodes}
 
@@ -100,9 +93,9 @@ Fig.~\ref{fig:node_states} represents the valid state transitions of a node:
 Each node is protected by a main spinlock that allows threads to change node
 attributes: incoming facts, owner thread, node state and locality information.
 There is also an internal spinlock that is locked whenever the node enters into
-the \textbf{working} state. If a thread sends facts to a node placed in
-another thread, it attempts to lock the internal lock in order to update the
-indexing structures of the node, otherwise it adds the facts to the list of
+the \textbf{working} state. If a node sends facts to node is placed in
+another thread, the current thread first attempts to lock the internal lock in order to update the
+indexing structures of the target node, otherwise it adds the facts to the list of
 incoming facts that are later processed by the owner thread.
 
 \subsubsection{Threads}

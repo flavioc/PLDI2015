@@ -1,4 +1,7 @@
-
+Randomized and approximation algorithms can obtain significant benefits from
+coordination directives because although the final program results will not be
+exact, they follow important statistical properties and can be computed faster.
+Examples of such programs are Loopy Belief Propagation.
 Loopy Belief Propagation~\cite{Murphy99loopybelief} (LBP) is an approximate inference algorithm
 used in graphical models with cycles. In its essence, LBP is a sum-product message passing algorithm
 where nodes exchange messages with their immediate neighbors and apply some computations to the messages
@@ -116,9 +119,11 @@ second-phase(A, [A, B | Next], Back)
    -o update(A), waiting(Back), *underline{schedule-next(B)},
       second-phase(B, [B | Next], A).
 \end{Verbatim}
-  \caption{Coordination code for the Splash Belief Propagation program. When a
-     linear fact is prefixed by \texttt{@}, it indicates that the fact is going
-  to be re-derived.}
+  \caption{Coordination code for the Splash Belief Propagation program. LM needs
+     50 lines of rules to implement splash trees, while GraphLab needs a
+     total of 350 lines of C++ to implement the same functionality.  Note
+     that when a linear fact is prefixed by \texttt{@}, it indicates that the
+     fact is going to be re-derived.}
   \label{code:sbp}
 \end{figure}
 \normalsize

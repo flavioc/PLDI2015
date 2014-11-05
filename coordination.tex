@@ -22,31 +22,30 @@ We introduce the concept of \emph{coordination facts} that allow the programmer
 to change how the run time schedules nodes and partitions the nodes among
 threads of execution. Coordination facts can be used in the body or head of the
 rules to allow the programmer to reason and change how execution is to be done.
-In this fashion, we keep the language declaratively because we reason logically
+In this fashion, we keep the language declarative because we reason logically
 about the state of execution, without the need to introduce extra-logical
-operators into the language that would reduce problems when attempting to prove
+operators into the language that would introduce problems when attempting to prove
 properties about programs.
 
-There are two kinds of coordination facts. The first kind of coordination facts are
-called \emph{sensing facts} and are used to sense information about data
-placement (where is the node being executed) or scheduled (what is the priority
-of the node). The second kind of coordination facts are \emph{action facts} that,
-when derived, are consumed to apply a coordination operation during execution.
-These logical rules that use coordination are implemented efficiently in the run
-time system and are hidden from the programmer.
+There are two classes of coordination facts. The first class of coordination facts are
+called \emph{sensing facts} and are used to sense information about the
+underlying runtime system, including node placement and node scheduling.
+The second kind of coordination facts are \emph{action facts} that are deleted
+to apply a coordination operation in the runtime system.
 
-\subsection{Scheduling Facts}
+\subsection{Scheduling Facts}\label{sec:fifo}
 
 We can use action facts to change the order in which nodes are evaluated by adding
 \emph{priorities}. Node priority works at the thread level
-so that each thread can make a local decision about which node of the graph to run next.
-Note that, by default, nodes are picked arbitrarily (a FIFO approach is used).
+so that each thread can make a local decision about which node to execute next.
+Note that, by default, nodes are picked using a FIFO approach, because that
+tends to work better for most programs since older nodes tend to have more facts
+to be used.
 
 We have two kinds of priorities: a \emph{temporary priority} and a \emph{default
-priority}. A default priority is used indefinitely, while a temporary priority
-is only used once, so that when node with a temporary priority $P$ is picked to
-run, the priority will default back to $D$, the default priority. Initially,
-all nodes have a default priority of $0$.
+priority}. A temporary priority momentarily changes the default priority $D$ of a
+node, so that once the node is done, the priority will default back to $D$.
+Initially, all nodes have a default priority of $0$.
 
 The following list presents the action facts available to manipulate the scheduling
 decisions of the system:
@@ -54,10 +53,10 @@ decisions of the system:
 \begin{itemize}
    \item \texttt{type linear set-priority(node, float)}: This sets the
    temporary priority of a node. If the node already has a priority, we only
-   change the priority if the new one is higher priority. The programmer can
+   change the priority if the new one is higher. The programmer can
    decide if priorities are to be ordered in ascending or descending order.
-   \item \texttt{type linear action add-priority(node, float)}: Increments,
-   temporarily, the current priority of the node.
+   \item \texttt{type linear action add-priority(node, float)}: Increases,
+   temporarily, the priority of the node.
    \item\texttt{type linear schedule-next(node)}: The work will fetch the
    highest priority node's priority $P$ from its set of nodes and set the
    action's argument node's priority as $P + 1.0$. If using the priorities in
@@ -68,14 +67,13 @@ decisions of the system:
    execution of the whole program.
 \end{itemize}
 
-LM provides the sensing fact \texttt{type linear priority(node, node, float)},
-where the second argument is the target node and the third argument is the
-node priority. Sensing facts are only used in the body of the rules in order
+LM provides the sensing fact \texttt{priority(A, B, P)} in order to sense the
+priority \texttt{P} of node \texttt{B} from node \texttt{A}.
+Sensing facts are only used in the body of the rules in order
 to fetch information from the runtime system.
-Note that when sensing facts are consumed, they are re-derived automatically,
-except if the programmer explicitly tells the compiler otherwise. 
+Note that when sensing facts are deleted, they are re-derived automatically.
 Logically, \texttt{set-priority} and \texttt{set-default-priority} update the
-value of \texttt{priority} facts, but this done seamlessly by the runtime
+value of \texttt{priority} facts, but this done automatically by the runtime
 system.
 
 \subsubsection{Partitioning facts}

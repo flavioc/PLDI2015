@@ -1,12 +1,12 @@
-Declarative programming is good for parallel programming but makes it hard for
-the programmer to fine tune scheduling and data layout of the program.
-some programs require more information in order to execute better.
-with our approach we permit the programmer to write declarative programs
-but then optimize them later using sensing facts and action facts that
-understand and change how the programs are executed.
-
-Linear Meld is a concurrent forward-chaining linear logic programming
-language where logical facts can be asserted and retracted in a
-structured way. In Linear Meld, a program is seen as a database of
-logical facts and a set of derivation rules. The database of facts is
-partitioned by the nodes of a graph structure which leads to
+Declarative programming has been hailed as a promising approach to parallel
+programming since it hides the implementation details of parallelism away from the
+programmer. However, some control is lost when code is
+automatically parallelized, leaving the programmer with very little
+opportunities for fine tuning programs.
+We extended Linear Meld, a concurrent forward-chaining linear logic programming
+language, with coordination facts that allow the programmer to change
+computation scheduling and data layout. Our approach allows the programmer to
+write declarative parallel programs and then optionally use coordination facts
+to fine tune programs, while keeping the program fully declarative and amenable
+to correctness proofs. We show several application examples, experimental
+results and some advantages of our novel approach.

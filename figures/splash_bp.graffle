@@ -304,7 +304,7 @@
 			<key>Points</key>
 			<array>
 				<string>{61.000009249989297, 154.50001761661284}</string>
-				<string>{76.999990750008024, 154.50001761661284}</string>
+				<string>{76.999990750008038, 154.50001761661284}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -1623,6 +1623,18 @@
 			<string>{{455.5, 229.99999999999983}, {37, 35}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
+			<key>FontInfo</key>
+			<dict>
+				<key>Color</key>
+				<dict>
+					<key>w</key>
+					<string>0</string>
+				</dict>
+				<key>Font</key>
+				<string>Helvetica</string>
+				<key>Size</key>
+				<real>12</real>
+			</dict>
 			<key>ID</key>
 			<integer>100</integer>
 			<key>Shape</key>
@@ -1653,6 +1665,18 @@
 			<string>{{401.5, 230.99999999999983}, {37, 35}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
+			<key>FontInfo</key>
+			<dict>
+				<key>Color</key>
+				<dict>
+					<key>w</key>
+					<string>0</string>
+				</dict>
+				<key>Font</key>
+				<string>Helvetica</string>
+				<key>Size</key>
+				<real>12</real>
+			</dict>
 			<key>ID</key>
 			<integer>99</integer>
 			<key>Shape</key>
@@ -1755,6 +1779,18 @@
 			<string>{{131.5, 230.99999999999983}, {37, 35}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
+			<key>FontInfo</key>
+			<dict>
+				<key>Color</key>
+				<dict>
+					<key>w</key>
+					<string>0</string>
+				</dict>
+				<key>Font</key>
+				<string>Helvetica</string>
+				<key>Size</key>
+				<real>12</real>
+			</dict>
 			<key>ID</key>
 			<integer>94</integer>
 			<key>Shape</key>
@@ -1771,6 +1807,19 @@
 						<string>0</string>
 						<key>r</key>
 						<string>0.955357</string>
+					</dict>
+					<key>FillType</key>
+					<integer>2</integer>
+					<key>GradientAngle</key>
+					<real>90</real>
+					<key>GradientColor</key>
+					<dict>
+						<key>b</key>
+						<string>0.2</string>
+						<key>g</key>
+						<string>0.2</string>
+						<key>r</key>
+						<string>0.2</string>
 					</dict>
 				</dict>
 				<key>shadow</key>
@@ -3550,6 +3599,18 @@
 			<string>{{455.5, 182.99999999999983}, {37, 35}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
+			<key>FontInfo</key>
+			<dict>
+				<key>Color</key>
+				<dict>
+					<key>w</key>
+					<string>0</string>
+				</dict>
+				<key>Font</key>
+				<string>Helvetica</string>
+				<key>Size</key>
+				<real>12</real>
+			</dict>
 			<key>ID</key>
 			<integer>41</integer>
 			<key>Shape</key>
@@ -3580,6 +3641,18 @@
 			<string>{{401.5, 183.99999999999983}, {37, 35}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
+			<key>FontInfo</key>
+			<dict>
+				<key>Color</key>
+				<dict>
+					<key>w</key>
+					<string>0</string>
+				</dict>
+				<key>Font</key>
+				<string>Helvetica</string>
+				<key>Size</key>
+				<real>12</real>
+			</dict>
 			<key>ID</key>
 			<integer>40</integer>
 			<key>Shape</key>
@@ -3610,6 +3683,18 @@
 			<string>{{347.5, 183.99999999999983}, {37, 35}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
+			<key>FontInfo</key>
+			<dict>
+				<key>Color</key>
+				<dict>
+					<key>w</key>
+					<string>0</string>
+				</dict>
+				<key>Font</key>
+				<string>Helvetica</string>
+				<key>Size</key>
+				<real>12</real>
+			</dict>
 			<key>ID</key>
 			<integer>39</integer>
 			<key>Shape</key>
@@ -3676,6 +3761,18 @@
 			<string>{{185.5, 183.99999999999983}, {37, 35}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
+			<key>FontInfo</key>
+			<dict>
+				<key>Color</key>
+				<dict>
+					<key>w</key>
+					<string>0</string>
+				</dict>
+				<key>Font</key>
+				<string>Helvetica</string>
+				<key>Size</key>
+				<real>12</real>
+			</dict>
 			<key>ID</key>
 			<integer>36</integer>
 			<key>Shape</key>
@@ -3693,6 +3790,19 @@
 						<key>r</key>
 						<string>0.955357</string>
 					</dict>
+					<key>FillType</key>
+					<integer>2</integer>
+					<key>GradientAngle</key>
+					<real>90</real>
+					<key>GradientColor</key>
+					<dict>
+						<key>b</key>
+						<string>0.2</string>
+						<key>g</key>
+						<string>0.2</string>
+						<key>r</key>
+						<string>0.2</string>
+					</dict>
 				</dict>
 				<key>shadow</key>
 				<dict>
@@ -3706,6 +3816,18 @@
 			<string>{{131.5, 183.99999999999983}, {37, 35}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
+			<key>FontInfo</key>
+			<dict>
+				<key>Color</key>
+				<dict>
+					<key>w</key>
+					<string>0</string>
+				</dict>
+				<key>Font</key>
+				<string>Helvetica</string>
+				<key>Size</key>
+				<real>12</real>
+			</dict>
 			<key>ID</key>
 			<integer>35</integer>
 			<key>Shape</key>
@@ -3722,6 +3844,19 @@
 						<string>0</string>
 						<key>r</key>
 						<string>0.955357</string>
+					</dict>
+					<key>FillType</key>
+					<integer>2</integer>
+					<key>GradientAngle</key>
+					<real>90</real>
+					<key>GradientColor</key>
+					<dict>
+						<key>b</key>
+						<string>0.2</string>
+						<key>g</key>
+						<string>0.2</string>
+						<key>r</key>
+						<string>0.2</string>
 					</dict>
 				</dict>
 				<key>shadow</key>
@@ -3772,6 +3907,18 @@
 			<string>{{401.5, 136.99999999999983}, {37, 35}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
+			<key>FontInfo</key>
+			<dict>
+				<key>Color</key>
+				<dict>
+					<key>w</key>
+					<string>0</string>
+				</dict>
+				<key>Font</key>
+				<string>Helvetica</string>
+				<key>Size</key>
+				<real>12</real>
+			</dict>
 			<key>ID</key>
 			<integer>32</integer>
 			<key>Shape</key>
@@ -3802,6 +3949,18 @@
 			<string>{{347.5, 136.99999999999983}, {37, 35}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
+			<key>FontInfo</key>
+			<dict>
+				<key>Color</key>
+				<dict>
+					<key>w</key>
+					<string>0</string>
+				</dict>
+				<key>Font</key>
+				<string>Helvetica</string>
+				<key>Size</key>
+				<real>12</real>
+			</dict>
 			<key>ID</key>
 			<integer>31</integer>
 			<key>Shape</key>
@@ -3832,6 +3991,18 @@
 			<string>{{293.5, 136.99999999999983}, {37, 35}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
+			<key>FontInfo</key>
+			<dict>
+				<key>Color</key>
+				<dict>
+					<key>w</key>
+					<string>0</string>
+				</dict>
+				<key>Font</key>
+				<string>Helvetica</string>
+				<key>Size</key>
+				<real>12</real>
+			</dict>
 			<key>ID</key>
 			<integer>30</integer>
 			<key>Shape</key>
@@ -3880,6 +4051,18 @@
 			<string>{{185.5, 136.99999999999983}, {37, 35}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
+			<key>FontInfo</key>
+			<dict>
+				<key>Color</key>
+				<dict>
+					<key>w</key>
+					<string>0</string>
+				</dict>
+				<key>Font</key>
+				<string>Helvetica</string>
+				<key>Size</key>
+				<real>12</real>
+			</dict>
 			<key>ID</key>
 			<integer>28</integer>
 			<key>Shape</key>
@@ -3897,6 +4080,19 @@
 						<key>r</key>
 						<string>0.955357</string>
 					</dict>
+					<key>FillType</key>
+					<integer>2</integer>
+					<key>GradientAngle</key>
+					<real>90</real>
+					<key>GradientColor</key>
+					<dict>
+						<key>b</key>
+						<string>0.2</string>
+						<key>g</key>
+						<string>0.2</string>
+						<key>r</key>
+						<string>0.2</string>
+					</dict>
 				</dict>
 				<key>shadow</key>
 				<dict>
@@ -3910,6 +4106,18 @@
 			<string>{{131.5, 136.99999999999983}, {37, 35}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
+			<key>FontInfo</key>
+			<dict>
+				<key>Color</key>
+				<dict>
+					<key>w</key>
+					<string>0</string>
+				</dict>
+				<key>Font</key>
+				<string>Helvetica</string>
+				<key>Size</key>
+				<real>12</real>
+			</dict>
 			<key>ID</key>
 			<integer>27</integer>
 			<key>Shape</key>
@@ -3927,6 +4135,19 @@
 						<key>r</key>
 						<string>0.76415</string>
 					</dict>
+					<key>FillType</key>
+					<integer>2</integer>
+					<key>GradientAngle</key>
+					<real>90</real>
+					<key>GradientColor</key>
+					<dict>
+						<key>b</key>
+						<string>0.2</string>
+						<key>g</key>
+						<string>0.2</string>
+						<key>r</key>
+						<string>0.2</string>
+					</dict>
 				</dict>
 				<key>shadow</key>
 				<dict>
@@ -3940,6 +4161,18 @@
 			<string>{{77.5, 136.99999999999983}, {37, 35}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
+			<key>FontInfo</key>
+			<dict>
+				<key>Color</key>
+				<dict>
+					<key>w</key>
+					<string>0</string>
+				</dict>
+				<key>Font</key>
+				<string>Helvetica</string>
+				<key>Size</key>
+				<real>12</real>
+			</dict>
 			<key>ID</key>
 			<integer>26</integer>
 			<key>Shape</key>
@@ -3956,6 +4189,19 @@
 						<string>0</string>
 						<key>r</key>
 						<string>0.955357</string>
+					</dict>
+					<key>FillType</key>
+					<integer>2</integer>
+					<key>GradientAngle</key>
+					<real>90</real>
+					<key>GradientColor</key>
+					<dict>
+						<key>b</key>
+						<string>0.2</string>
+						<key>g</key>
+						<string>0.2</string>
+						<key>r</key>
+						<string>0.2</string>
 					</dict>
 				</dict>
 				<key>shadow</key>
@@ -4060,6 +4306,18 @@
 			<string>{{185.5, 89.999999999999829}, {37, 35}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
+			<key>FontInfo</key>
+			<dict>
+				<key>Color</key>
+				<dict>
+					<key>w</key>
+					<string>0</string>
+				</dict>
+				<key>Font</key>
+				<string>Helvetica</string>
+				<key>Size</key>
+				<real>12</real>
+			</dict>
 			<key>ID</key>
 			<integer>20</integer>
 			<key>Shape</key>
@@ -4077,6 +4335,19 @@
 						<key>r</key>
 						<string>0.955357</string>
 					</dict>
+					<key>FillType</key>
+					<integer>2</integer>
+					<key>GradientAngle</key>
+					<real>90</real>
+					<key>GradientColor</key>
+					<dict>
+						<key>b</key>
+						<string>0.2</string>
+						<key>g</key>
+						<string>0.2</string>
+						<key>r</key>
+						<string>0.2</string>
+					</dict>
 				</dict>
 				<key>shadow</key>
 				<dict>
@@ -4090,6 +4361,18 @@
 			<string>{{131.5, 89.999999999999829}, {37, 35}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
+			<key>FontInfo</key>
+			<dict>
+				<key>Color</key>
+				<dict>
+					<key>w</key>
+					<string>0</string>
+				</dict>
+				<key>Font</key>
+				<string>Helvetica</string>
+				<key>Size</key>
+				<real>12</real>
+			</dict>
 			<key>ID</key>
 			<integer>19</integer>
 			<key>Shape</key>
@@ -4107,6 +4390,19 @@
 						<key>r</key>
 						<string>0.955357</string>
 					</dict>
+					<key>FillType</key>
+					<integer>2</integer>
+					<key>GradientAngle</key>
+					<real>90</real>
+					<key>GradientColor</key>
+					<dict>
+						<key>b</key>
+						<string>0.2</string>
+						<key>g</key>
+						<string>0.2</string>
+						<key>r</key>
+						<string>0.2</string>
+					</dict>
 				</dict>
 				<key>shadow</key>
 				<dict>
@@ -4120,6 +4416,18 @@
 			<string>{{77.5, 89.999999999999829}, {37, 35}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
+			<key>FontInfo</key>
+			<dict>
+				<key>Color</key>
+				<dict>
+					<key>w</key>
+					<string>0</string>
+				</dict>
+				<key>Font</key>
+				<string>Helvetica</string>
+				<key>Size</key>
+				<real>12</real>
+			</dict>
 			<key>ID</key>
 			<integer>18</integer>
 			<key>Shape</key>
@@ -4136,6 +4444,19 @@
 						<string>0</string>
 						<key>r</key>
 						<string>0.955357</string>
+					</dict>
+					<key>FillType</key>
+					<integer>2</integer>
+					<key>GradientAngle</key>
+					<real>90</real>
+					<key>GradientColor</key>
+					<dict>
+						<key>b</key>
+						<string>0.2</string>
+						<key>g</key>
+						<string>0.2</string>
+						<key>r</key>
+						<string>0.2</string>
 					</dict>
 				</dict>
 				<key>shadow</key>
@@ -4294,6 +4615,18 @@
 			<string>{{14.5, 5.9999999999993179}, {268, 272}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
+			<key>FontInfo</key>
+			<dict>
+				<key>Color</key>
+				<dict>
+					<key>w</key>
+					<string>0</string>
+				</dict>
+				<key>Font</key>
+				<string>Helvetica</string>
+				<key>Size</key>
+				<real>12</real>
+			</dict>
 			<key>ID</key>
 			<integer>140</integer>
 			<key>Shape</key>
@@ -4385,7 +4718,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2014-11-01 05:30:34 +0000</string>
+	<string>2014-11-05 01:22:52 +0000</string>
 	<key>Modifier</key>
 	<string>Flávio Cruz</string>
 	<key>NotesVisible</key>
@@ -4463,7 +4796,7 @@
 		<key>Expanded_Canvases</key>
 		<array/>
 		<key>Frame</key>
-		<string>{{87, 0}, {1304, 812}}</string>
+		<string>{{85, 0}, {1304, 812}}</string>
 		<key>ShowInfo</key>
 		<true/>
 		<key>ShowRuler</key>

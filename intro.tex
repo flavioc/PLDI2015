@@ -11,7 +11,7 @@ automatically parallelizes the program in order to take advantage of
 multiple threads of execution.
 The programming paradigm has been adopted with huge success in domain specific
 languages such as SQL and MapReduce~\cite{Dean:2008:MSD:1327452.1327492}.
-Although more general declarative languages have yet to be as successful, the
+Although general declarative languages have yet to be as successful, the
 future looks promising for this particular approach.
 
 We argue, however, that declarative programming leaves little to no programmer control
@@ -23,34 +23,33 @@ turn, such information would make execution better in terms of run time time,
 memory usage and scalability.
 
 In this paper, we extend Linear Meld (LM), a declarative language by
-\cite{cruz-iclp14,cruz-ppdp14}, with coordination facts that give programmer control over
-scheduling and data placement. LM is a linear logic programming language
-intended for programs over graph structures and with
-support for structured manipulation of mutable state using 
-linear logic~\cite{girard-87}. In LM, the nodes of the graph perform computation
-through derivation of rules and communicate with other nodes when logical facts
-are derived.
+\cite{cruz-iclp14,cruz-ppdp14}, with coordination facts that give programmer
+control over scheduling and data placement. LM is a linear logic programming
+language designed for programs that operate on graphs.  The use of linear
+logic~\cite{girard-87} allows support for structured manipulation of mutable
+state. In LM, computation is divided so that each node of the graph computes
+independently and is allowed to communicate with other nodes.
+Both computation and communication happen through derivation of logical rules.
 
-The operational semantics of LM allow for plenty of
-non-determinism since nodes execute independently and can be executed with
-any specific order. Since LM uses mutable state, the order in which nodes are
-executed may be crucial in terms of performance. We extended the language with
-coordination facts that can be used as a regular fact in the program logic to
-improve program execution.
-The first kind of coordination facts are
-called \emph{sensing facts} and are used to sense information about data
-placement (where is the node being executed). This allows the programmer to
-write logical rules that depend on the current state of the program. The second
-kind of coordination facts are \emph{action facts} that, when deriving, will be
-consumed to apply a scheduling operation during execution. This allows the
-programmer to prioritize node computation or place nodes in different threads.
-Both kinds of facts are \emph{linear facts} since they are consumed and/or change.
+Given that LM uses mutable state, the order in which nodes are executed may be
+crucial in terms of performance. We extended the language with coordination
+facts that can be used as a regular fact in the program logic to improve program
+execution.  The first kind of coordination facts are called \emph{sensing facts}
+and are used to sense information about the system the program is running on.
+This allows the programmer to write logical rules that depend on the current
+state of the program and the system. The second kind of coordination facts are
+\emph{action facts} that when deleted in rules are used to apply a scheduling
+operation during execution. This allows the programmer to prioritize node
+computation or place nodes in different threads.
 
 To the best of our knowledge, this is the first time that a declarative language allows 
 control over execution without a significant change in the language itself and
-without using non-declarative operations. This proves specially important since
+without using non-declarative operations. This is specially important since
 programs can proven to be correct even in the presence of coordination facts.
-Our other two main contributions are as follows: a novel way to coordinate
-declarative programs through user control that introduce measurable performance
-improvements; several application where we add programmer control to declarative
-programs in order to make them perform better.
+In order to prove our thesis, we first give a brief overview of the
+base language, including a small example. Next, in
+Section~\ref{sec:coordination} we introduce the available coordination facts,
+followed by Section~\ref{sec:implementation}, where we describe the
+implementation of the runtime required to implement the desired coordination
+mechanisms. Afterwards, in Section~\ref{sec:applications} we present several applications where we add
+programmer control to declarative programs in order to make them perform better.
