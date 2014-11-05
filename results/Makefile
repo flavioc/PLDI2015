@@ -5,7 +5,8 @@ SCRIPT = $(SCRIPT_DIR)/plot_coord.py
 IMGS = min-max-tictactoe.png new-heat-transfer-80.png \
 	shortest-uspowergrid.png system_splash-bp-400.png \
 	system_belief-propagation-400.png \
-	system_improve_belief-propagation-400.png
+	system_improve_belief-propagation-400.png \
+	comparison1.png
 
 all: $(IMGS)
 
@@ -20,6 +21,9 @@ shortest-uspowergrid.png: sssp.txt
 
 system_improve_belief-propagation-400.png system_belief-propagation-400.png system_splash-bp-400.png: splash-bp.txt
 	python $(SCRIPT_DIR)/plot_compare_system.py splash-bp.txt "system_"
+
+comparison1.png: compare.txt
+	python $(SCRIPT_DIR)/plot_compare.py compare.txt "" --global-only
 
 clean:
 	rm -f $(IMGS)

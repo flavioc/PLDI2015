@@ -1,0 +1,180 @@
+
+pagerank-5000 th1 4049 -> 4049
+pagerank-5000 th2 2314 -> 2314
+pagerank-5000 th4 1206 -> 1206
+pagerank-5000 th6 848 -> 848
+pagerank-5000 th8 650 -> 650
+pagerank-5000 th10 550 -> 550
+pagerank-5000 th12 481 -> 481
+pagerank-5000 th14 426 -> 426
+pagerank-5000 th16 410 -> 410
+
+pagerank-5000 o1 4527 -> 4527
+pagerank-5000 o2 2587 -> 2587
+pagerank-5000 o4 1423 -> 1423
+pagerank-5000 o6 1003 -> 1003
+pagerank-5000 o8 812 -> 812
+pagerank-5000 o10 701 -> 701
+pagerank-5000 o12 618 -> 618
+pagerank-5000 o14 567 -> 567
+pagerank-5000 o16 534 -> 534
+
+pagerank-search_engines th1 5814 -> 5814
+pagerank-search_engines th2 3572 -> 3572
+pagerank-search_engines th4 1757 -> 1757
+pagerank-search_engines th6 1261 -> 1261
+pagerank-search_engines th8 924 -> 924
+pagerank-search_engines th10 844 -> 844
+pagerank-search_engines th12 645 -> 645
+pagerank-search_engines th14 654 -> 654
+pagerank-search_engines th16 539 -> 539
+
+pagerank-search_engines o1 6071 -> 6071
+pagerank-search_engines o2 4290 -> 4290
+pagerank-search_engines o4 1943 -> 1943
+pagerank-search_engines o6 1509 -> 1509
+pagerank-search_engines o8 1140 -> 1140
+pagerank-search_engines o10 1101 -> 1101
+pagerank-search_engines o12 824 -> 824
+pagerank-search_engines o14 784 -> 784
+pagerank-search_engines o16 721 -> 721
+
+greedy-graph-coloring-2000 th1 16137 -> 16137
+greedy-graph-coloring-2000 th2 8308 -> 8308
+greedy-graph-coloring-2000 th4 4407 -> 4407
+greedy-graph-coloring-2000 th6 2915 -> 2915
+greedy-graph-coloring-2000 th8 2195 -> 2195
+greedy-graph-coloring-2000 th10 1797 -> 1797
+greedy-graph-coloring-2000 th12 1534 -> 1534
+greedy-graph-coloring-2000 th14 1316 -> 1316
+greedy-graph-coloring-2000 th16 1164 -> 1164
+
+greedy-graph-coloring-2000 o1 16899 -> 16899
+greedy-graph-coloring-2000 o2 8733 -> 8733
+greedy-graph-coloring-2000 o4 4636 -> 4636
+greedy-graph-coloring-2000 o6 3108 -> 3108
+greedy-graph-coloring-2000 o8 2320 -> 2320
+greedy-graph-coloring-2000 o10 1922 -> 1922
+greedy-graph-coloring-2000 o12 1591 -> 1591
+greedy-graph-coloring-2000 o14 1387 -> 1387
+greedy-graph-coloring-2000 o16 1239 -> 1239
+
+greedy-graph-coloring-search_engines th1 5312 -> 5312
+greedy-graph-coloring-search_engines th2 2893 -> 2893
+greedy-graph-coloring-search_engines th4 1733 -> 1733
+greedy-graph-coloring-search_engines th6 1111 -> 1111
+greedy-graph-coloring-search_engines th8 839 -> 839
+greedy-graph-coloring-search_engines th10 758 -> 758
+greedy-graph-coloring-search_engines th12 587 -> 587
+greedy-graph-coloring-search_engines th14 537 -> 537
+greedy-graph-coloring-search_engines th16 508 -> 508
+
+greedy-graph-coloring-search_engines o1 5194 -> 5194
+greedy-graph-coloring-search_engines o2 3941 -> 3941
+greedy-graph-coloring-search_engines o4 1710 -> 1710
+greedy-graph-coloring-search_engines o6 1254 -> 1254
+greedy-graph-coloring-search_engines o8 937 -> 937
+greedy-graph-coloring-search_engines o10 858 -> 858
+greedy-graph-coloring-search_engines o12 679 -> 679
+greedy-graph-coloring-search_engines o14 616 -> 616
+greedy-graph-coloring-search_engines o16 557 -> 557
+
+shortest-uspowergrid th1 68320 -> 68320
+shortest-uspowergrid th2 35591 -> 35591
+shortest-uspowergrid th4 17635 -> 17635
+shortest-uspowergrid th6 11384 -> 11384
+shortest-uspowergrid th8 8057 -> 8057
+shortest-uspowergrid th10 7442 -> 7442
+shortest-uspowergrid th12 6058 -> 6058
+shortest-uspowergrid th14 5015 -> 5015
+shortest-uspowergrid th16 4480 -> 4480
+
+shortest-uspowergrid o1 68260 -> 68260
+shortest-uspowergrid o2 35453 -> 35453
+shortest-uspowergrid o4 19763 -> 19763
+shortest-uspowergrid o6 11608 -> 11608
+shortest-uspowergrid o8 9153 -> 9153
+shortest-uspowergrid o10 8477 -> 8477
+shortest-uspowergrid o12 6639 -> 6639
+shortest-uspowergrid o14 4830 -> 4830
+shortest-uspowergrid o16 5648 -> 5648
+
+new-heat-transfer-80 o1 136373 -> 136373
+new-heat-transfer-80 o2 88914 -> 88914
+new-heat-transfer-80 o4 43505 -> 43505
+new-heat-transfer-80 o6 44226 -> 44226
+new-heat-transfer-80 o8 27489 -> 27489
+new-heat-transfer-80 o10 22088 -> 22088
+new-heat-transfer-80 o12 17555 -> 17555
+new-heat-transfer-80 o14 19908 -> 19908
+new-heat-transfer-80 o16 15056 -> 15056
+
+new-heat-transfer-80 th1 139077 -> 139077
+new-heat-transfer-80 th2 88277 -> 88277
+new-heat-transfer-80 th4 43875 -> 43875
+new-heat-transfer-80 th6 35923 -> 35923
+new-heat-transfer-80 th8 22221 -> 22221
+new-heat-transfer-80 th10 18093 -> 18093
+new-heat-transfer-80 th12 15483 -> 15483
+new-heat-transfer-80 th14 13572 -> 13572
+new-heat-transfer-80 th16 12118 -> 12118
+
+8queens-13 o1 220463 -> 220463
+8queens-13 o2 128312 -> 128312
+8queens-13 o4 69173 -> 69173
+8queens-13 o6 47181 -> 47181
+8queens-13 o8 33832 -> 33832
+8queens-13 o10 30582 -> 30582
+8queens-13 o12 25054 -> 25054
+8queens-13 o14 23008 -> 23008
+8queens-13 o16 18750 -> 18750
+
+8queens-13 th1 218841 -> 218841
+8queens-13 th2 120797 -> 120797
+8queens-13 th4 65372 -> 65372
+8queens-13 th6 44292 -> 44292
+8queens-13 th8 34340 -> 34340
+8queens-13 th10 30565 -> 30565
+8queens-13 th12 26613 -> 26613
+8queens-13 th14 23127 -> 23127
+8queens-13 th16 21000 -> 21000
+
+belief-propagation-400 o1 262466 -> 262466
+belief-propagation-400 o2 145601 -> 145601
+belief-propagation-400 o4 68422 -> 68422
+belief-propagation-400 o6 39634 -> 39634
+belief-propagation-400 o8 26457 -> 26457
+belief-propagation-400 o10 17280 -> 17280
+belief-propagation-400 o12 15583 -> 15583
+belief-propagation-400 o14 11890 -> 11890
+belief-propagation-400 o16 11224 -> 11224
+
+belief-propagation-400 th1 265576 -> 265576
+belief-propagation-400 th2 146376 -> 146376
+belief-propagation-400 th4 67010 -> 67010
+belief-propagation-400 th6 36422 -> 36422
+belief-propagation-400 th8 23365 -> 23365
+belief-propagation-400 th10 15874 -> 15874
+belief-propagation-400 th12 14065 -> 14065
+belief-propagation-400 th14 10741 -> 10741
+belief-propagation-400 th16 9846 -> 9846
+
+min-max-tictactoe o1 193261 -> 193261
+min-max-tictactoe o2 113716 -> 113716
+min-max-tictactoe o4 68218 -> 68218
+min-max-tictactoe o6 45985 -> 45985
+min-max-tictactoe o8 40969 -> 40969
+min-max-tictactoe o10 37052 -> 37052
+min-max-tictactoe o12 37145 -> 37145
+min-max-tictactoe o14 36360 -> 36360
+min-max-tictactoe o16 39585 -> 39585
+
+min-max-tictactoe th1 190024 -> 190024
+min-max-tictactoe th2 100065 -> 100065
+min-max-tictactoe th4 52659 -> 52659
+min-max-tictactoe th6 36610 -> 36610
+min-max-tictactoe th8 26363 -> 26363
+min-max-tictactoe th10 20809 -> 20809
+min-max-tictactoe th12 19372 -> 19372
+min-max-tictactoe th14 17284 -> 17284
+min-max-tictactoe th16 14950 -> 14950
