@@ -1,0 +1,19 @@
+13queens th1 310267 -> 310267
+13queens th2 319941 -> 319941
+13queens th4 219212 -> 219212
+13queens th6 189736 -> 189736
+13queens th8 129751 -> 129751
+13queens th10 114708 -> 114708
+13queens th12 101795 -> 101795
+13queens th14 82528 -> 82528
+13queens th16 77660 -> 77660
+
+13queens-coord th1 311655 -> 311655
+13queens-coord th2 193820 -> 193820
+13queens-coord th4 114846 -> 114846
+13queens-coord th6 75623 -> 75623
+13queens-coord th8 61253 -> 61253
+13queens-coord th10 62054 -> 62054
+13queens-coord th12 46653 -> 46653
+13queens-coord th14 33888 -> 33888
+13queens-coord th16 31840 -> 31840

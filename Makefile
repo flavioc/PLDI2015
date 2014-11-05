@@ -8,7 +8,8 @@ paper.pdf: paper.tex ack.tex intro.tex \
 		implementation.tex \
 		application.tex sssp.tex \
 		minimax.tex heat-transfer.tex \
-		splash-bp.tex
+		splash-bp.tex nqueens.tex \
+		conclusions.tex
 	pdflatex paper.tex
 	pdflatex paper.tex
 	bibtex paper

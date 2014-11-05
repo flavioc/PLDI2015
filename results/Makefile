@@ -6,7 +6,7 @@ IMGS = min-max-tictactoe.png new-heat-transfer-80.png \
 	shortest-uspowergrid.png system_splash-bp-400.png \
 	system_belief-propagation-400.png \
 	system_improve_belief-propagation-400.png \
-	comparison1.png
+	comparison1.png 13queens.png
 
 all: $(IMGS)
 
@@ -24,6 +24,9 @@ system_improve_belief-propagation-400.png system_belief-propagation-400.png syst
 
 comparison1.png: compare.txt
 	python $(SCRIPT_DIR)/plot_compare.py compare.txt "" --global-only
+
+13queens.png: nqueens.txt
+	python $(SCRIPT) nqueens.txt ""
 
 clean:
 	rm -f $(IMGS)
