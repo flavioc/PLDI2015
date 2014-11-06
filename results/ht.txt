@@ -17,3 +17,23 @@ new-heat-transfer-80-coord th10 15991 -> 15991
 new-heat-transfer-80-coord th12 12569 -> 12569
 new-heat-transfer-80-coord th14 10578 -> 10578
 new-heat-transfer-80-coord th16 9205 -> 9205
+
+new-heat-transfer-120 th1 541281 -> 541281
+new-heat-transfer-120 th2 399474 -> 399474
+new-heat-transfer-120 th4 215163 -> 215163
+new-heat-transfer-120 th6 156077 -> 156077
+new-heat-transfer-120 th8 116387 -> 116387
+new-heat-transfer-120 th10 92554 -> 92554
+new-heat-transfer-120 th12 81934 -> 81934
+new-heat-transfer-120 th14 68363 -> 68363
+new-heat-transfer-120 th16 63626 -> 63626
+
+new-heat-transfer-120-coord th1 269354 -> 269354
+new-heat-transfer-120-coord th2 246897 -> 246897
+new-heat-transfer-120-coord th4 162586 -> 162586
+new-heat-transfer-120-coord th6 108902 -> 108902
+new-heat-transfer-120-coord th8 83918 -> 83918
+new-heat-transfer-120-coord th10 68194 -> 68194
+new-heat-transfer-120-coord th12 57628 -> 57628
+new-heat-transfer-120-coord th14 51579 -> 51579
+new-heat-transfer-120-coord th16 44735 -> 44735

@@ -47,19 +47,21 @@ other logical rule remains the same. We add new logical ruels that coordinate
 the creation and execution of the splash trees:
 
 \begin{description}
-   \item[Tree building]: Each node has a \texttt{waiting} fact that is used to
-   start the tree building process. When the highest priority is picked, a token
-   is created that will navigate through the tree. Note that in the rule located
-   in lines 14-21, newly added nodes to the tree must have a positive priority
-   (due to new belief updates) and must be residing in the same thread.
-   We want the tree to be kept in the same thread in order to maximize
-   parallelism with 1 tree per thread.
-   \item[First phase]: In the third rule (lines 11-12), when the number of nodes
-   of the tree reaches a certain limit, a 
-   \texttt{first-phase} is generated in order to update the beliefs of all nodes
-   in the tree, starting from the leaves and ending at the root
-   As the nodes are updated, an \texttt{update} fact is derived to update
-   the belief values (line 35).
+   \item[Tree building]: Each node has a \texttt{inactive} fact that is used to
+   start the tree building process. When the highest priority node is picked, a
+   \texttt{tree} is created that will navigate through the tree. In lines 15-21,
+   we use an \emph{aggregate}~\cite{cruz-iclp14} to gather all the neighbor
+   nodes that have a positive priority (due to a new belief update) and are in the
+   same thread. Nodes are collected into list \texttt{L} (line 21) and
+   appended to list \texttt{Next}.
+   
+   \item[First phase]: In the
+   third rule (lines 11-12), when the number of nodes of the tree reaches a
+   certain limit, a \texttt{first-phase} is generated to update the beliefs of
+   all nodes in the tree, starting from the leaves and ending at the root As the
+   nodes are updated, an \texttt{update} fact is derived to update the belief
+   values (line 35).
+
    \item[Second phase]: In the second phase, the computation of beliefs is
    performed from the root to the leaves and the belief values are updated a
    second time (line 42).
@@ -76,29 +78,29 @@ for threads to build splash trees on.
    -o *underline{set-static(A), set-cpu(A, grid(X, Y))}.
 
 // TREE BUILDING
-// continue tree
-waiting(A), token(A, All, Next) -o token(A, All, Next).
-// start tree
-waiting(A), *underline{@priority(A, A, P)}, P > 0.0
-   -o token(A, [A], [A]).
+// expand tree by adding neighbor nodes
+inactive(A), tree(A, All, Next) -o expand-tree(A, All, Next).
+// start tree since we do not have one
+inactive(A), *underline{@priority(A, A, P)}, P > 0.0
+   -o expand-tree(A, [A], [A]).
 // end tree building
-token(A, All, Next), length(All) > maxnodes
+expand-tree(A, All, Next), length(All) >= maxnodes
    -o first-phase(A, All, reverse(All)).
 // expand tree
-token(A, All, [A | Next])
+expand-tree(A, All, [A | Next]), length([A | Next]) < maxnodes
    -o [collect => L | Side | !edge(A, L, Side),
-         0 = count(All, L),
-         0 = count(Next, L),
-         *underline{@priority(A, L, P)}, P > 0.0,
+         0 = count(All, L), // L is not in All
+         0 = count(Next, L), // L is not in Next
+         *underline{@priority(A, L, P), P > 0.0,}
          *underline{@cpu-id(A, L, Id1)},
-         *underline{@cpu-id(A, A, Id2)}, Id1 = Id2 |
-         send-token(A, All, Next ++ L)].
+         *underline{@cpu-id(A, A, Id2), Id1 = Id2} |
+         send-tree(A, All, Next ++ L)].
 
-send-token(A, All, [])
+send-tree(A, All, [])
    -o first-phase(A, All, reverse(All)).
-send-token(A, All, [B | Next])
+send-tree(A, All, [B | Next])
    -o *underline{schedule-next(B)},
-      token(B, All ++ [B], [B | Next]).
+      tree(B, All ++ [B], [B | Next]).
 
 // FIRST PHASE
 first-phase(A, [A], [A]) -o second-phase(A, [], A).
@@ -111,12 +113,12 @@ first-phase(A, All, [A, B | Next])
 
 // SECOND PHASE
 second-phase(A, [], _)
-   -o *underline{set-priority(A, 0.0)}, waiting(A), update(A).
+   -o *underline{set-priority(A, 0.0)}, inactive(A), update(A).
 second-phase(A, [A], Back)
-   -o update(A), waiting(Back),
-      waiting(A), *underline{set-priority(A, 0.0)}.
+   -o update(A), inactive(Back),
+      inactive(A), *underline{set-priority(A, 0.0)}.
 second-phase(A, [A, B | Next], Back)
-   -o update(A), waiting(Back), *underline{schedule-next(B)},
+   -o update(A), inactive(Back), *underline{schedule-next(B)},
       second-phase(B, [B | Next], A).
 \end{Verbatim}
   \caption{Coordination code for the Splash Belief Propagation program. LM needs
