@@ -3,4 +3,5 @@
 *.aux
 *.blg
 *.out
-.*.swp
+*.swp
+*.swo

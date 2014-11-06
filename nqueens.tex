@@ -4,8 +4,8 @@ other~\cite{8queens}. The challenge of finding all the
 distinct solutions to this problem is a good benchmark in designing
 parallel algorithms.
 
-The LM solution considers the chess board as a graph where nodes communicate
-with each other to build valid configurations. First, we start with the empty
+The LM solution considers the chess board as a graph where nodes exchange valid
+configurations between each other. First, we start with the empty
 state in the first row of the chess board. Then, each square adds its own
 position to the state and sends the state down, to the next row. Once a square
 receives new configurations, it attempts to add its position to the
@@ -15,7 +15,7 @@ the bottom row will have all the valid configurations.
 
 Since computation goes from the top row to the bottom row, not all placements of
 nodes on threads may be equally performant. This is specially true because the
-bottom rows tend to perform most work. The best placement is then to split the
+bottom rows tend to perform the most work. The best placement is then to split the
 board vertically, so that, in optimal conditions, each thread gets the same
 number of columns.  Our experiments show that, on shared memory, it does not
 matter much if we start with a bad placement since node stealing overcomes those

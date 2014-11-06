@@ -6,21 +6,14 @@ is transformed at each node and the result reduced to a final result in the
 \emph{reduce phase}. In order to facilitate the writing of programs over large
 datasets, SQL-like languages such as
 PigLatin~\cite{Olston:2008:PLN:1376616.1376726} have been developed.
-PigLatin automatically compiles declarative code into physical plans
-that are executed over Hadoop but provides very little control to the
-programmer.
-
-A declarative approach that is regaining popularity is
-Datalog~\cite{Ullman:1990:PDK:533142}, also a forward-chaining logic programming
-language. Traditionally used in deductive databases, it is now being increasingly used in different fields
-such as distributed networking~\cite{Loo-condie-garofalakis-p2}, sensor
-nets~\cite{Chu:2007:DID:1322263.1322281} and cloud computing~\cite{alvaro:boom}.
-LM itself is inspired in P2~\cite{Loo-condie-garofalakis-p2} since it also models
-programs as a graph structure. Another programming system that uses the graph
-abstraction is Dryad~\cite{Isard:2007:DDD:1272996.1273005}, which combines computational vertices
-with communication channels (edges) to form a data-flow graph. The program is
-then scheduled to run on multiple computers/cores and data is partitioned
-automatically during runtime.
+PigLatin builds on top of MapReduce and allows the programmer to write complex
+data-flow graphs, increasing the abstraction of the MapReduce paradigm.
+An alternative to PigLatin/MapReduce is
+Dryad~\cite{Isard:2007:DDD:1272996.1273005}
+that allows programmers to design arbitrary computation patterns using the DAG
+abstraction. It combines computational vertices with communication channels
+(edges). Dryad programs are automatically scheduled to run on multiple
+computers/cores and data is partitioned automatically during runtime.
 
 Many programming languages follow the so-called \emph{coordination
 paradigm}~\cite{Papadopoulos98coordinationmodels}, a form of distributed
@@ -42,7 +35,7 @@ Linda is be implemented on top of many
 popular languages by simply creating a communication and storage mechanism for
 the tuple space and then adding the directives as a language library.
 
-Another important coordination language is Delirium~\cite{Delirium}. Unlike
+Another early coordination language is Delirium~\cite{Delirium}. Unlike
 Linda which is embbeded into another language, Delirium actually embeds
 operators written in other languages inside the Delirium language.
 The advantages of Delirium are improved abstraction
@@ -51,21 +44,20 @@ coordination language.
 
 Linda and Delirium are limited in the sense that the programmer can only
 coordinate the scheduling of processing units, while the placement of data is
-left to the implementation. LM also differs from those languages since it
-raises the abstraction level from the processing units to nodes of a graph.
+left to the implementation. LM differs from those languages since it
+is fully data-driven and coordination acts on data instead of processing units.
+The abstraction is then raised by considering data and algorithmic aspects of
+the program instead of focusing how processing units are used.
 Furthermore, the LM language is both a coordination language and a computation
 language and there is no distinction between the two components.
 
-\iffalse
-GraphLab~\cite{GraphLab2010} is a C++ framework for developing parallel machine
-learning algorithms. GraphLab allows nodes to
-have read/write access to different scopes through different concurrent access
-models in order to balance performance and data consistency. While some programs
-only need to access the local node's data, others may need to update edge
-information. Each consistency model will provide different guarantees that are
-better adapted to some algorithms. GraphLab provides different schedulers
-that dictate the order in which node's are computed, which is a rudimentary form
-of coordination. Later in this paper, we will show how certain GraphLab's
-schedulers can be easily implemented in LM through the use of coordination
-facts.
-\fi
+Forward-chaining logic programming was made famous by the Datalog
+language~\cite{Ullman:1990:PDK:533142}.  Traditionally used in deductive
+databases, it is now being increasingly used in different fields such as
+distributed networking~\cite{Loo-condie-garofalakis-p2}, sensor
+nets~\cite{Chu:2007:DID:1322263.1322281} and cloud computing~\cite{alvaro:boom}.
+LM itself is inspired in Meld~\cite{ashley-rollman-iclp09}, a Datalog-like language for
+programming distributed emsembles of modular robots. Meld introduced the idea of
+sensing and action facts in order to sense and act on the outside world,
+respectively. Coordination facts are inspired in the same principles but are
+used for coordinating data and computation.

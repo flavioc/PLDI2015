@@ -1,4 +1,3 @@
-
 Writing parallel programs in sequential languages is hard because manipulating
 shared state using multiple threads may result in data race
 conditions. Such issues are handled with low level constructs such as locks and
@@ -14,8 +13,9 @@ languages such as SQL and MapReduce~\cite{Dean:2008:MSD:1327452.1327492}.
 Although general declarative languages have yet to be as successful, the
 future looks promising for this particular approach.
 
-We argue, however, that declarative programming leaves little to no programmer control
-over how execution is scheduled or how data is laid out. This introduces some
+The problem with declarative programming is that it leaves little to no programmer control
+over how execution is scheduled or how data is laid out, making it hard to achieve
+necessary efficiency. This introduces some
 performance issues because even if the runtime system is able to reasonably
 parallelize the program using a general algorithm, there is a lack of specific
 information about the program that a compiler does not easily understand. In
@@ -35,17 +35,17 @@ Given that LM uses mutable state, the order in which nodes are executed may be
 crucial in terms of performance. We extended the language with coordination
 facts that can be used as a regular fact in the program logic to improve program
 execution.  The first kind of coordination facts are called \emph{sensing facts}
-and are used to sense information about the system the program is running on.
-This allows the programmer to write logical rules that depend on the current
-state of the program and the system. The second kind of coordination facts are
+and are used to sense information about the system the program is running on,
+e.g., scheduling and node placement on threads. The second kind of coordination facts are
 \emph{action facts} that when deleted in rules are used to apply a scheduling
-operation during execution. This allows the programmer to prioritize node
+operation during execution. Coordination facts allow the programmer to write
+logical rules that depend on the current state of the program and then prioritize node
 computation or place nodes in different threads.
 
 To the best of our knowledge, this is the first time that a declarative language allows 
 control over execution without a significant change in the language itself and
 without using non-declarative operations. This is specially important since
-programs can proven to be correct even in the presence of coordination facts.
+programs can be proven to be correct even in the presence of coordination facts.
 In order to prove our thesis, we first give a brief overview of the
 base language, including a small example. Next, in
 Section~\ref{sec:coordination} we introduce the available coordination facts,

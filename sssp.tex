@@ -3,7 +3,7 @@ Section~\ref{sec:language}. We are going to update the code in
 Fig.~\ref{code:shortest_path_program} so that nodes with the shortest distances
 are selected to run before others nodes. The coordinated version of the same
 algorithm is presented in Fig.~\ref{code:shortest_path_program_coord} and it
-uses one coordination fact, namely \texttt{set-priority} (line 15). Note that we
+uses one coordination fact, namely \texttt{set-priority} (line 14). Note that we
 also use a global program directive to order priorities in ascending order (line
 5).
 
@@ -24,16 +24,14 @@ type linear relax(node, int, list int).
 shortest(A, +00, []).
 relax(@1, 0, [@1]).
 
-relax(A, D1, P1), shortest(A, D2, P2),
-D1 < D2
-   -o shortest(A, D1, P1),
+shortest(A, D1, P1), D1 > D2, relax(A, D2, P2)
+   -o shortest(A, D2, P2),
       \{B, W | !edge(A, B, W) |
-         relax(B, D1 + W, P1 ++ [B]),
-         \underline{set-priority(B, float(D1 + W))}\}.
+         relax(B, D2 + W, P2 ++ [B]),
+         \underline{set-priority(B, float(D2 + W))}\}.
 
-relax(A, D1, P1), shortest(A, D2, P2),
-D1 >= D2
-   -o shortest(A, D2, P2).
+shortest(A, D1, P1), D1 <= D2, relax(A, D2, P2)
+   -o shortest(A, D1, P1).
 \end{Verbatim}
   \caption{Shortest Path Program.}
   \label{code:shortest_path_program_coord}
