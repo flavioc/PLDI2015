@@ -16,6 +16,44 @@ Next, the rules are recursively applied and the database is updated by adding
 new facts or deleting facts used during rule derivation.
 When no more rules are applicable, the program terminates.
 
+\begin{topfig}
+\scriptsize\begin{Verbatim}[numbers=left]
+type route edge(node, node, int).
+type linear shortest(node, int, list int).
+type linear relax(node, int, list int).
+
+!edge(@1, @2, 3). !edge(@1, @3, 1).
+!edge(@3, @2, 1). !edge(@3, @4, 5).
+!edge(@2, @4, 1).
+shortest(A, +00, []).
+relax(@1, 0, [@1]).
+
+shortest(A, D1, P1), D1 > D2, relax(A, D2, P2)
+   -o shortest(A, D2, P2),
+      {B, W | !edge(A, B, W) |
+         relax(B, D2 + W, P2 ++ [B])}.
+
+shortest(A, D1, P1), D1 <= D2, relax(A, D2, P2)
+   -o shortest(A, D1, P1).
+\end{Verbatim}
+  \scap{code:shortest_path_program}{Single Source Shortest Path program code.}
+\end{topfig}
+
+\begin{dblfig}[ht]
+\begin{center}
+  \subfloat[]{\includegraphics[width=0.3\textwidth]{figures/shortest2}}
+  \hspace{0.4cm}
+  \subfloat[]{\includegraphics[width=0.3\textwidth]{figures/shortest3}}
+  \hspace{0.4cm}
+  \subfloat[]{\includegraphics[width=0.3\textwidth]{figures/shortest8}}
+\end{center}
+\scap{fig:shortest_path_program}{Graphical representation of the SSSP program. Figure (a) represents the
+   program after propagating initial distance at node \texttt{@1}, followed by
+   Figure (b) where the first rule is applied in node \texttt{@3}. Figure (c)
+   represents the state of the final program, where all the shortest paths
+   have been computed.}
+\end{dblfig}
+
 CLM has been designed for writing programs that operate on graphs. CLM partitions
 the database by using the first argument of each fact. The first argument has
 type \emph{node} and represents a node in the graph. To achieve concurrency,
@@ -53,30 +91,6 @@ graph; \texttt{shortest(A, +00, [])} is the initial shortest distance
 algorithm by setting the initial distance from \texttt{@1} to \texttt{@1} to be
 0.
 
-\begin{topfig}
-\scriptsize\begin{Verbatim}[numbers=left]
-type route edge(node, node, int).
-type linear shortest(node, int, list int).
-type linear relax(node, int, list int).
-
-!edge(@1, @2, 3). !edge(@1, @3, 1).
-!edge(@3, @2, 1). !edge(@3, @4, 5).
-!edge(@2, @4, 1).
-shortest(A, +00, []).
-relax(@1, 0, [@1]).
-
-shortest(A, D1, P1), D1 > D2, relax(A, D2, P2)
-   -o shortest(A, D2, P2),
-      {B, W | !edge(A, B, W) |
-         relax(B, D2 + W, P2 ++ [B])}.
-
-shortest(A, D1, P1), D1 <= D2, relax(A, D2, P2)
-   -o shortest(A, D1, P1).
-\end{Verbatim}
-  \scap{code:shortest_path_program}{Single Source Shortest Path program code.}
-\end{topfig}
-\normalsize
-
 The first rule of the program (lines 11-14) reads as following: if the current
 \texttt{shortest} path \texttt{P1} with distance \texttt{D1} is larger
 than a new path \texttt{relax} with distance \texttt{D2}, then replace the
@@ -89,21 +103,6 @@ example, in Fig.~\ref{fig:shortest_path_program}~(a) we apply rule 1 in node
 \texttt{@1} where two new \texttt{relax} facts are derived at node \texttt{@2}
 and \texttt{@3}. Fig.~\ref{fig:shortest_path_program}~(b) is the result after
 applying the same rule but at node \texttt{2}.
-
-\begin{figure*}[ht]
-\begin{center}
-  \subfloat[]{\includegraphics[width=0.3\textwidth]{figures/shortest2}}
-  \hspace{0.4cm}
-  \subfloat[]{\includegraphics[width=0.3\textwidth]{figures/shortest3}}
-  \hspace{0.4cm}
-  \subfloat[]{\includegraphics[width=0.3\textwidth]{figures/shortest8}}
-\end{center}
-\scap{fig:shortest_path_program}{Graphical representation of the SSSP program. Figure (a) represents the
-   program after propagating initial distance at node \texttt{@1}, followed by
-   Figure (b) where the first rule is applied in node \texttt{@3}. Figure (c)
-   represents the state of the final program, where all the shortest paths
-   have been computed.}
-\end{figure*}
 
 The second rule of the program (lines 16-17) is read as following: if the
 current shortest path \texttt{D1} is shorter than the new path \texttt{D2} then
