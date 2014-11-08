@@ -3,8 +3,8 @@ shared state using multiple threads may result in data race
 conditions. Such issues are handled with low level constructs such as locks and
 condition variables, requiring a fair amount of effort to get right.
 Declarative programming has been hailed as a solution to this issue, since the
-problem of implementing the details of parallelism is moved away from the programmer to the
-compiler and runtime of the language. The programmer writes code
+problem of implementing the details of parallelism is moved from the programmer to the
+compiler and runtime. The programmer writes code
 without having to deal with parallel programming constructs and the compiler
 automatically parallelizes the program in order to take advantage of
 multiple threads of execution.
@@ -15,26 +15,29 @@ future looks promising for this particular approach.
 
 The problem with declarative programming is that it leaves little to no programmer control
 over how execution is scheduled or how data is laid out, making it hard to achieve
-necessary efficiency. This introduces some
+necessary efficiency. This introduces 
 performance issues because even if the runtime system is able to reasonably
 parallelize the program using a general algorithm, there is a lack of specific
-information about the program that a compiler does not easily understand. In
-turn, such information would make execution better in terms of run time time,
-memory usage and scalability.
+information about the program that a compiler cannot easily deduce. Such
+information could make execution better in terms of run time time,
+memory usage, and scalability.
 
-In this paper, we extend Linear Meld (LM), a declarative language by
-\cite{cruz-iclp14,cruz-ppdp14} with coordination facts that give programmer
+In this paper, we introduce Coordinated Linear Meld (CLM), a declarative
+language that extends the Linear Meld~(LM) language~\cite{cruz-iclp14,cruz-ppdp14} with coordination facts that give programmer
 control over scheduling and data placement. LM is a linear logic programming
 language designed for programs that operate on graphs.  The use of linear
-logic~\cite{girard-87} allows support for structured manipulation of mutable
+logic~\cite{girard-87} supports structured manipulation of mutable
 state. In LM, computation is divided so that each node of the graph computes
-independently and is allowed to communicate with other nodes.
-Both computation and communication happen through derivation of logical rules.
+independently and is allowed to \scare{communicate} with other nodes.
+Both computation and communication happen through the derivation of logical
+rules (which make up the program).
 
-Given that LM uses mutable state, the order in which nodes are executed may be
-crucial in terms of performance. We extended the language with coordination
-facts that can be used as a regular fact in the program logic to improve program
-execution.  The first kind of coordination facts are called \emph{sensing facts}
+The CLM language features coordination
+primitives that can be used in the same way as any other primitive,
+in other words, they are specificied with the same syntax and semantics as the
+rest of the programming language. These coordination primitives can be used to
+improve program execution based on the state of the program and the underlying
+machine. The first kind of coordination facts are called \emph{sensing facts}
 and are used to sense information about the system the program is running on,
 e.g., scheduling and node placement on threads. The second kind of coordination facts are
 \emph{action facts} that when deleted in rules are used to apply a scheduling
@@ -43,13 +46,14 @@ logical rules that depend on the current state of the program and then prioritiz
 computation or place nodes in different threads.
 
 To the best of our knowledge, this is the first time that a declarative language allows 
-control over execution without a significant change in the language itself and
-without using non-declarative operations. This is specially important since
-programs can be proven to be correct even in the presence of coordination facts.
-In order to prove our thesis, we first give a brief overview of the
-base language, including a small example. Next, in
-Section~\ref{sec:coordination} we introduce the available coordination facts,
-followed by Section~\ref{sec:implementation}, where we describe the
-implementation of the runtime required to implement the desired coordination
-mechanisms. Afterwards, in Section~\ref{sec:applications} we present several applications where we add
-programmer control to declarative programs in order to make them perform better.
+control over execution while staying declarative and without resorting to
+meta-language constructs. This is crucial to our goal of being able to prove
+programs correct since
+proofs can be constructed even in the presence of coordination facts.
+After briefly discussing related work, we present an overview of the base
+language, with an example. In Section~\ref{sec:coordination}, we introduce the
+current set of coordination facts,
+followed by a description of the changes required to implement the desired
+coordination mechanisms. In
+Section~\ref{sec:applications} we present several applications and show
+coordination can improve programs without destroying clarity or provability.

@@ -10,6 +10,7 @@
 %
 \usepackage{SIunits}            % typset units correctly
 \usepackage{courier}            % standard fixed width font
+\usepackage{setspace}
 \usepackage[scaled]{helvet} % see www.ctan.org/get/macros/latex/required/psnfss/psnfss2e.pdf
 \usepackage{url}                  % format URLs
 \usepackage{listings}          % format code
@@ -42,18 +43,20 @@
            {Carnegie Mellon University\\Pittsburgh, PA 15213, USA}
            {seth@cs.cmu.edu}
 
+\newcommand{\scare}[1]{``#1''} 
+
 \maketitle
+\doublespacing
 \begin{abstract}
 \input{abstract}
 \end{abstract}
 
 \category{D.1.3}{PROGRAMMING TECHNIQUES}{Concurrent Programming}[Parallel Programming]
-\category{D.3.4}{PROCESSORS}{Interpreters}
 \category{D.3.4}{PROCESSORS}{Run-time environments}
 
 \terms{Design, Languages, Performance}
 
-\keywords{Parallel Programming, Linear Logic, Virtual Machine, Implementation}
+\keywords{Parallel Programming, Linear Logic}
 
 \section{Introduction}
 \input{intro}
@@ -75,10 +78,6 @@
 
 \section{Conclusions}
 \input{conclusions}
-
-\section{Acknowledgements}
-
-\input{ack}
 
 \bibliographystyle{abbrvnat}
 \bibliography{refs}

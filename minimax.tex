@@ -5,10 +5,8 @@ turns~\cite{Edwards54}.
 
 The algorithm proceeds by building a game tree, where each tree node represents a
 game state and the children represent the possible game moves that can
-be made by either player 1 or player 2. The
-tree levels are built in a way that each player plays in turns and the
-first level represents the moves made by player 1.  An
-evaluation function \texttt{f(State)} is used to compute the score of
+be made by either player 1 or player 2.
+An evaluation function \texttt{f(State)} is used to compute the score of
 the board for each leaf of the tree. A node is a leaf when the game state can no longer be
 expanded. Finally, the
 algorithm recursively minimizes or maximizes the scores of each node.
@@ -23,20 +21,21 @@ leaf scores are computed or when a node fully minimizes or maximizes the
 children scores. When the program ends, only the root node has facts in its
 database.
 
-The LM code in Fig.~\ref{minimax:check-end} implements
-the initial expansion of the tree. The first three rules (lines 1-10) deal
-with the cases where no children nodes are created and the last three rules
-(12-29) deal with cases where new nodes may be created.
-The rule in lines 12-25 generate new nodes using the
+The code in Fig.~\ref{minimax:check-end} shows part of the program.
+The first three rules (lines 1-10) deal
+with the case where no children nodes are created and the last three rules
+(12-29) deal with the cases for creating new nodes.
+The rule in lines 12-25 generates new nodes using the
 \texttt{exists} language construct, which creates a new node address
-\texttt{B}, where a new \texttt{play} fact is created with the new
+\texttt{B}, where a new \texttt{play} fact is created with the a
 board. A \texttt{parent(B,A)} fact is derived to allow node \texttt{B} to
 communicate with its parent.
 
-As noted before in Section~\ref{sec:fifo}, we use a FIFO ordering for nodes,
+As noted before in Section~\ref{sec:fifo}, the runtime schedules nodes by XXX,
+in a FIFO ordering for nodes,
 meaning that when children are expanded, we first expand the children and
-then the children of the children. We note
-however, that this is not optimal for this program since the complete tree needs
+then the children of the children. In this case, the defined ordering
+is not optimal for since the complete tree needs
 to be expanded before computing the scores at the leaves. The memory
 complexity of the program is $\mathcal{O}(n)$, where $n$ is the number of nodes
 in the tree.
@@ -81,14 +80,15 @@ C <> 0
 With coordination, we set the priority nodes to be the same as the
 depth so that the tree is expanded in a depth-first fashion (lines 15 and 22).
 The memory complexity of the program then becomes $\mathcal{O}(d t)$, where $d$
-is the depth of the tree and $t$ is the number of threads. In
-Fig.~\ref{fig:minimax}, we have two threads (squares) and the first one has
-expanded the tree on the left side. When a second thread is idle, it steals the
-first unexpanded node and expands the tree from that position. Since threads
-prioritize deeper nodes, the scores of the first leaves are immediatelly
+is the depth of the tree and $t$ is the number of threads. As an example,
+consider a system with 2 threads, $T_1$ and $T_2$, where $T_1$ first expands the root
+node and then the first child. Since $T_2$ is idle, it steals half of the root's
+children nodes and starts expanding one of the nodes in a depth-first fashion.
+Since threads prioritize deeper nodes, the scores of the first leaves are immediatelly
 computed and then sent to the parent node. At this point, the leaves are deleted
 and reused for other nodes in the tree, resulting in minimal memory usage.
 
+\iffalse
 \begin{figure}[h!]
    \begin{center}
       \includegraphics[width=4.5cm]{figures/minimax_tree}
@@ -99,6 +99,7 @@ and reused for other nodes in the tree, resulting in minimal memory usage.
       tree before computing the node scores.}
    \label{fig:minimax}
 \end{figure}
+\fi
 
 We also take advantage of memory locality by using \texttt{set-static} (line
 14), so that nodes after a certain level are not stolen by other threads. While
@@ -129,10 +130,10 @@ distributed systems.
 In Fig.~\ref{results:memory_minmax} we compare the memory usage and scalability
 of the coordinated MiniMax against the regular MiniMax. The coordinated version
 sees a huge reduction of memory usage, needing at most 8MB for 16 threads, while
-the regular version needs around 14GB. Note that as the number of threads goes
+the regular version needs almost 14GB. Note that as the number of threads goes
 up, memory usage also goes up. This is an artifact of our parallel memory
 allocator that allocates large chunks of memory beforehand.
-In terms of run time, our experimental results show a 14-fold speedup for the
+In terms of scalability, our experimental results show a 14-fold speedup for the
 coordinated version against a 12-fold for the regular version when using 16
 threads. When comparing the two versions directly, there is a 20\% run time
 reduction when using 16 threads in the coordinated version.

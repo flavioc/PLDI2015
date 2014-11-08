@@ -1,45 +1,43 @@
-Since LM uses linear logic and supports deletion of facts, the order in which
-nodes are scheduled can have a big impact on performance.
-
 The SSSP program present in Fig.~\ref{code:shortest_path_program} is concise and
-declarative but its performance may depend in the order in which nodes are
+declarative but its performance depends on the order in which nodes are
 executed. If nodes with greater distances are prioritized over other nodes, the
 program will generate more \texttt{relax} facts since it will take longer to
 reach the shortest distances. From Fig.~\ref{fig:shortest_path_program}, it is
-clear that the best computational ordering is the following: \texttt{@1},
+clear that the best scheduling is the following: \texttt{@1},
 \texttt{@3}, \texttt{@2} and then \texttt{@4}, where only 4 \texttt{relax}
 facts are generated. If we had decided to process nodes in order
 \texttt{@1}, \texttt{@2}, \texttt{@4}, \texttt{@3}, \texttt{@4},
 \texttt{@2}, then 6 \texttt{relax} facts would have been generated.
-Therefore, the optimal solution for SSSP is to schedule the node with the
+The optimal solution for SSSP is to schedule the node with the
 shortest distance, which is essentially the Dijkstra shortest path
 algorithm~\cite{Dijkstra}. Note how it is possible to change the nature of
 the algorithm by simply changing the order of node computation, but still
 retain the declarative nature of the program.
 
-We introduce the concept of \emph{coordination facts} that allow the programmer
-to change how the run time schedules nodes and partitions the nodes among
-threads of execution. Coordination facts can be used in the body or head of the
-rules to allow the programmer to reason and change how execution is to be done.
+\emph{Coordination facts} allow the programmer
+to change how the run time schedules nodes and how it partitions the nodes among
+threads of execution. Coordination facts can be used in either the body of the
+rule, the head of the rule or both.
+This allows scheduling and partition decisions to be made based on the state of
+the program and on the state of the underlying machine.
 In this fashion, we keep the language declarative because we reason logically
 about the state of execution, without the need to introduce extra-logical
-operators into the language that would introduce problems when attempting to prove
+operators into the language that would introduce significant issues when proving
 properties about programs.
 
-There are two classes of coordination facts. The first class of coordination facts are
-called \emph{sensing facts} and are used to sense information about the
+There are two kinds of coordination facts: \emph{sensing} and \emph{action}
+facts. Sensing facts are used to sense information about the
 underlying runtime system, including node placement and node scheduling.
-The second kind of coordination facts are \emph{action facts} that are deleted
-to apply a coordination operation in the runtime system.
+Action facts are used to apply a coordination operations on the runtime system.
 
 \subsection{Scheduling Facts}\label{sec:fifo}
 
-We can use action facts to change the order in which nodes are evaluated by adding
-\emph{priorities}. Node priority works at the thread level
-so that each thread can make a local decision about which node to execute next.
-Note that, by default, nodes are picked using a FIFO approach, because that
-tends to work better for most programs since older nodes tend to have more facts
-to be used.
+In order to allow different scheduling strategies, we introduce the concept of
+\emph{node priority} by assigning a priority value to every node in the program
+and by introducing coordination facts that manipulate such priority values.
+By default, nodes do not have any priority and can be picked in any order. In
+our implementation, we use a FIFO approach because this tends to work better for
+most programs since older nodes tend to a higher number of unexamined facts.
 
 We have two kinds of priorities: a \emph{temporary priority} and a \emph{default
 priority}. A temporary priority momentarily changes the default priority $D$ of a
@@ -49,31 +47,33 @@ Initially, all nodes have a default priority of $0$.
 The following list presents the action facts available to manipulate the scheduling
 decisions of the system:
 
+\newcommand{\code}[1]{\texttt{\small{#1}}}
+
 \begin{itemize}
-   \item \texttt{type linear set-priority(node, float)}: This sets the
-   temporary priority of a node. If the node already has a priority, we only
-   change the priority if the new one is higher. The programmer can
-   decide if priorities are to be ordered in ascending or descending order.
-   \item \texttt{type linear action add-priority(node, float)}: Increases,
-   temporarily, the priority of the node.
-   \item\texttt{type linear schedule-next(node)}: The work will fetch the
-   highest priority node's priority $P$ from its set of nodes and set the
-   action's argument node's priority as $P + 1.0$. If using the priorities in
-   ascending order, we pick the lowest priority and subtract $1.0$.
-   \item\texttt{type linear set-default-priority(node, float)}: Sets the default
+   \item \code{set-priority(node A, float F)}: This sets the
+   temporary priority of \texttt{A} to \texttt{F}. If \texttt{A} has a priority
+   \texttt{F'}, we only change the priority if \texttt{F} is higher. The programmer
+   can decide if priorities are to be ordered in ascending or descending order.
+   \item \code{add-priority(node A, float F)}: Increases,
+   temporarily, the priority of node \texttt{A} by \texttt{F}.
+   \item \code{schedule-next(node A)}: Changes the temporary priority of node
+   \texttt{A} to be 1 unit higher than the current highest priority.
+   \item \code{set-default-priority(node, float)}: Sets the default
    priority of the node.
-   \item \texttt{type linear action stop-program(node)}: Immediately stops the
+   \item \code{stop-program(node A)}: Immediately stops the
    execution of the whole program.
 \end{itemize}
 
-LM provides the sensing fact \texttt{priority(A, B, P)} in order to sense the
-priority \texttt{P} of node \texttt{B} from node \texttt{A}.
+LM provides the sensing fact \code{priority(node A, node B, float P)} in order to sense the
+priority \texttt{P} of node \texttt{B} (at node \texttt{A}).
 Sensing facts are only used in the body of the rules in order
 to fetch information from the runtime system.
-Note that when sensing facts are deleted, they are re-derived automatically.
+Note that when sensing facts are used to prove new facts, they are re-derived automatically.
+~\footnote{The observant reader will know that all the coordination facts are
+   linear and XXX
 Logically, \texttt{set-priority} and \texttt{set-default-priority} update the
 value of \texttt{priority} facts, but this done automatically by the runtime
-system.
+system.}
 
 \subsubsection{Partitioning facts}
 
@@ -82,25 +82,25 @@ the available threads executing the program. In terms of action
 facts, we have the following:
 
 \begin{itemize}
-   \item \texttt{type linear set-cpu(node, int)}: Moves the node to a
-   thread of execution.
-   \item \texttt{type linear set-affinity(node, node)}: Places the first node in
-   the same thread as the second node.
-   \item \texttt{type linear set-moving(node)}: Allows the node to move freely
+   \item \code{set-cpu(node A, int C)}: Moves node \texttt{A} to thread
+   \texttt{C}.
+   \item \code{set-affinity(node A, node B)}: Places node \texttt{B} in
+   the thread of node \texttt{B}.
+   \item \code{set-moving(node A)}: Allows node \texttt{A} to move freely
    between threads.
-   \item \texttt{type linear set-static(node)}: Forces the node to stay in the
+   \item \code{set-static(node A)}: Forces node \texttt{A} to stay in the
    same thread indefinitely.
 \end{itemize}
 
 For sensing facts, we have the following set of coordination facts:
 
 \begin{itemize}
-   \item \texttt{type linear cpu-id(node, node, int)}: The third argument
-   indicates the thread where the node of the second argument is currently running.
-   \item \texttt{type linear moving(node, node)}: Fact available if the node in the
-   second argument is allowed to move between threads.
-   \item \texttt{type linear static(node, node)}: Fact available if the node in
-   the second argument is not allowed to move between threads.
+   \item \code{cpu-id(node A, node B, int C)}: Store at node \texttt{A} which
+   thread, \texttt{C}, \texttt{B} is actually running on.
+   \item \code{moving(node A, node B)}: Fact available at node \texttt{A} if \texttt{B} is allowed
+   to move between threads.
+   \item \code{static(node A, node B)}: Fact available at node \texttt{A} if \texttt{B} is not
+   allowed to move between threads.
 \end{itemize}
 
 \iffalse

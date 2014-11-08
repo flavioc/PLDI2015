@@ -1,13 +1,13 @@
-There has been an increasing interest in declarative and data-centric
+There has been an increasing interest in declarative 
 languages. MapReduce~\cite{Dean:2008:MSD:1327452.1327492}, for instance, is a
-popular data-centric programming model that is optimized for large clusters. The
-scheduling and data sharing model is very simple: in the \emph{map phase}, data
-is transformed at each node and the result reduced to a final result in the
-\emph{reduce phase}. In order to facilitate the writing of programs over large
+popular data-centric programming model that is optimized for large clusters.
+Intrinsic to its popularity is the simplicity of its scheduling and data sharing model.
+In order to facilitate the writing of programs over large
 datasets, SQL-like languages such as
 PigLatin~\cite{Olston:2008:PLN:1376616.1376726} have been developed.
 PigLatin builds on top of MapReduce and allows the programmer to write complex
-data-flow graphs, increasing the abstraction of the MapReduce paradigm.
+data-flow graphs, raising the abstraction and easy of programmability of
+MapReduce programs.
 An alternative to PigLatin/MapReduce is
 Dryad~\cite{Isard:2007:DDD:1272996.1273005}
 that allows programmers to design arbitrary computation patterns using the DAG
@@ -44,20 +44,20 @@ coordination language.
 
 Linda and Delirium are limited in the sense that the programmer can only
 coordinate the scheduling of processing units, while the placement of data is
-left to the implementation. LM differs from those languages since it
-is fully data-driven and coordination acts on data instead of processing units.
+left to the implementation. But even more importantly, CLM differs from those
+languages because coordination acts on data instead of processing units.
 The abstraction is then raised by considering data and algorithmic aspects of
 the program instead of focusing how processing units are used.
 Furthermore, the LM language is both a coordination language and a computation
 language and there is no distinction between the two components.
 
-Forward-chaining logic programming was made famous by the Datalog
+Forward-chaining logic programming came into its own with the Datalog
 language~\cite{Ullman:1990:PDK:533142}.  Traditionally used in deductive
 databases, it is now being increasingly used in different fields such as
 distributed networking~\cite{Loo-condie-garofalakis-p2}, sensor
 nets~\cite{Chu:2007:DID:1322263.1322281} and cloud computing~\cite{alvaro:boom}.
-LM itself is inspired in Meld~\cite{ashley-rollman-iclp09}, a Datalog-like language for
+The LM language was inspired by Meld~\cite{ashley-rollman-iclp09}, a Datalog-like language for
 programming distributed emsembles of modular robots. Meld introduced the idea of
 sensing and action facts in order to sense and act on the outside world,
-respectively. Coordination facts are inspired in the same principles but are
-used for coordinating data and computation.
+respectively. LCM uses sensing facts to sense the underlying system that the program is running on and action facs
+act on that system.

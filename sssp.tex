@@ -1,8 +1,7 @@
-The Single Source Shortest Path (SSSP) program was already presented in
-Section~\ref{sec:language}. We are going to update the code in
-Fig.~\ref{code:shortest_path_program} so that nodes with the shortest distances
-are selected to run before others nodes. The coordinated version of the same
-algorithm is presented in Fig.~\ref{code:shortest_path_program_coord} and it
+In Section~\ref{sec:language}, we said that the SSSP program has an optimal
+scheduling if the nodes with the shortest distances are selected to run before
+other nodes.  The coordinated version of the SSSP
+program is presented in Fig.~\ref{code:shortest_path_program_coord} and it
 uses one coordination fact, namely \texttt{set-priority} (line 14). Note that we
 also use a global program directive to order priorities in ascending order (line
 5).
@@ -10,8 +9,8 @@ also use a global program directive to order priorities in ascending order (line
 When using a single thread, the algorithm behaves like
 Dijkstra's shortest path algorithm~\cite{Dijkstra}. However, when using multiple
 threads, each thread will pick the smallest distance from their subset of nodes.
-While this is not optimal since threads do not share a global view of priorities,
-many rule derivations are going to be avoided.
+While this does not yield the optimal program with relation to 1 thread, it
+allows for parallel execution and locally avoid unnecessary work. XXX
 
 \begin{figure}[h!]
 \scriptsize\begin{Verbatim}[numbers=left,commandchars=\\\{\}]
@@ -44,8 +43,8 @@ although it applies rules using smarter ordering. The derivation of
 \texttt{set-priority} does not change the behavior of the logical rules and the
 code remains declarative.
 
-Figure~\ref{results:sssp_uspowergrid} shows experimental results for a variant of
-the SSSP program that computes the SSSP for many of the nodes of the graph.
+Figure~\ref{results:sssp_uspowergrid} shows experimental results a
+SSSP program that computes the SSSP for 20\% of the nodes of the graph.
 There are some situations where unecessary facts are propagated
 because although the shortest distance is selected, sub-optimal distances may be
 propagated because many SSSP distances are computed at the same time.
@@ -71,7 +70,7 @@ scalable as the regular program.
          \end{tabular}
          \normalsize
       }
-      \subfloat[]{\includegraphics[width=4.5cm]{results/shortest-uspowergrid.png}}
+      \subfloat[]{\includegraphics[width=5.5cm]{results/shortest-uspowergrid.png}}
    \end{center}
    \caption{Experimental results for the SSSP program using US powergrid network.
    On the left we show the number of facts derived for the regular \textbf{R}
