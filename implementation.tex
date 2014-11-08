@@ -107,7 +107,7 @@ new facts which can result in new facts for the current node or other
 nodes.  The thread will continue processing facts for the current node
 until there are no new facts generated for it.  It will then pick
 another active node.  If its queues are all empty it will try to steal
-work (\ie nodes) from another thread.
+work (i.e., nodes) from another thread.
 
 To support priorities each thread has two pairs of queues: a pair of
 doubly linked lists known as the \emph{standard queue} and a pair of
