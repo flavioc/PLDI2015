@@ -22,7 +22,37 @@
 % known bug: http://tex.stackexchange.com/questions/1522/pdfendlink-ended-up-in-different-nesting-level-than-pdfstartlink
 \newcommand{\doi}[1]{doi:~\href{http://dx.doi.org/#1}{\Hurl{#1}}}   % print a hyperlinked DOI
 
+\newlength{\figcapspace}
+\setlength{\figcapspace}{-2ex plus 2pt minus 3pt}
+\newcommand{\scap}[2]{\vspace*{\figcapspace}\caption{\sl #2}\label{#1}}
 
+\newlength{\figtopspace}
+\newlength{\figbottomspace}
+\setlength{\figtopspace}{-.5ex}
+\setlength{\figbottomspace}{-.5ex plus 2pt minus 2pt}
+
+\setcounter{topnumber}{4}
+\setcounter{bottomnumber}{4}
+\renewcommand{\topfraction}{.9}
+\renewcommand{\bottomfraction}{.9}
+\setcounter{totalnumber}{6}
+\renewcommand{\floatpagefraction}{.9}
+\renewcommand{\dblfloatpagefraction}{.9}
+\renewcommand{\dbltopfraction}{.9}
+\setcounter{dbltopnumber}{4}
+\renewcommand{\textfraction}{.1}
+
+\newenvironment{topfig}{\begin{figure}[tb]
+\vspace{\figtopspace}}{\vspace{\figbottomspace}
+\end{figure}}
+
+\newenvironment{dblfig}{\begin{figure*}[tb]
+\vspace{\figtopspace}}{\vspace{\figbottomspace}
+\end{figure*}}
+
+%\renewcommand{\baselinestretch}{1.5} % double-spaced
+\clubpenalty 10000
+\widowpenalty 10000
 
 \begin{document}
 
@@ -46,7 +76,7 @@
 \newcommand{\scare}[1]{``#1''} 
 
 \maketitle
-\doublespacing
+%\doublespacing
 \begin{abstract}
 \input{abstract}
 \end{abstract}
