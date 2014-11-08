@@ -87,45 +87,58 @@ Fig.~\ref{fig:node_states} represents the valid state transitions of a node:
       specified by the state machine.}
 \end{topfig}
 
-Each node is protected by a main spinlock that allows threads to change node
-attributes: incoming facts, owner thread, state variable and locality information.
-A database spinlock is locked whenever the node enters into
-the \textbf{working} state. If a node sends facts to another node placed in
-another thread, the current thread first attempts to lock the database lock in order to update the
-indexing structures of the target node, otherwise it adds the facts to the list of
-incoming facts that are later processed by the owner thread.
+Each node is protected by a main spinlock that allows threads to
+change node attributes: incoming facts, owner thread, state variable
+and locality information.  A database spinlock is locked whenever the
+node enters into the \textbf{working} state.  
+
+To avoid unneccesary copying, when a node sends facts to a node
+located in another thread, the current thread first attempts to lock
+the database lock of the target node in order to directly update its
+indexing structures, otherwise it adds the facts to the list of
+incoming facts that are later processed by the owner thread of the
+target node.
 
 \subsubsection{Threads}
 
-Threads pop active nodes from a thread local queue and execute new candidate rules to
-generate new facts, which in turn can activate other nodes.
-XXX NEEDS REWRITE
-In order to reduce inter-thread communication, node priorities are implemented
-at the thread level. This means that, when a thread picks the highest
-priority node, it is actually the highest priority from the set of nodes owned
-by the thread and not the highest priority node in the whole program.
-To allow node priorities, we use 2 two pairs of queues per thread: a pair of doubly linked
-lists known as the \emph{standard queue} and a pair of min/max heap known as the \emph{priority queue}.
+The main loop for each thread is to get an active node from one of its
+local queues and process all applicable rules for that node generating
+new facts which can result in new facts for the current node or other
+nodes.  The thread will continue processing facts for the current node
+until there are no new facts generated for it.  It will then pick
+another active node.  If its queues are all empty it will try to steal
+work (\ie nodes) from another thread.
 
-The regular queue contains nodes without priorities and
-supports push into tail, remove node from the head, remove arbitrary node, and
-remove first half of nodes.
-The priority queue contains nodes with priorities and is implemented as a binary
-heap array. It supports the following operations: push into the heap, remove the min node,
-remove an arbitrary node, remove half of the nodes (horizontal split), and
-priority update.
-Operations for removing half of the queue are implemented in order to support
-node stealing, while operations to remove arbitrary nodes or update the
-priority of nodes allows threads to change the priority of nodes.
+To support priorities each thread has two pairs of queues: a pair of
+doubly linked lists known as the \emph{standard queue} and a pair of
+min/max heap known as the \emph{priority queue}.  The standard queue
+contains nodes without priorities and supports push into tail, remove
+node from the head, remove arbitrary node, and remove first half of
+nodes.  The priority queue contains nodes with priorities and is
+implemented as a binary heap array. It supports the following
+operations: push into the heap, remove the min node, remove an
+arbitrary node, remove half of the nodes (horizontal split), and
+priority update.  Operations for removing half of the queue are
+implemented in order to support node stealing, while operations to
+remove arbitrary nodes or update the priority of nodes allows threads
+to change the priority of nodes.
 
-The \texttt{next} and \texttt{prev} pointers of the regular queue are part of
-the node structure in order to save space. These pointers are also used as the
-index in the priority queue and current priority, respectively.
+To minimize inter-thread communication, node priorities are
+implemented at the thread level. Thus, when a thread picks the highest
+priority node from the priority queue, it is only the highest priority
+with respect to the set of nodes owned by the thread and not the
+highest priority node in the whole program.  
 
-Both the regular and priority queue are actually implemented as 2 queues each.
-The \emph{static queue} contains nodes that are local to a thread (and thus cannot be stolen) and
-the \emph{dynamic queue} maybe accessed by other threads during node stealing.
+The \texttt{next} and \texttt{prev} pointers of the regular queue are
+part of the node structure in order to save space. These pointers are
+also used as the index in the priority queue and current priority,
+respectively.
 
+Both the regular and priority queue are implemented as a pair of
+queues.  This first of the pair is the \emph{static queue} which
+contains nodes that cannot be stolen.  The other queue in each pair is
+the \emph{dynamic queue} which contains nodes which can be stolen by
+other threads.
 
 \subsubsection{Communication}
 
