@@ -12,7 +12,7 @@ threads, each thread will pick the smallest distance from their subset of nodes.
 While this does not yield the optimal program with relation to 1 thread, it
 allows for parallel execution and locally avoid unnecessary work. XXX
 
-\begin{figure}[h!]
+\begin{topfig}
 \scriptsize\begin{Verbatim}[numbers=left,commandchars=\\\{\}]
 type route edge(node, node, int).
 type linear shortest(node, int, list int).
@@ -32,9 +32,8 @@ shortest(A, D1, P1), D1 > D2, relax(A, D2, P2)
 shortest(A, D1, P1), D1 <= D2, relax(A, D2, P2)
    -o shortest(A, D1, P1).
 \end{Verbatim}
-  \caption{Shortest Path Program.}
-  \label{code:shortest_path_program_coord}
-\end{figure}
+  \scap{code:shortest_path_program_coord}{Shortest Path Program.}
+\end{topfig}
 \normalsize
 
 The most interesting property of the SSSP program presented in
@@ -56,7 +55,7 @@ threads. In turn, this makes the coordinated version 20 times faster
 than the regular version using 1 thread. Note that the coordinated program is as
 scalable as the regular program.
 
-\begin{figure}[h!]
+\begin{topfig}
    \begin{center}
       \subfloat[]{ \begin{tabular}[b]{ | c | c | c | }
          \hline                       
@@ -72,11 +71,10 @@ scalable as the regular program.
       }
       \subfloat[]{\includegraphics[width=5.5cm]{results/shortest-uspowergrid.png}}
    \end{center}
-   \caption{Experimental results for the SSSP program using US powergrid network.
+   \scap{results:sssp_uspowergrid}{Experimental results for the SSSP program using US powergrid network.
    On the left we show the number of facts derived for the regular \textbf{R}
    and coordinated version \textbf{C} using a variable number of threads
    \textbf{\# T}. On the right, we have the scalability of the regular and
    coordinated version. The speedup values are computed using the execution
    time for 1 thread.}
-   \label{results:sssp_uspowergrid}
-\end{figure}
+\end{topfig}

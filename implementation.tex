@@ -79,14 +79,13 @@ Fig.~\ref{fig:node_states} represents the valid state transitions of a node:
    \item[coordinating]: the node is moving from one queue to another queue.
 \end{description}
 
-\begin{figure}[h!]
+\begin{topfig}
    \centering
    \includegraphics[width=0.4\textwidth]{node_states.pdf}
-   \caption{The node state machine as represented by the state variable. During
+   \scap{fig:node_states}{The node state machine as represented by the state variable. During
       the lifetime of a program, each node goes through different states as
       specified by the state machine.}
-   \label{fig:node_states}
-\end{figure}
+\end{topfig}
 
 Each node is protected by a main spinlock that allows threads to change node
 attributes: incoming facts, owner thread, state variable and locality information.
@@ -172,13 +171,12 @@ is no degration of performance by adding coordination mechanisms. Since we also
 performed general performance improvements, programs such as PageRank and Greedy
 Graph Coloring programs now perform better than before.
 
-\begin{figure}[h!]
+\begin{topfig}
    \begin{center}
       \subfloat[]{\includegraphics[width=8cm]{results/comparison1.png}}
    \end{center}
-   \caption{Measuring the overhead of coordination mechanisms. The \textbf{Old}
+   \scap{results:comparison1}{Measuring the overhead of coordination mechanisms. The \textbf{Old}
    bars represent the performance of the original virtual machine, while
    \textbf{New} is the relative performance of the new version that includes
    coordination mechanisms.}
-   \label{results:comparison1}
-\end{figure}
+\end{topfig}

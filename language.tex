@@ -53,7 +53,7 @@ graph; \texttt{shortest(A, +00, [])} is the initial shortest distance
 algorithm by setting the initial distance from \texttt{@1} to \texttt{@1} to be
 0.
 
-\begin{figure}[h!]
+\begin{topfig}
 \scriptsize\begin{Verbatim}[numbers=left]
 type route edge(node, node, int).
 type linear shortest(node, int, list int).
@@ -73,9 +73,8 @@ shortest(A, D1, P1), D1 > D2, relax(A, D2, P2)
 shortest(A, D1, P1), D1 <= D2, relax(A, D2, P2)
    -o shortest(A, D1, P1).
 \end{Verbatim}
-  \caption{Single Source Shortest Path program code.}
-  \label{code:shortest_path_program}
-\end{figure}
+  \scap{code:shortest_path_program}{Single Source Shortest Path program code.}
+\end{topfig}
 \normalsize
 
 The first rule of the program (lines 11-14) reads as following: if the current
@@ -99,12 +98,11 @@ applying the same rule but at node \texttt{2}.
   \hspace{0.4cm}
   \subfloat[]{\includegraphics[width=0.3\textwidth]{figures/shortest8}}
 \end{center}
-\caption{Graphical representation of the SSSP program. Figure (a) represents the
+\scap{fig:shortest_path_program}{Graphical representation of the SSSP program. Figure (a) represents the
    program after propagating initial distance at node \texttt{@1}, followed by
    Figure (b) where the first rule is applied in node \texttt{@3}. Figure (c)
    represents the state of the final program, where all the shortest paths
    have been computed.}
-\label{fig:shortest_path_program}
 \end{figure*}
 
 The second rule of the program (lines 16-17) is read as following: if the

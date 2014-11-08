@@ -36,12 +36,11 @@ however that in the plot we do not take into account the costs of moving
 nodes between workers. In a real system, the performance gap may not be as wide
 since in the worst case there may be 144 moves.
 
-\begin{figure}[ht!]
+\begin{topfig}
    \begin{center}
       \subfloat[]{\includegraphics[width=5cm]{results/13queens.png}}
    \end{center}
-   \caption{Experimental results for the 13 Queens program. The coordinated
+   \scap{results:nqueens}{Experimental results for the 13 Queens program. The coordinated
       version is on average 2 times faster than the version with bad data
       placement.}
-   \label{results:nqueens}
-\end{figure}
+\end{topfig}

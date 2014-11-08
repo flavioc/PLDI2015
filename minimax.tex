@@ -40,7 +40,7 @@ to be expanded before computing the scores at the leaves. The memory
 complexity of the program is $\mathcal{O}(n)$, where $n$ is the number of nodes
 in the tree.
 
-\begin{figure}[h!]
+\begin{topfig}
 \scriptsize\begin{Verbatim}[numbers=left,commandchars=\\\{\}]
 expand(A, Board, [], 0, P, \underline{Depth})
   -o leaf(A, Board).
@@ -72,9 +72,8 @@ expand(A, Board, [C | Xs], N, P, \underline{Depth})
 C <> 0
   -o expand(A, Board ++ [C], Xs, N, P, \underline{Depth}).
 \end{Verbatim}
-\caption{MiniMax: checking if the game has ended and expanding the tree}
-\label{minimax:check-end}
-\end{figure}
+\scap{minimax:check-end}{MiniMax: checking if the game has ended and expanding the tree}
+\end{topfig}
 \normalsize
 
 With coordination, we set the priority nodes to be the same as the
@@ -89,16 +88,15 @@ computed and then sent to the parent node. At this point, the leaves are deleted
 and reused for other nodes in the tree, resulting in minimal memory usage.
 
 \iffalse
-\begin{figure}[h!]
+\begin{topfig}
    \begin{center}
       \includegraphics[width=4.5cm]{figures/minimax_tree}
    \end{center}
-   \caption{Expanding the MiniMax tree using coordination. By prioritizing
+   \scap{fig:minimax}{Expanding the MiniMax tree using coordination. By prioritizing
       deeper nodes, threads are forced to expand the tree using a depth-first
       approach, which is superior since there is no need to expand the whole
       tree before computing the node scores.}
-   \label{fig:minimax}
-\end{figure}
+\end{topfig}
 \fi
 
 We also take advantage of memory locality by using \texttt{set-static} (line
@@ -107,7 +105,7 @@ this is not critical for performance in shared memory systems where node
 stealing is fairly efficient, we expect that such coordination to be critical in
 distributed systems.
 
-\begin{figure}[h!]
+\begin{topfig}
    \begin{center}
       \subfloat[]{\small\begin{tabular}[b]{ | c | c | c |}
          \hline                       
@@ -122,10 +120,9 @@ distributed systems.
       }
       \subfloat[]{\includegraphics[width=4.5cm]{results/min-max-tictactoe.png}}
    \end{center}
-   \caption{Memory usage and scalability of the regular and coordinated versions
+   \scap{results:memory_minmax}{Memory usage and scalability of the regular and coordinated versions
       of MiniMax.}
-   \label{results:memory_minmax}
-\end{figure}
+\end{topfig}
 
 In Fig.~\ref{results:memory_minmax} we compare the memory usage and scalability
 of the coordinated MiniMax against the regular MiniMax. The coordinated version

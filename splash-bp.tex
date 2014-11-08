@@ -28,16 +28,15 @@ In Fig.~\ref{splash_bp} we represent two threads creating two different splash
 trees. It is encouraged to create several splash trees concurrently as long as
 we have threads to create them.
 
-\begin{figure}[h!]
+\begin{topfig}
    \begin{center}
       \includegraphics[width=6.5cm]{figures/splash_bp}
    \end{center}
-   \caption{Creating splash trees for belief propagation. Each threads picks the
+   \scap{splash_bp}{Creating splash trees for belief propagation. Each threads picks the
    highest priority node and creates a tree from that node. The belief values
    are updated in two phases: first from the leaves to the root and then from
    the root to the leaves.}
-   \label{splash_bp}
-\end{figure}
+\end{topfig}
 
 
 The code for Splash Belief Propagation~(SBP) in Fig.~\ref{code:sbp} presents the
@@ -72,7 +71,7 @@ line 2 in order to (1) force nodes to stay in the thread and (2) to partition
 nodes as a grid of threads. This setups a well defined area of nodes
 for threads to build splash trees on.
 
-\begin{figure}[h!]
+\begin{topfig}
 \scriptsize\begin{Verbatim}[numbers=left,commandchars=*\{\}]
 !coord(A, X, Y), start(A)
    -o *underline{set-static(A), set-cpu(A, grid(X, Y))}.
@@ -121,28 +120,26 @@ second-phase(A, [A, B | Next], Back)
    -o update(A), inactive(Back), *underline{schedule-next(B)},
       second-phase(B, [B | Next], A).
 \end{Verbatim}
-  \caption{Coordination code for the Splash Belief Propagation program. LM needs
+  \scap{code:sbp}{Coordination code for the Splash Belief Propagation program. LM needs
      50 lines of rules to implement splash trees, while GraphLab needs a
      total of 350 lines of C++ to implement the same functionality.  Note
      that when a linear fact is prefixed by \texttt{@}, it indicates that the
      fact is going to be re-derived.}
-  \label{code:sbp}
-\end{figure}
+\end{topfig}
 \normalsize
 
-\begin{figure*}[ht!]
+\begin{dblfig}
    \begin{center}
       \subfloat[]{\includegraphics[width=5cm]{results/system_belief-propagation-400.png}}
       \subfloat[]{\includegraphics[width=5cm]{results/system_splash-bp-400.png}}
       \subfloat[]{\includegraphics[width=5cm]{results/system_improve_belief-propagation-400.png}}
    \end{center}
-   \caption{Experimental results for LBP and SBP. Figure (a) shows the
+   \scap{results:splash_bp}{Experimental results for LBP and SBP. Figure (a) shows the
       scalability of LBP for both LM and GraphLab and Figure (b) shows the
       scalability of SBP. Figure (c) presents the
       improvements seen in SBP against LBP, where SBP runs, on average, 1.5 to 2.5
       times faster than LBP.}
-   \label{results:splash_bp}
-\end{figure*}
+\end{dblfig}
 
 
 In this program, coordination assumes a far more important role than we have
