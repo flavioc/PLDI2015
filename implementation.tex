@@ -99,6 +99,7 @@ incoming facts that are later processed by the owner thread.
 
 Threads pop active nodes from a thread local queue and execute new candidate rules to
 generate new facts, which in turn can activate other nodes.
+XXX NEEDS REWRITE
 In order to reduce inter-thread communication, node priorities are implemented
 at the thread level. This means that, when a thread picks the highest
 priority node, it is actually the highest priority from the set of nodes owned
