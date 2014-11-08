@@ -1,13 +1,13 @@
 Randomized and approximation algorithms can obtain significant benefits from
-coordination directives because although the final program results will not be
-exact, they follow important statistical properties and can be computed faster.
-Examples of such programs are Loopy Belief Propagation.
+coordination directives because their inherent non-determinism can be harnessed
+to evaluate rules in different orders.
+An example of such program is Loopy Belief Propagation.
 Loopy Belief Propagation~\cite{Murphy99loopybelief} (LBP) is an approximate inference algorithm
 used in graphical models with cycles. In its essence, LBP is a sum-product message passing algorithm
 where nodes exchange messages with their immediate neighbors and apply some computations to the messages
 received.
 
-LBP is an algorithm that maps very well to the graph based model of LM. In its
+LBP is an algorithm that maps very well to the graph based model of CLM. In its
 original form, the belief values of nodes are computed by synchronous iterations.
 LBP offers more concurrency when belief values are computed asynchronously
 leading to faster convergence. For this, every node keeps track of all messages
@@ -24,10 +24,9 @@ leaves. The root of this tree is the node with the highest priority (based on
 belief) while the other nodes in the tree must have a non-zero priority.
 Note that the priorities are updated whenever a neighbor updates their belief.
 These \emph{splash trees} are built iteratively until we reach convergence.
-In Fig.~\ref{splash_bp} we represent two threads creating two different splash
-trees. It is encouraged to create several splash trees concurrently as long as
-we have threads to create them.
+%In Fig.~\ref{splash_bp} we represent two threads creating two different splash trees.
 
+\iffalse
 \begin{figure}[h!]
    \begin{center}
       \includegraphics[width=6.5cm]{figures/splash_bp}
@@ -38,12 +37,12 @@ we have threads to create them.
    the root to the leaves.}
    \label{splash_bp}
 \end{figure}
-
+\fi
 
 The code for Splash Belief Propagation~(SBP) in Fig.~\ref{code:sbp} presents the
 coordination code for LBP.  Please note that we just appended the code in
 Fig.~\ref{code:sbp} to a working but unoptimized version of the algorithm, every
-other logical rule remains the same. We add new logical ruels that coordinate
+other rule remains the same. We add new rules that coordinate
 the creation and execution of the splash trees:
 
 \begin{description}
@@ -69,7 +68,7 @@ the creation and execution of the splash trees:
 
 Note that the \texttt{set-static} and \texttt{set-cpu} action fact are used in
 line 2 in order to (1) force nodes to stay in the thread and (2) to partition
-nodes as a grid of threads. This setups a well defined area of nodes
+nodes as a grid of threads. This sets up a well defined area of nodes
 for threads to build splash trees on.
 
 \begin{figure}[h!]
@@ -121,7 +120,7 @@ second-phase(A, [A, B | Next], Back)
    -o update(A), inactive(Back), *underline{schedule-next(B)},
       second-phase(B, [B | Next], A).
 \end{Verbatim}
-  \caption{Coordination code for the Splash Belief Propagation program. LM needs
+  \caption{Coordination code for the Splash Belief Propagation program. CLM needs
      50 lines of rules to implement splash trees, while GraphLab needs a
      total of 350 lines of C++ to implement the same functionality.  Note
      that when a linear fact is prefixed by \texttt{@}, it indicates that the
@@ -137,7 +136,7 @@ second-phase(A, [A, B | Next], Back)
       \subfloat[]{\includegraphics[width=5cm]{results/system_improve_belief-propagation-400.png}}
    \end{center}
    \caption{Experimental results for LBP and SBP. Figure (a) shows the
-      scalability of LBP for both LM and GraphLab and Figure (b) shows the
+      scalability of LBP for both CLM and GraphLab and Figure (b) shows the
       scalability of SBP. Figure (c) presents the
       improvements seen in SBP against LBP, where SBP runs, on average, 1.5 to 2.5
       times faster than LBP.}
@@ -149,17 +148,16 @@ In this program, coordination assumes a far more important role than we have
 seen before. Coordination rules fully drive the behavior of the algorithm and
 although the final result of the algorithm is identical to the original
 algorithm (minus probabilitistic errors), SBP works in a very different way.
-A system that also implements SBP is
-GraphLab~\cite{GraphLab2010}, a C++ framework for writing machine algorithms.
+SBP is implemented in GraphLab~\cite{GraphLab2010}, a C++ framework for writing machine algorithms.
 GraphLab provides the splash scheduler for these types of inferences as part of
-the framework. This particular scheduler is around 350 lines of complicated C++ code.
-With our coordination facts, it is possible to create fairly complicated coordination
-patterns with only 12 simple logical rules.
+the framework. This particular scheduler is around 350 lines of C++ code.
+With our coordination facts, it is possible to create the necessary
+patterns with only 12 simple rules.
 
-We measured the behavior of LBP and SBP for both LM and GraphLab.
+We measured the behavior of LBP and SBP for both CLM and GraphLab.
 Fig.~\ref{results:splash_bp} shows that both systems have very similar behavior
-when using a variable number of threads.
-Note that GraphLab avoids message passing between nodes since new neighbor
-belief updates are changed immediatelly, resulting in slightly better
-scalability for GraphLab.
-
+when using a variable number of threads.  The differences in performance between
+GraphLab and CLM comes mainly because GraphLab performs in-place updates of
+neighbor belief values, while CLM compiler and runtime system performs naive
+manipulation of facts by deriving rules. The in-place update could be generated
+by the compiler using smarter compilation strategies.

@@ -35,9 +35,10 @@ Action facts are used to apply a coordination operations on the runtime system.
 In order to allow different scheduling strategies, we introduce the concept of
 \emph{node priority} by assigning a priority value to every node in the program
 and by introducing coordination facts that manipulate such priority values.
-By default, nodes do not have any priority and can be picked in any order. In
-our implementation, we use a FIFO approach because this tends to work better for
-most programs since older nodes tend to a higher number of unexamined facts.
+By default, nodes have no priority and can be picked in any order. In
+our implementation, we use a FIFO approach because
+older nodes tend to a higher number of unexamined facts, from which to derive
+subsequent new facts.
 
 We have two kinds of priorities: a \emph{temporary priority} and a \emph{default
 priority}. A temporary priority momentarily changes the default priority $D$ of a
@@ -64,16 +65,17 @@ decisions of the system:
    execution of the whole program.
 \end{itemize}
 
-LM provides the sensing fact \code{priority(node A, node B, float P)} in order to sense the
+CLM provides the sensing fact \code{priority(node A, node B, float P)} in order to sense the
 priority \texttt{P} of node \texttt{B} (at node \texttt{A}).
 Sensing facts are only used in the body of the rules in order
 to fetch information from the runtime system.
 Note that when sensing facts are used to prove new facts, they are re-derived automatically.
-~\footnote{The observant reader will know that all the coordination facts are
-   linear and XXX
-Logically, \texttt{set-priority} and \texttt{set-default-priority} update the
-value of \texttt{priority} facts, but this done automatically by the runtime
-system.}
+~\footnote{The observant reader will notice that all the coordination facts are
+linear and when created in the body of a rule will be consumed. The system
+creates the necessary code to re-derive them without programmer interaction.
+Likewise, \texttt{set-priority} and \texttt{set-default-priority} update the
+value of \texttt{priority} facts by consuming and re-deriving them but this is
+done automatically by the runtime system.}
 
 \subsubsection{Partitioning facts}
 

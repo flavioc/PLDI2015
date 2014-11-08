@@ -27,7 +27,7 @@ special instructions of the virtual machine, but they perform some action,
 instead of being added to the database as facts.
 Semantically, action facts are like any other. However, since they are
 immediatelly used by the machine, there is no need to store them in the
-database, avoiding unnecessary allocations and deallocations.
+database, therefore avoiding unnecessary allocations and deallocations.
 
 \subsection{Execution}
 
@@ -35,7 +35,7 @@ The virtual machine is implemented in C++11 and uses the threading system from
 the standard library to implement multithreading. Each thread is responsible for
 executing a subset of \emph{active nodes}. A node is active if it has unexamined
 facts. After a node is processed, it becomes inactive until a new fact is
-derived for it. Inactive nodes have no work to do. When a new fact is derived for an
+derived for it. When a new fact is derived for an
 inactive node, the node is made active and placed on the appropriate queue of
 the appropriate thread.  Threads do useful work by processing active nodes from their queues. Whenever a
 thread becomes idle, it attempts to steal nodes from a random thread.
@@ -98,7 +98,8 @@ incoming facts that are later processed by the owner thread.
 
 \subsubsection{Threads}
 
-Threads pop active nodes from their queues and execute new candidate rules. 
+Threads pop active nodes from a thread local queue and execute new candidate rules to
+generate new facts, which in turn can activate other nodes.
 In order to reduce inter-thread communication, node priorities are implemented
 at the thread level. This means that, when a thread picks the highest
 priority node, it is actually the highest priority from the set of nodes owned
@@ -162,7 +163,7 @@ languages. For instance, the LBP program was found to be around 2 times slower
 than GraphLab, while N Queens program was found to be around 10 to 15 slower
 than a sequential C implementation. Some of those programs were compared against
 a Python implementations and LM faired fairly well. In this section, we measure
-the impact of the coordination mechanisms we have implemented for the new
+the impact of the coordination mechanisms we have implemented for the CLM
 virtual machine.
 
 Fig.~\ref{results:comparison1} shows the comparison between the original virtual

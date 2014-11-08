@@ -1,16 +1,15 @@
-In Section~\ref{sec:language}, we said that the SSSP program has an optimal
-scheduling if the nodes with the shortest distances are selected to run before
-other nodes.  The coordinated version of the SSSP
-program is presented in Fig.~\ref{code:shortest_path_program_coord} and it
-uses one coordination fact, namely \texttt{set-priority} (line 14). Note that we
-also use a global program directive to order priorities in ascending order (line
-5).
+Here we add coordination to the SSSP program described in Section
+The coordinated version of the
+SSSP~(Fig.~\ref{code:shortest_path_program_coord}) uses the coordination fact
+\texttt{set-priority} (line 14). We also use a global program directive to order
+priorities in ascending order (line 5).
 
-When using a single thread, the algorithm behaves like
-Dijkstra's shortest path algorithm~\cite{Dijkstra}. However, when using multiple
+When run with one thread, the algorithm behaves like
+Dijkstra's shortest path algorithm~\cite{Dijkstra}. When using multiple
 threads, each thread will pick the smallest distance from their subset of nodes.
 While this does not yield the optimal program with relation to 1 thread, it
-allows for parallel execution and locally avoid unnecessary work. XXX
+allows for parallel execution and locally avoids unnecessary work. The result
+scales well and it is close to Dijkstra's algorithm.
 
 \begin{figure}[h!]
 \scriptsize\begin{Verbatim}[numbers=left,commandchars=\\\{\}]
@@ -43,18 +42,16 @@ although it applies rules using smarter ordering. The derivation of
 \texttt{set-priority} does not change the behavior of the logical rules and the
 code remains declarative.
 
-Figure~\ref{results:sssp_uspowergrid} shows experimental results a
-SSSP program that computes the SSSP for 20\% of the nodes of the graph.
+Figure~\ref{results:sssp_uspowergrid} shows experimental results when the
+program computes the SSSP for 20\% of the nodes of the graph.
 There are some situations where unecessary facts are propagated
-because although the shortest distance is selected, sub-optimal distances may be
+because although the shortest distance is selected locally, sub-optimal distances may be
 propagated because many SSSP distances are computed at the same time.
 However, we see a reduction of over 50\% in the number of
 derived facts when using the coordinated version \textbf{C} over the regular
 version \textbf{R}. The results also show that the cordinated
 version using 16 threads is 1.3 times faster than the regular version using 16
-threads. In turn, this makes the coordinated version 20 times faster
-than the regular version using 1 thread. Note that the coordinated program is as
-scalable as the regular program.
+threads while still showing good scaling.
 
 \begin{figure}[h!]
    \begin{center}
