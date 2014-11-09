@@ -6,8 +6,8 @@ all: ht-locks.png sssp-locks.png minmax-locks.png \
 ht-locks.png: ht-reg.txt ht-coord.txt ht-local-only.txt plot_three.py lib.py
 	python plot_three.py ht-reg.txt ht-coord.txt ht-local-only.txt ht-locks.png "HT locks" "Local-Only"
 
-sssp-locks.png: sssp.txt sssp-coord.txt plot.py
-	python plot.py sssp.txt sssp-coord.txt sssp-locks.png "SSSP locks"
+sssp-locks.png: sssp.txt sssp-coord.txt plot_three.py lib.py
+	python plot_three.py sssp.txt sssp-coord.txt sssp-buffer.txt sssp-locks.png "SSSP locks" "Buffered"
 
 minmax-locks.png: minmax-reg.txt minmax-coord.txt plot.py
 	python plot.py minmax-reg.txt minmax-coord.txt minmax-locks.png "MiniMax locks"

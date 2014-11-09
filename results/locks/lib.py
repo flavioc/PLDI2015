@@ -1,5 +1,7 @@
 import re
 
+YAXIS = 200000000
+
 class dataobj(object):
    ATTRS = ['coord_normal_lock', 'coord_priority_lock', 'schedule_next_lock', 'add_priority_lock', 'set_priority_lock', 'set_moving_lock', 'set_static_lock', 'set_affinity_lock']
 

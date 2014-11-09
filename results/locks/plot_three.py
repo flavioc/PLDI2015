@@ -8,7 +8,7 @@ import matplotlib as mpl
 import numpy as np
 from matplotlib import rcParams
 from numpy import nanmax
-from lib import read_experiment
+from lib import read_experiment, YAXIS
 
 if len(sys.argv) != 7:
    print "not enough arguments"
@@ -46,7 +46,8 @@ pfailo = ax.bar(ind + width, opt_exp.get_fail_locks(), width, color=cmap(0.1))
 
 ptotalreg = ax.bar(ind + 2 * width, reg_exp.get_total_locks(), width, color=cmap(0.9), hatch=".")
 pfailreg = ax.bar(ind + 2 * width, reg_exp.get_fail_locks(), width, color=cmap(0.5))
-ax.set_ylim([0, max([max(reg_exp.get_total_locks()), max(coord_exp.get_total_locks())])*1.4])
+ax.set_ylim([0, max([max(reg_exp.get_total_locks()), max(coord_exp.get_total_locks())])*1.5])
+#ax.set_ylim([0, YAXIS])
 ax.set_xticks(ind)
 ax.set_xticklabels(('1', '2', '4', '6', '8', '10', '12', '14', '16'))
 ax.legend((ptotalc, ptotalo, pcoordc, pfailc, ptotalreg), ('Original Locks (Coordinated)', 'Original Locks (' + opt_name + ')', 'Coordination Locks', 'Coordination Locks (Failed)', 'Original Regular Locks'), loc=2)
