@@ -1,0 +1,144 @@
+THREAD 1
+main_db_lock: 0   /  1
+node_lock: 0   /  41448322
+thread_lock: 0 /  1
+database_lock: 0  /  34399334
+normal_lock: 0 /  16534184
+coord_normal_lock: 0 /  80115
+priority_lock: 0  /  15655877
+coord_priority_lock: 0  /  3495330
+schedule_next_lock: 0   /  0
+add_priority_lock: 0 /  5053229
+set_priority_lock: 0 /  0
+set_moving_lock: 0   /  0
+set_static_lock: 0   /  0
+set_affinity_lock: 0 /  0
+
+THREAD 2
+main_db_lock: 0   /  2
+node_lock: 2507   /  59228264
+thread_lock: 0 /  11499
+database_lock: 4544  /  49075193
+normal_lock: 3739 /  25855201
+coord_normal_lock: 55   /  103413
+priority_lock: 8468  /  21855847
+coord_priority_lock: 25068 /  3483607
+schedule_next_lock: 0   /  0
+add_priority_lock: 1116 /  5060579
+set_priority_lock: 0 /  0
+set_moving_lock: 0   /  0
+set_static_lock: 0   /  0
+set_affinity_lock: 0 /  0
+
+THREAD 4
+main_db_lock: 0   /  4
+node_lock: 11380  /  70721097
+thread_lock: 3 /  48900
+database_lock: 18882 /  58561563
+normal_lock: 35472   /  28208682
+coord_normal_lock: 464  /  253873
+priority_lock: 26192 /  27099732
+coord_priority_lock: 81186 /  5718030
+schedule_next_lock: 0   /  0
+add_priority_lock: 3520 /  8564313
+set_priority_lock: 0 /  0
+set_moving_lock: 0   /  0
+set_static_lock: 0   /  0
+set_affinity_lock: 0 /  0
+
+THREAD 6
+main_db_lock: 0   /  6
+node_lock: 41808  /  66426263
+thread_lock: 65   /  217406
+database_lock: 79780 /  55068723
+normal_lock: 55318   /  26139007
+coord_normal_lock: 2228 /  495718
+priority_lock: 75380 /  25290154
+coord_priority_lock: 223994   /  5683244
+schedule_next_lock: 0   /  0
+add_priority_lock: 13308   /  8576310
+set_priority_lock: 0 /  0
+set_moving_lock: 0   /  0
+set_static_lock: 0   /  0
+set_affinity_lock: 0 /  0
+
+
+THREAD 8
+main_db_lock: 0   /  8
+node_lock: 42576  /  68787203
+thread_lock: 55   /  192498
+database_lock: 81691 /  57008152
+normal_lock: 72375   /  27042874
+coord_normal_lock: 2117 /  482403
+priority_lock: 72027 /  26274291
+coord_priority_lock: 209756   /  5848116
+schedule_next_lock: 0   /  0
+add_priority_lock: 12753   /  8839132
+set_priority_lock: 0 /  0
+set_moving_lock: 0   /  0
+set_static_lock: 0   /  0
+set_affinity_lock: 0 /  0
+
+THREAD 10
+main_db_lock: 0   /  10
+node_lock: 67261  /  66390618
+thread_lock: 312  /  371680
+database_lock: 138041   /  55089802
+normal_lock: 99360   /  26338151
+coord_normal_lock: 5051 /  691984
+priority_lock: 109753   /  24961519
+coord_priority_lock: 329399   /  5450517
+schedule_next_lock: 0   /  0
+add_priority_lock: 19514   /  8291219
+set_priority_lock: 0 /  0
+set_moving_lock: 0   /  0
+set_static_lock: 0   /  0
+set_affinity_lock: 0 /  0
+
+THREAD 12
+main_db_lock: 0   /  12
+node_lock: 80114  /  67181743
+thread_lock: 261  /  319293
+database_lock: 141166   /  55712912
+normal_lock: 121549  /  26722778
+coord_normal_lock: 5050 /  659685
+priority_lock: 100704   /  25375498
+coord_priority_lock: 294582   /  5497836
+schedule_next_lock: 0   /  0
+add_priority_lock: 22805   /  8372359
+set_priority_lock: 0 /  0
+set_moving_lock: 0   /  0
+set_static_lock: 0   /  0
+set_affinity_lock: 0 /  0
+
+THREAD 14
+main_db_lock: 0   /  14
+node_lock: 96588  /  66626258
+thread_lock: 480  /  366849
+database_lock: 162074   /  55318310
+normal_lock: 139494  /  26246640
+coord_normal_lock: 6802 /  726829
+priority_lock: 107658   /  25022200
+coord_priority_lock: 325298   /  5615070
+schedule_next_lock: 0   /  0
+add_priority_lock: 28123   /  8556657
+set_priority_lock: 0 /  0
+set_moving_lock: 0   /  0
+set_static_lock: 0   /  0
+set_affinity_lock: 0 /  0
+
+THREAD 16
+main_db_lock: 0   /  16
+node_lock: 107786 /  66375901
+thread_lock: 623  /  354813
+database_lock: 148701   /  55060867
+normal_lock: 201080  /  26366174
+coord_normal_lock: 8308 /  722895
+priority_lock: 96936 /  25010629
+coord_priority_lock: 276980   /  5270535
+schedule_next_lock: 0   /  0
+add_priority_lock: 28677   /  8129300
+set_priority_lock: 0 /  0
+set_moving_lock: 0   /  0
+set_static_lock: 0   /  0
+set_affinity_lock: 0 /  0

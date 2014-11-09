@@ -9,7 +9,7 @@ paper.pdf: paper.tex ack.tex intro.tex \
 		application.tex sssp.tex \
 		minimax.tex heat-transfer.tex \
 		splash-bp.tex nqueens.tex \
-		conclusions.tex
+		conclusions.tex locks.tex
 	pdflatex paper.tex
 	pdflatex paper.tex
 	bibtex paper
