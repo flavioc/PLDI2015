@@ -1,13 +1,10 @@
 
-all: ht-locks.png ht-locks-local-only.png sssp-locks.png minmax-locks.png \
+all: ht-locks.png sssp-locks.png minmax-locks.png \
 	nqueens-bottom-moving.png nqueens-bottom-static.png \
 	nqueens-top-moving.png nqueens-top-static.png bp.png
 
-ht-locks.png: ht-reg.txt ht-coord.txt plot.py
-	python plot.py ht-reg.txt ht-coord.txt ht-locks.png "HT locks"
-
-ht-locks-local-only.png: ht-reg.txt ht-local-only.txt plot.py
-	python plot.py ht-reg.txt ht-local-only.txt ht-locks-local-only.png "HT Local-Only locks"
+ht-locks.png: ht-reg.txt ht-coord.txt ht-local-only.txt plot_three.py lib.py
+	python plot_three.py ht-reg.txt ht-coord.txt ht-local-only.txt ht-locks.png "HT locks" "Local-Only"
 
 sssp-locks.png: sssp.txt sssp-coord.txt plot.py
 	python plot.py sssp.txt sssp-coord.txt sssp-locks.png "SSSP locks"
