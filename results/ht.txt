@@ -1,3 +1,4 @@
+# regular
 new-heat-transfer-80 th1 137921 -> 137921
 new-heat-transfer-80 th2 88670 -> 88670
 new-heat-transfer-80 th4 44121 -> 44121
@@ -8,12 +9,24 @@ new-heat-transfer-80 th12 17311 -> 17311
 new-heat-transfer-80 th14 15116 -> 15116
 new-heat-transfer-80 th16 12295 -> 12295
 
-new-heat-transfer-80-coord th1 77571 -> 77571
-new-heat-transfer-80-coord th2 53221 -> 53221
-new-heat-transfer-80-coord th4 33505 -> 33505
-new-heat-transfer-80-coord th6 22125 -> 22125
-new-heat-transfer-80-coord th8 17717 -> 17717
-new-heat-transfer-80-coord th10 13734 -> 13734
-new-heat-transfer-80-coord th12 10757 -> 10757
-new-heat-transfer-80-coord th14 9911 -> 9911
-new-heat-transfer-80-coord th16 8811 -> 8811
+# local-only
+new-heat-transfer-80-coord1 th1 77571 -> 77571
+new-heat-transfer-80-coord1 th2 53221 -> 53221
+new-heat-transfer-80-coord1 th4 33505 -> 33505
+new-heat-transfer-80-coord1 th6 22125 -> 22125
+new-heat-transfer-80-coord1 th8 17717 -> 17717
+new-heat-transfer-80-coord1 th10 13734 -> 13734
+new-heat-transfer-80-coord1 th12 10757 -> 10757
+new-heat-transfer-80-coord1 th14 9911 -> 9911
+new-heat-transfer-80-coord1 th16 8811 -> 8811
+
+# coordinated
+new-heat-transfer-80-coord0 th1 75645 -> 75645
+new-heat-transfer-80-coord0 th2 53541 -> 53541
+new-heat-transfer-80-coord0 th4 36355 -> 36355
+new-heat-transfer-80-coord0 th6 24751 -> 24751
+new-heat-transfer-80-coord0 th8 18814 -> 18814
+new-heat-transfer-80-coord0 th10 15991 -> 15991
+new-heat-transfer-80-coord0 th12 12569 -> 12569
+new-heat-transfer-80-coord0 th14 10578 -> 10578
+new-heat-transfer-80-coord0 th16 9205 -> 9205

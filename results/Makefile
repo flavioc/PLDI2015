@@ -14,7 +14,7 @@ min-max-tictactoe.png: minmax.txt
 	python $(SCRIPT) minmax.txt ""
 
 new-heat-transfer-80.png: ht.txt
-	python $(SCRIPT) ht.txt ""
+	python $(SCRIPT_DIR)/plot_ht.py ht.txt
 
 shortest-uspowergrid.png: sssp.txt
 	python $(SCRIPT) sssp.txt ""
