@@ -1,6 +1,6 @@
 
-SCRIPT_DIR = $(HOME)/Projects/meld/scripts/plots
-SCRIPT = $(SCRIPT_DIR)/plot_coord.py
+SCRIPT_DIR = $(PWD)
+SCRIPT = plot_coord.py
 
 IMGS = min-max-tictactoe.png new-heat-transfer-80.png \
 	shortest-uspowergrid.png system_splash-bp-400.png \
