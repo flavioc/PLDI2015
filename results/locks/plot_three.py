@@ -49,6 +49,8 @@ pfailreg = ax.bar(ind + 2 * width, reg_exp.get_fail_locks(), width, color=cmap(0
 ax.set_ylim([0, max([max(reg_exp.get_total_locks()), max(coord_exp.get_total_locks())])*1.5])
 #ax.set_ylim([0, YAXIS])
 ax.set_xticks(ind)
+ax.get_yaxis().get_major_formatter().set_scientific(True)
+ax.get_yaxis().get_major_formatter().set_powerlimits((-3, 3))
 ax.set_xticklabels(('1', '2', '4', '6', '8', '10', '12', '14', '16'))
 ax.legend((ptotalc, ptotalo, pcoordc, pfailc, ptotalreg), ('Original Locks (Coordinated)', 'Original Locks (' + opt_name + ')', 'Coordination Locks', 'Coordination Locks (Failed)', 'Original Regular Locks'), loc=2)
 plt.savefig(output_file)
