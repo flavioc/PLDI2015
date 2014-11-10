@@ -15,8 +15,7 @@ database, performing join operations and then consuming and deriving facts.
 Optimizations such as join optimizations (to support efficient rule filtering)
 and fact updates are implemented by the compiler.
 
-\subsubsection{Coordination directives}
-
+\paragraph{Coordination directives}
 Coordination directives are compiled in two different ways, depending on whether they
 appear in the body or in the head of the rule. Coordination facts in the body
 are compiled into special instructions that inspect the state of the virtual
@@ -42,8 +41,7 @@ thread becomes idle, it attempts to steal nodes from a random thread.
 If unsucessful, the thread becomes idle and waits for program
 termination while periodically attempting to steal nodes.
 
-\subsubsection{Nodes}
-
+\paragraph{Nodes} 
 A node is represented as a collection of facts (per predicate) and an indexing structure that
 keeps track of the available facts and potential candidate rules. We need
 a separate indexing structure per node since rules run local to each node.
@@ -99,7 +97,7 @@ indexing structures, otherwise it adds the facts to the list of
 incoming facts that are later processed by the owner thread of the
 target node.
 
-\subsubsection{Threads}
+\paragraph{Threads}
 
 The main loop for each thread is to get an active node from one of its
 local queues and process all applicable rules for that node generating
@@ -140,7 +138,7 @@ contains nodes that cannot be stolen.  The other queue in each pair is
 the \emph{dynamic queue} which contains nodes which can be stolen by
 other threads.
 
-\subsubsection{Communication}
+\paragraph{Communication}
 
 Threads synchronize with each other using mutual exclusion. We use a spinlock in
 each queue to protect queue operations.
@@ -162,13 +160,13 @@ synchronization intensive places in the virtual machine:
    updates in order to move the node in $T_2$'s queues.
 \end{description}
 
-\subsubsection{Garbage collection}
+\paragraph{Garbage collection}
 
 Whenever a node has an empty database and no references from other nodes, it is
 deleted from the graph. The virtual machine uses reference counting to detect
 such cases.
 
-\subsubsection{Coordination overhead}
+\paragraph{Coordination overhead}
 
 In the paper~\cite{cruz-ppdp14}, the LM virtual machine was measured and
 compared against implementations of similar programs but written in other

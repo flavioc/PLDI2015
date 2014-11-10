@@ -1,17 +1,73 @@
-\begin{topfig}
-   \begin{center}
-      \subfloat[]{\includegraphics[width=6.5cm]{results/locks/ht-locks.png}}
-   \end{center}
-\end{topfig}
+\paragraph{Locking} The CLM virtual machine uses spinlocks to protect shared data structures between
+threads. As described in Section~\ref{sec:implementation}, coordination
+operations require synchronization since they need to change node information
+and sometimes move nodes between the standard queue and the regular queue.
+In order to measure the locking costs of coordination, we measured the following
+statistics: \emph{basic locks}, the number of locks acquired that were already
+present in the original LM virtual machine and \emph{coordination locks}, the
+number of locks acquired for performing coordination operations. We also
+measured how often a \texttt{lock()} operation fails on the first attempt, but
+such statistics are not represented in the figures below since the values are
+too small.
+
+The first program we measured was SSSP, represented in
+Fig.~\ref{results:sssp_uspowergrid}. In addition to the Regular and
+Coordinated versions, we have the Buffered version where we
+optimized the virtual machine to buffer coordination actions before applying
+them. The idea is to avoid applying multiple \texttt{set-priority} operations to
+the same node during a single node execution. We thus gather the higher priority
+values and then perform coordination after the node has executed.
+Although the number of locks is significantly reduced, we did not see a
+similar performance improvement, since the Buffered version is only
+5\% faster than the Coordinated version.
 
 \begin{topfig}
    \begin{center}
       \subfloat[]{\includegraphics[width=6.5cm]{results/locks/sssp-locks.png}}
    \end{center}
+  \scap{locks:SSSP}{Locking statistics for SSSP.
+     \texttt{Coordinated} refers to the program in
+     Fig.~\ref{results:sssp_uspowergrid}, while \texttt{Buffered} is a more
+     optimized version of the same program where coordination operations are
+     buffered before application.}
 \end{topfig}
+
+In Fig.~\ref{locks:HT} we show the lock statistics for HT. We measured the
+regular version, the coordinated version and the local-only version as in
+Fig.~\ref{results:ht}. There is a slight reduction in number of locks with
+coordination and then a further reduction in the local-only version because less
+facts are exchanged between threads.
+
+\begin{topfig}
+   \begin{center}
+      \subfloat[]{\includegraphics[width=6.5cm]{results/locks/ht-locks.png}}
+   \end{center}
+  \scap{locks:HT}{Locking statistics for HT. Coordination reduces
+     the overall number of locks used, while further optimization for locality
+     reduces the locks even further.}
+\end{topfig}
+
+Finally, in Fig.~\ref{locks:LBP} we present lock statistics for LBP and SBP. LBP
+is represented as the Regular bar, while SBP is represented as the Coordinated
+bar. We notice that LBP has quite a lot of locking for 1 thread since LBP
+is an asynchronous algorithm and tends to be a slow sequential algorithm,
+requiring more derivations when using 1 thread. The numbers go down as more
+threads are used. For SBP, there is a consistent amount of locking without
+little variations between the number of threads used. This is because threads
+interactly very little with each other and the amount of work to do is the same
+for all threads.
 
 \begin{topfig}
    \begin{center}
       \subfloat[]{\includegraphics[width=6.5cm]{results/locks/bp.png}}
    \end{center}
+  \scap{locks:LBP}{Locking statistics for LBP and SBP. Locking is constant for
+     SBP because threads do not interact with each other.}
 \end{topfig}
+
+These experiments indicate that handling coordination has a small cost that is
+greatly offset by improved performance. In general, coordination reduces the
+amount of locking required in the overall program because the number of facts
+needed to be derived is reduced. Even in cases where the amount of locking
+increases, it is still better to use coordination due to less synchronization
+between threads.

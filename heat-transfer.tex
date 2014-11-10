@@ -1,5 +1,5 @@
 In the Heat Transfer algorithm~(HT), we have a graph where heat values are
-exchanged between nodes. XXX rewrite The program stops when the new heat values of every node are
+exchanged between nodes. The program stops when the new heat values of every node are
 $\delta = |H_i - H_{i-1}| \le \epsilon$. The algorithm works
 asynchronously since heat values can be updated by using new partial information
 coming from neighbor nodes. This increases parallelism since nodes do not need
@@ -18,13 +18,13 @@ have more priority.
 new-heat(A, New, Old),
 Delta = fabs(New - Old),
 Delta > epsilon
-   -o {B, W | !edge(A, B, W) |
+   -o {B | !edge(A, B) |
          new-neighbor-heat(B, A, New),
          update(B), \underline[add-priority(B, Delta)]}.
 
 new-heat(A, New, Old)
 fabs(New - Old) <= epsilon
-   -o {B, W | !edge(A, B, W) |
+   -o {B | !edge(A, B) |
          new-neighbor-heat(B, A, New)}.
 \end{Verbatim}
   \scap{code:ht}{Coordination code for the Heat Transfer program. We updated the first rule
@@ -52,7 +52,7 @@ new-heat(A, New, Old)
 fabs(New - Old) <= epsilon
 \underline[cpu-id(A, B, C)],
 \underline[cpu-id(A, A, C)]
-   -o {B, W | !edge(A, B, W) |
+   -o {B, W | !edge(A, B) |
          new-neighbor-heat(B, A, New)}.
 
 new-heat(A, New, Old)
