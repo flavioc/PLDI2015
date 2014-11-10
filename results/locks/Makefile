@@ -9,20 +9,20 @@ ht-locks.png: ht-reg.txt ht-coord.txt ht-local-only.txt plot_three.py lib.py
 sssp-locks.png: sssp.txt sssp-coord.txt plot_three.py lib.py
 	python plot_three.py sssp.txt sssp-coord.txt sssp-buffer.txt sssp-locks.png "SSSP locks" "Buffered"
 
-minmax-locks.png: minmax-reg.txt minmax-coord.txt plot.py
+minmax-locks.png: minmax-reg.txt minmax-coord.txt plot.py lib.py
 	python plot.py minmax-reg.txt minmax-coord.txt minmax-locks.png "MiniMax locks"
 
-nqueens-bottom-moving.png: nqueens-reg.txt nqueens-bottom-moving.txt plot.py
+nqueens-bottom-moving.png: nqueens-reg.txt nqueens-bottom-moving.txt plot.py lib.py
 	python plot.py nqueens-reg.txt nqueens-bottom-moving.txt nqueens-bottom-moving.png "N Queens (Bottom Moving)"
 
-nqueens-bottom-static.png: nqueens-reg.txt nqueens-bottom-static.txt plot.py
+nqueens-bottom-static.png: nqueens-reg.txt nqueens-bottom-static.txt plot.py lib.py
 	python plot.py nqueens-reg.txt nqueens-bottom-static.txt nqueens-bottom-static.png "N Queens (Bottom Static)"
 
-nqueens-top-moving.png: nqueens-reg.txt nqueens-top-moving.txt plot.py
+nqueens-top-moving.png: nqueens-reg.txt nqueens-top-moving.txt plot.py lib.py
 	python plot.py nqueens-reg.txt nqueens-top-moving.txt nqueens-top-moving.png "N Queens (Top Moving)"
 
-nqueens-top-static.png: nqueens-reg.txt nqueens-top-static.txt plot.py
+nqueens-top-static.png: nqueens-reg.txt nqueens-top-static.txt plot.py lib.py
 	python plot.py nqueens-reg.txt nqueens-top-static.txt nqueens-top-static.png "N Queens (Top Static)"
 
-bp.png: bp.txt sbp.txt plot.py
+bp.png: bp.txt sbp.txt plot.py lib.py
 	python plot.py bp.txt sbp.txt bp.png "LBP / SBP"
