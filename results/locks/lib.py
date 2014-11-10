@@ -3,7 +3,7 @@ import re
 YAXIS = 200000000
 
 class dataobj(object):
-   ATTRS = ['coord_normal_lock', 'coord_priority_lock', 'schedule_next_lock', 'add_priority_lock', 'set_priority_lock', 'set_moving_lock', 'set_static_lock', 'set_affinity_lock']
+   COORD_ATTRS = ['coord_normal_lock', 'coord_priority_lock', 'schedule_next_lock', 'add_priority_lock', 'set_priority_lock', 'set_moving_lock', 'set_static_lock', 'set_affinity_lock']
 
    def set(self, name, fail, total):
       self.info_fail[name] = fail
@@ -18,14 +18,17 @@ class dataobj(object):
    def total_locks(self):
       return sum(total for name, total in self.info_total.iteritems())
 
+   def total_basic_locks(self):
+      return self.total_locks() - self.total_coord_locks()
+
    def total_fail(self):
       return sum(total for name, total in self.info_fail.iteritems())
 
    def total_coord_locks(self):
-      return sum(self.get_total(name) for name in self.ATTRS)
+      return sum(self.get_total(name) for name in self.COORD_ATTRS)
 
    def fail_coord_locks(self):
-      return sum(self.get_fail(name) for name in self.ATTRS)
+      return sum(self.get_fail(name) for name in self.COORD_ATTRS)
 
    def frac_coord_locks(self):
       return (float(self.total_coord_locks()) / float(self.total_locks())) * 100
@@ -68,6 +71,9 @@ class experiment(object):
 
    def get_total_locks(self):
       return [data.total_locks() for th, data in sorted(self.threads.iteritems())]
+
+   def get_basic_locks(self):
+      return [data.total_basic_locks() for th, data in sorted(self.threads.iteritems())]
 
    def get_threads(self):
       return [th for th in sorted(self.threads.keys())]
