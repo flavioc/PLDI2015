@@ -1,4 +1,5 @@
 import re
+import math
 
 YAXIS = 200000000
 
@@ -8,6 +9,9 @@ class dataobj(object):
    def set(self, name, fail, total):
       self.info_fail[name] = fail
       self.info_total[name] = total
+
+   def set_average_priority_queue(self, avg):
+      self.avg_prio_queue = avg
 
    def get_total(self, name):
       return self.info_total[name]
@@ -30,6 +34,25 @@ class dataobj(object):
    def fail_coord_locks(self):
       return sum(self.get_fail(name) for name in self.COORD_ATTRS)
 
+   def normal_queue_operations(self):
+      return self.get_total('normal_lock')
+
+   def priority_queue_operations(self):
+      return self.get_total('priority_lock')
+
+   def average_priority_queue(self):
+      try:
+         return self.get_total('average_priority')
+      except KeyError:
+         return 0
+
+   def queue_instruction_count(self):
+      normal = self.normal_queue_operations()
+      prio = self.priority_queue_operations()
+      if self.average_priority_queue() == 0:
+         return normal
+      return normal + int(prio * math.log(float(self.average_priority_queue()), 2))
+
    def frac_coord_locks(self):
       return (float(self.total_coord_locks()) / float(self.total_locks())) * 100
 
@@ -45,6 +68,7 @@ class dataobj(object):
       self.threads = th
       self.info_total = {}
       self.info_fail = {}
+      self.avg_prio_queue = 0
 
 class experiment(object):
 
@@ -74,6 +98,15 @@ class experiment(object):
 
    def get_basic_locks(self):
       return [data.total_basic_locks() for th, data in sorted(self.threads.iteritems())]
+
+   def normal_queue_operations(self):
+      return [data.normal_queue_operations() for th, data in sorted(self.threads.iteritems())]
+
+   def priority_queue_operations(self):
+      return [data.priority_queue_operations() for th, data in sorted(self.threads.iteritems())]
+
+   def queue_instruction_count(self):
+      return [data.queue_instruction_count() for th, data in sorted(self.threads.iteritems())]
 
    def get_threads(self):
       return [th for th in sorted(self.threads.keys())]
@@ -109,9 +142,16 @@ def read_experiment(filename):
          name = vec[0]
          res = vec[1].lstrip(" ")
          resvec = re.split('\s+', res)
-         fail = int(resvec[0])
-         total = int(resvec[2])
-         data.set(name, fail, total)
+         if len(resvec) == 3:
+            fail = int(resvec[0])
+            total = int(resvec[2])
+            data.set(name, fail, total)
+         else:
+            if resvec[0] == '-nan':
+               total = 0
+            else:
+               total = int(float(resvec[0]))
+            data.set_average_priority_queue(total)
    if data:
       exp.add_thread(thread, data)
    return exp
