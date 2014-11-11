@@ -17,30 +17,28 @@ Since computation goes from the top row to the bottom row, not all placements of
 nodes on threads may be equally performant. This is especially true because the
 bottom rows tend to perform the most work. The best placement is then to split the
 board vertically, so that, in optimal conditions, each thread gets the same
-number of columns.  Our experiments show that, on shared memory, it does not
+number of columns. Our experiments show that, on shared memory, it does not
 matter much if we start with a bad placement since node stealing overcomes those
-issues by improving load balancing dynamically. But what if we want run the
-program on a distributed system, where moving nodes between workers can be
-expensive? We measured the performance of the program without node stealing in
-order to assess how important data placement would be for such systems.
-We used the default partition of the program as it is, which results in the board being
-split by rows and another configuration using the coordination action
-\texttt{set-cpu(A, vertical(X, Y))} that forces nodes to be moved to another
-thread using a vertical partitioning. Note that \texttt{X} and \texttt{Y} are
-the coordinates of the node in the chessboard.
+issues by improving load balancing dynamically. However, we noticed interesting
+cache effects when prioritizing nodes in bottom rows. The N Queens program
+builds and shares lists representing valid board states and needs to iterate
+over those lists often when checking if a new position does not invalidate a state.
+We thus used coordination axioms \texttt{set-default-priority(A, X)} and \texttt{set-cpu(A,
+vertical(X, Y)}, where \texttt{X} is the row number (0 is the top row) and
+\texttt{Y} is the column number.
 
-Figure~\ref{results:nqueens} shows the performance results of coordinating the
-placing of nodes on threads without work stealing. There is a noticiable
-performance improvement when using an optimal data placement strategy. Note
-however that in the plot we do not take into account the costs of moving
-nodes between workers. In a real system, the performance gap may not be as wide
-since in the worst case there may be 144 moves.
+We first ran the coordinated program using dynamic partitioning (with work
+stealing) and saw some performance improvements. However, using dynamic
+partitioning is bad for memory locality since threads will steal nodes often.
+We then added \texttt{set-static(A)} as a coordination axiom and saw
+performance improvement, especially when the board columns are perfectly
+partitioned by the number of threads (in our case 13 threads).
+Figure~\ref{results:nqueens} shows the performance gains saw for the 13 Queens
+program.
 
 \begin{topfig}
    \begin{center}
       \subfloat[]{\includegraphics[width=5.5cm]{results/13queens.png}}
    \end{center}
-   \scap{results:nqueens}{Experimental results for the 13 Queens program. The coordinated
-      version is on average 2 times faster than the version with bad data
-      placement.}
+   \scap{results:nqueens}{Experimental results for the 13 Queens program.}
 \end{topfig}

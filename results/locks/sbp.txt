@@ -1,144 +1,153 @@
 THREAD 1
 main_db_lock: 0	/	1
-node_lock: 0	/	16468635
+node_lock: 0	/	16395875
 thread_lock: 0	/	1
-database_lock: 0	/	13578436
-normal_lock: 0	/	1417057
-coord_normal_lock: 0	/	1007138
-priority_lock: 0	/	11043972
-coord_priority_lock: 0	/	2956931
-schedule_next_lock: 0	/	2670012
+database_lock: 0	/	13518542
+normal_lock: 0	/	1411634
+coord_normal_lock: 0	/	1001289
+priority_lock: 0	/	10992734
+coord_priority_lock: 0	/	2945591
+schedule_next_lock: 0	/	2657514
 add_priority_lock: 0	/	0
-set_priority_lock: 0	/	5430804
+set_priority_lock: 0	/	5412559
 set_moving_lock: 0	/	0
 set_static_lock: 0	/	0
 set_affinity_lock: 0	/	0
-heap_operations: 94696037
+heap_operations: 94314625
+normal_operations: 2276140
 THREAD 2
 main_db_lock: 0	/	2
-node_lock: 21	/	16773004
-thread_lock: 1	/	6898
-database_lock: 86	/	13829583
-normal_lock: 11	/	1450232
-coord_normal_lock: 15	/	1026843
-priority_lock: 721	/	11254234
-coord_priority_lock: 330	/	3031397
-schedule_next_lock: 4	/	2719407
+node_lock: 14	/	17313139
+thread_lock: 1	/	5596
+database_lock: 84	/	14278764
+normal_lock: 27	/	1483284
+coord_normal_lock: 12	/	1063514
+priority_lock: 629	/	11615848
+coord_priority_lock: 282	/	3146868
+schedule_next_lock: 3	/	2809482
 add_priority_lock: 0	/	0
-set_priority_lock: 11	/	5554853
+set_priority_lock: 9	/	5747955
 set_moving_lock: 0	/	0
 set_static_lock: 0	/	0
 set_affinity_lock: 0	/	0
-heap_operations: 91365996
+heap_operations: 94792590
+normal_operations: 2404372
 THREAD 4
 main_db_lock: 0	/	4
-node_lock: 44	/	17360787
-thread_lock: 3	/	7545
-database_lock: 134	/	14318509
-normal_lock: 31	/	1480554
-coord_normal_lock: 45	/	1062155
-priority_lock: 1742	/	11645168
-coord_priority_lock: 883	/	3171491
-schedule_next_lock: 4	/	2816643
+node_lock: 10	/	16660866
+thread_lock: 3	/	7456
+database_lock: 85	/	13737113
+normal_lock: 20	/	1430714
+coord_normal_lock: 19	/	1010335
+priority_lock: 982	/	11174746
+coord_priority_lock: 459	/	3030608
+schedule_next_lock: 2	/	2700849
 add_priority_lock: 0	/	0
-set_priority_lock: 23	/	5798075
+set_priority_lock: 6	/	5563014
 set_moving_lock: 0	/	0
 set_static_lock: 0	/	0
 set_affinity_lock: 0	/	0
-heap_operations: 89450243
+heap_operations: 85665602
+normal_operations: 2298004
 THREAD 6
 main_db_lock: 0	/	6
-node_lock: 36	/	18014710
-thread_lock: 5	/	11167
-database_lock: 210	/	14860966
-normal_lock: 26	/	1531435
-coord_normal_lock: 38	/	1108239
-priority_lock: 1895	/	12087917
-coord_priority_lock: 1126	/	3309587
-schedule_next_lock: 4	/	2925210
+node_lock: 18	/	16687948
+thread_lock: 5	/	8604
+database_lock: 120	/	13760219
+normal_lock: 30	/	1430097
+coord_normal_lock: 35	/	1011328
+priority_lock: 1294	/	11189747
+coord_priority_lock: 643	/	3042023
+schedule_next_lock: 3	/	2704800
 add_priority_lock: 0	/	0
-set_priority_lock: 31	/	6028816
+set_priority_lock: 14	/	5584551
 set_moving_lock: 0	/	0
 set_static_lock: 0	/	0
 set_affinity_lock: 0	/	0
-heap_operations: 92805475
+heap_operations: 85674525
+normal_operations: 2298994
 THREAD 8
 main_db_lock: 0	/	8
-node_lock: 49	/	16096276
-thread_lock: 7	/	13130
-database_lock: 206	/	13267310
-normal_lock: 31	/	1393426
-coord_normal_lock: 46	/	969010
-priority_lock: 2127	/	10794314
-coord_priority_lock: 1199	/	2925292
-schedule_next_lock: 7	/	2606754
+node_lock: 39	/	16757567
+thread_lock: 7	/	12315
+database_lock: 197	/	13816722
+normal_lock: 46	/	1435236
+coord_normal_lock: 43	/	1013228
+priority_lock: 1839	/	11239430
+coord_priority_lock: 937	/	3065666
+schedule_next_lock: 4	/	2715975
 add_priority_lock: 0	/	0
-set_priority_lock: 34	/	5382108
+set_priority_lock: 15	/	5624389
 set_moving_lock: 0	/	0
 set_static_lock: 0	/	0
 set_affinity_lock: 0	/	0
-heap_operations: 77242800
+heap_operations: 80840826
+normal_operations: 2303824
 THREAD 10
 main_db_lock: 0	/	10
-node_lock: 64	/	17297555
-thread_lock: 9	/	12904
-database_lock: 236	/	14265415
-normal_lock: 49	/	1471272
-coord_normal_lock: 62	/	1051298
-priority_lock: 2193	/	11601834
-coord_priority_lock: 1547	/	3181838
-schedule_next_lock: 5	/	2806347
+node_lock: 38	/	17164637
+thread_lock: 9	/	14409
+database_lock: 223	/	14154125
+normal_lock: 52	/	1469441
+coord_normal_lock: 40	/	1045352
+priority_lock: 2025	/	11515805
+coord_priority_lock: 984	/	3143645
+schedule_next_lock: 3	/	2784246
 add_priority_lock: 0	/	0
-set_priority_lock: 40	/	5820861
+set_priority_lock: 21	/	5752731
 set_moving_lock: 0	/	0
 set_static_lock: 0	/	0
 set_affinity_lock: 0	/	0
-heap_operations: 85439875
+heap_operations: 84635676
+normal_operations: 2368922
 THREAD 12
 main_db_lock: 0	/	12
-node_lock: 108	/	16737377
-thread_lock: 11	/	19214
-database_lock: 274	/	13798677
-normal_lock: 49	/	1442063
-coord_normal_lock: 52	/	1010989
-priority_lock: 2338	/	11228844
-coord_priority_lock: 1661	/	3073739
-schedule_next_lock: 9	/	2712441
+node_lock: 46	/	16802108
+thread_lock: 11	/	17831
+database_lock: 253	/	13853108
+normal_lock: 55	/	1444317
+coord_normal_lock: 74	/	1017245
+priority_lock: 2305	/	11269567
+coord_priority_lock: 1267	/	3085003
+schedule_next_lock: 4	/	2723559
 add_priority_lock: 0	/	0
-set_priority_lock: 58	/	5626508
+set_priority_lock: 31	/	5644536
 set_moving_lock: 0	/	0
 set_static_lock: 0	/	0
 set_affinity_lock: 0	/	0
-heap_operations: 80329313
+heap_operations: 80692026
+normal_operations: 2313726
 THREAD 14
 main_db_lock: 0	/	14
-node_lock: 134	/	16510650
-thread_lock: 12	/	23163
-database_lock: 307	/	13608418
-normal_lock: 55	/	1437041
-coord_normal_lock: 58	/	1001965
-priority_lock: 2345	/	11080855
-coord_priority_lock: 1549	/	3014155
-schedule_next_lock: 8	/	2674467
+node_lock: 60	/	16689385
+thread_lock: 13	/	18969
+database_lock: 326	/	13759105
+normal_lock: 91	/	1433683
+coord_normal_lock: 89	/	1009785
+priority_lock: 3362	/	11192852
+coord_priority_lock: 1604	/	3066010
+schedule_next_lock: 6	/	2705295
 add_priority_lock: 0	/	0
-set_priority_lock: 42	/	5517625
+set_priority_lock: 36	/	5611062
 set_moving_lock: 0	/	0
 set_static_lock: 0	/	0
 set_affinity_lock: 0	/	0
-heap_operations: 76935742
+heap_operations: 78028682
+normal_operations: 2297322
 THREAD 16
 main_db_lock: 0	/	16
-node_lock: 107	/	16285877
-thread_lock: 13	/	23948
-database_lock: 262	/	13421936
-normal_lock: 53	/	1415448
-coord_normal_lock: 54	/	979891
-priority_lock: 2351	/	10928428
-coord_priority_lock: 1632	/	2983193
-schedule_next_lock: 3	/	2637021
+node_lock: 57	/	16631715
+thread_lock: 15	/	23659
+database_lock: 347	/	13709044
+normal_lock: 77	/	1443437
+coord_normal_lock: 71	/	1010177
+priority_lock: 2961	/	11161437
+coord_priority_lock: 1540	/	3045019
+schedule_next_lock: 3	/	2694681
 add_priority_lock: 0	/	0
-set_priority_lock: 41	/	5467587
+set_priority_lock: 26	/	5567616
 set_moving_lock: 0	/	0
 set_static_lock: 0	/	0
 set_affinity_lock: 0	/	0
-heap_operations: 73191511
+heap_operations: 74805036
+normal_operations: 2301538

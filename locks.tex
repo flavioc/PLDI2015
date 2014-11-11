@@ -65,6 +65,8 @@ for all threads.
      SBP because threads do not interact with each other.}
 \end{topfig}
 
+\paragraph{Queue Instructions}
+
 We also measured the number of queue instructions required to compute programs.
 While the regular queue operations have constant complexity, priority queue
 operations are usually logarithmic and require more computation. We counted the
@@ -74,16 +76,23 @@ many \emph{percolate-up}/\emph{percolate-down} instructions are required to main
 
 Table~\ref{queue_instructions} presents the total queue instructions for several
 programs. All the coordinated programs require far more queue instructions than
-the regular version. For instance, the coordinated SSSP program requires 3 to 4
+the regular version. For instance, the coordinated SSSP program requires 4 to 5
 times more instructions to perform queue operations. Interestingly, the buffered
 version requires even more instructions although it performs less overall
 coordination. It is likely that this is due to increased fact computation and
-subsequent queue manipulation. We argue that the 5\% performance improvement in the
+subsequent queue manipulation because coordination operations are buffered.
+We argue that the 5\% performance improvement in the
 buffered version is due mostly to reduced locking.
 
 For the HT program, the coordinated version requires twice more queue
 instructions than the regular version. As expected, the local-only version
 requires less queue operations because the number of derived facts is reduced.
+The MiniMax program also sees twices as many queue instructions using
+coordination. This does not happen with the N Queens program, where the number
+of queue instructions is far greater when using coordination, especially when
+using a small number of threads. We argue that this happens because higher
+priority nodes at the bottom are often added to the priority queue, resulting in
+many \emph{percolate-up} operations.
 
 \begin{topfig}
 \footnotesize\begin{tabular}{ | l || c | c | c | c | c |}
@@ -92,22 +101,22 @@ requires less queue operations because the number of derived facts is reduced.
    Instructions}} \\ \cline{2-6}
 & 1 & 2 & 4 & 8 & 16 \\ \hline
 \hline
-SSSP - Regular & 298K & 300K & 313K & 284K & 317K \\ \hline
-SSSP - Coordinated & 953K & 960K & 861K & 911K & 987K \\ \hline
-SSSP - Buffered & 951K & 1M & 1M & 1M & 1M \\ \hline
+SSSP - Regular & 199K & 201K & 205K & 196K & 207K \\ \hline
+SSSP - Coordinated & 964K & 938K & 870K & 886K & 963K \\ \hline
+SSSP - Buffered & 1M & 1M & 1M & 1M & 1M \\ \hline
 \hline
-HT - Buffered & 38M & 49M & 52M & 74M & 55M \\ \hline
-HT - Coordinated & 57M & 64M & 95M & 87M & 83M \\ \hline
-HT - Local-Only & 57M & 63M & 90M & 85M & 77M \\ \hline
+HT - Buffered & 25M & 32M & 34M & 34M & 36M \\ \hline
+HT - Coordinated & 51M & 55M & 85M & 80M & 72M \\ \hline
+HT - Local-Only & 51M & 55M & 79M & 74M & 68M \\ \hline
 \hline
-LBP - Regular & 23M & 26M & 24M & 17M & 12M \\ \hline
-SBP - Coordinated & 96M & 92M & 90M & 78M & 74M \\ \hline
+LBP - Regular & 15M & 17M & 16M & 11M & 8M \\ \hline
+SBP - Coordinated & 96M & 97M & 87M & 83M & 77M \\ \hline
 \hline
-MiniMax - Regular & 24M & 25M & 26M & 26M & 27M \\ \hline
-MiniMax - Coordinated & 51M & 52M & 52M & 52M & 52M \\ \hline
+MiniMax - Regular & 16M & 19M & 19M & 19M & 20M \\ \hline
+MiniMax - Coordinated & 51M & 51M & 51M & 51M & 52M \\ \hline
 \hline
-N Queens - Regular & 12K & 24K & 25K & 365K & 5M \\ \hline
-N Queens - Coordinated & 57M & 11M & 904K & 145K & 44K \\ \hline
+N Queens - Regular & 8K & 15K & 16K & 17K & 20K \\ \hline
+N Queens - Coordinated & 57M & 18M & 676K & 125K & 41K \\ \hline
 \end{tabular}
 \scap{queue_instructions}{Number of queue \scare{instructions} per program. An
    operation to a regular queue counts as 1 instruction, while an operation to

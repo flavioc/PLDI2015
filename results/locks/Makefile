@@ -1,6 +1,6 @@
 
 all: ht-locks.png sssp-locks.png minmax-locks.png \
-	nqueens-locks.png bp.png
+	bp.png nqueens-locks.png
 
 ht-locks.png: ht-reg.txt ht-coord.txt ht-local-only.txt plot_three.py lib.py
 	python plot_three.py ht-reg.txt ht-coord.txt ht-local-only.txt ht-locks.png "HT locks" "Local-Only"

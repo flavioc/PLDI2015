@@ -13,6 +13,9 @@ class dataobj(object):
    def set_heap_operations(self, ops):
       self.heap_operations = ops
 
+   def set_normal_operations(self, ops):
+      self.normal_operations = ops
+
    def get_total(self, name):
       return self.info_total[name]
 
@@ -41,8 +44,7 @@ class dataobj(object):
       return self.get_total('priority_lock')
 
    def queue_instruction_count(self):
-      normal = self.normal_queue_operations()
-      return normal + self.heap_operations
+      return self.normal_operations + self.heap_operations
 
    def frac_coord_locks(self):
       return (float(self.total_coord_locks()) / float(self.total_locks())) * 100
@@ -60,6 +62,7 @@ class dataobj(object):
       self.info_total = {}
       self.info_fail = {}
       self.heap_operations = 0
+      self.normal_operations = 0
 
 class experiment(object):
 
@@ -139,7 +142,10 @@ def read_experiment(filename):
             data.set(name, fail, total)
          else:
             total = int(resvec[0])
-            data.set_heap_operations(total)
+            if name.startswith("normal_operations"):
+               data.set_normal_operations(total)
+            else:
+               data.set_heap_operations(total)
    if data:
       exp.add_thread(thread, data)
    return exp
