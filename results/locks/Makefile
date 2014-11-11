@@ -26,3 +26,6 @@ nqueens-top-static.png: nqueens-reg.txt nqueens-top-static.txt plot.py lib.py
 
 bp.png: bp.txt sbp.txt plot.py lib.py
 	python plot.py bp.txt sbp.txt bp.png "LBP / SBP"
+
+queue_operations: *.txt
+	@python queue_operations.py

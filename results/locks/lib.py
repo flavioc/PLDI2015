@@ -10,8 +10,8 @@ class dataobj(object):
       self.info_fail[name] = fail
       self.info_total[name] = total
 
-   def set_average_priority_queue(self, avg):
-      self.avg_prio_queue = avg
+   def set_heap_operations(self, ops):
+      self.heap_operations = ops
 
    def get_total(self, name):
       return self.info_total[name]
@@ -40,18 +40,9 @@ class dataobj(object):
    def priority_queue_operations(self):
       return self.get_total('priority_lock')
 
-   def average_priority_queue(self):
-      try:
-         return self.get_total('average_priority')
-      except KeyError:
-         return 0
-
    def queue_instruction_count(self):
       normal = self.normal_queue_operations()
-      prio = self.priority_queue_operations()
-      if self.average_priority_queue() == 0:
-         return normal
-      return normal + int(prio * math.log(float(self.average_priority_queue()), 2))
+      return normal + self.heap_operations
 
    def frac_coord_locks(self):
       return (float(self.total_coord_locks()) / float(self.total_locks())) * 100
@@ -68,7 +59,7 @@ class dataobj(object):
       self.threads = th
       self.info_total = {}
       self.info_fail = {}
-      self.avg_prio_queue = 0
+      self.heap_operations = 0
 
 class experiment(object):
 
@@ -147,11 +138,8 @@ def read_experiment(filename):
             total = int(resvec[2])
             data.set(name, fail, total)
          else:
-            if resvec[0] == '-nan':
-               total = 0
-            else:
-               total = int(float(resvec[0]))
-            data.set_average_priority_queue(total)
+            total = int(resvec[0])
+            data.set_heap_operations(total)
    if data:
       exp.add_thread(thread, data)
    return exp

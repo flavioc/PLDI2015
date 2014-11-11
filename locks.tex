@@ -65,9 +65,56 @@ for all threads.
      SBP because threads do not interact with each other.}
 \end{topfig}
 
-These experiments indicate that handling coordination has a small cost that is
-greatly offset by improved performance. In general, coordination reduces the
-amount of locking required in the overall program because the number of facts
-needed to be derived is reduced. Even in cases where the amount of locking
-increases, it is still better to use coordination due to less synchronization
-between threads.
+We also measured the number of queue instructions required to compute programs.
+While the regular queue operations have constant complexity, priority queue
+operations are usually logarithmic and require more computation. We counted the
+number of instructions required for queue operations during program execution.
+Each normal queue operation costs 1 instruction, while priority queue costs as
+many \emph{percolate-up}/\emph{percolate-down} instructions are required to maintain the heap property.
+
+Table~\ref{queue_instructions} presents the total queue instructions for several
+programs. All the coordinated programs require far more queue instructions than
+the regular version. For instance, the coordinated SSSP program requires 3 to 4
+times more instructions to perform queue operations. Interestingly, the buffered
+version requires even more instructions although it performs less overall
+coordination. It is likely that this is due to increased fact computation and
+subsequent queue manipulation. We argue that the 5\% performance improvement in the
+buffered version is due mostly to reduced locking.
+
+For the HT program, the coordinated version requires twice more queue
+instructions than the regular version. As expected, the local-only version
+requires less queue operations because the number of derived facts is reduced.
+
+\begin{topfig}
+\footnotesize\begin{tabular}{ | l || c | c | c | c | c |}
+\hline
+\multirow{2}{*}{\textbf{Program}} & \multicolumn{5}{c |}{\textbf{Queue
+   Instructions}} \\ \cline{2-6}
+& 1 & 2 & 4 & 8 & 16 \\ \hline
+\hline
+SSSP - Regular & 298K & 305K & 309K & 286K & 325K \\ \hline
+SSSP - Coordinated & 961K & 919K & 903K & 900K & 922K \\ \hline
+SSSP - Buffered & 939K & 961K & 999K & 926K & 1M \\ \hline
+\hline
+HT - Buffered & 38M & 49M & 50M & 52M & 54M \\ \hline
+HT - Coordinated & 57M & 63M & 95M & 89M & 82M \\ \hline
+HT - Local-Only & 57M & 63M & 91M & 80M & 74M \\ \hline
+\hline
+LBP - Regular & 23M & 26M & 24M & 17M & 12M \\ \hline
+SBP - Coordinated & 95M & 93M & 88M & 81M & 75M \\ \hline
+\hline
+MiniMax - Regular & 24M & 26M & 27M & 26M & 27M \\ \hline
+MiniMax - Coordinated & 51M & 51M & 52M & 51M & 52M \\ \hline
+\end{tabular}
+\scap{queue_instructions}{Number of queue \scare{instructions} per program. An
+   operation to a regular queue counts as 1 instruction, while an operation to
+   a priority queue costs the number of
+   \emph{percolate-up}/\emph{percolate-down} steps performed.}
+\end{topfig}
+
+These experiments indicate that handling coordination has a small cost in terms
+of synchronization but some cost in terms of queue operations with
+up to 5 times more queue instructions when using priority queues.
+Since coordination reduces the number of facts derived due to better scheduling
+decisions, the costs of manipulating priority queues become irrelevant.
+
