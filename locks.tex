@@ -92,19 +92,22 @@ requires less queue operations because the number of derived facts is reduced.
    Instructions}} \\ \cline{2-6}
 & 1 & 2 & 4 & 8 & 16 \\ \hline
 \hline
-SSSP - Regular & 298K & 305K & 309K & 286K & 325K \\ \hline
-SSSP - Coordinated & 961K & 919K & 903K & 900K & 922K \\ \hline
-SSSP - Buffered & 939K & 961K & 999K & 926K & 1M \\ \hline
+SSSP - Regular & 298K & 300K & 313K & 284K & 317K \\ \hline
+SSSP - Coordinated & 953K & 960K & 861K & 911K & 987K \\ \hline
+SSSP - Buffered & 951K & 1M & 1M & 1M & 1M \\ \hline
 \hline
-HT - Buffered & 38M & 49M & 50M & 52M & 54M \\ \hline
-HT - Coordinated & 57M & 63M & 95M & 89M & 82M \\ \hline
-HT - Local-Only & 57M & 63M & 91M & 80M & 74M \\ \hline
+HT - Buffered & 38M & 49M & 52M & 74M & 55M \\ \hline
+HT - Coordinated & 57M & 64M & 95M & 87M & 83M \\ \hline
+HT - Local-Only & 57M & 63M & 90M & 85M & 77M \\ \hline
 \hline
 LBP - Regular & 23M & 26M & 24M & 17M & 12M \\ \hline
-SBP - Coordinated & 95M & 93M & 88M & 81M & 75M \\ \hline
+SBP - Coordinated & 96M & 92M & 90M & 78M & 74M \\ \hline
 \hline
-MiniMax - Regular & 24M & 26M & 27M & 26M & 27M \\ \hline
-MiniMax - Coordinated & 51M & 51M & 52M & 51M & 52M \\ \hline
+MiniMax - Regular & 24M & 25M & 26M & 26M & 27M \\ \hline
+MiniMax - Coordinated & 51M & 52M & 52M & 52M & 52M \\ \hline
+\hline
+N Queens - Regular & 12K & 24K & 25K & 365K & 5M \\ \hline
+N Queens - Coordinated & 57M & 11M & 904K & 145K & 44K \\ \hline
 \end{tabular}
 \scap{queue_instructions}{Number of queue \scare{instructions} per program. An
    operation to a regular queue counts as 1 instruction, while an operation to

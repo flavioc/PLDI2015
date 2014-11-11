@@ -1,20 +1,40 @@
-There has been an increasing interest in declarative 
-languages. MapReduce~\cite{Dean:2008:MSD:1327452.1327492}, for instance, is a
-popular data-centric programming model that is optimized for large clusters.
-Intrinsic to its popularity is the simplicity of its scheduling and data sharing model.
-In order to facilitate the writing of programs over large
-datasets, SQL-like languages such as
-PigLatin~\cite{Olston:2008:PLN:1376616.1376726} have been developed.
-PigLatin builds on top of MapReduce and allows the programmer to write complex
-data-flow graphs, raising the abstraction and easy of programmability of
-MapReduce programs.
-An alternative to PigLatin/MapReduce is
-Dryad~\cite{Isard:2007:DDD:1272996.1273005}
-that allows programmers to design arbitrary computation patterns using the DAG
-abstraction. It combines computational vertices with communication channels
-(edges). Dryad programs are automatically scheduled to run on multiple
-computers/cores and data is partitioned automatically during runtime.
 
+\paragraph{Declarative Languages}
+Declarative programming paradigms such as \emph{logic} and \emph{functional}
+programming have been extensively exploited for their implicit parallelism.
+In logic languages such as Prolog, researchers took advantage of the
+non-determinism of proof-search to evaluate subgoals in parallel with models
+such as \emph{or-parallelism}~\cite{ali-86} and
+\emph{and-parallelism}~\cite{Shen-92}.  In functional languages, the stateless
+nature of computation allows multiple expressions to evaluate safely in
+parallel. This has been explored in several languages such as
+NESL~\cite{Blelloch:1996:PPA:227234.227246}, Id~\cite{Nikhil93anoverview}, and
+more recently Data Parallel Haskell~\cite{nepal}.
+
+\paragraph{Data Centric Languages}
+Recently, there has been an increasing interest in declarative data-centric
+languages.  MapReduce~\cite{Dean:2008:MSD:1327452.1327492}, for instance, is a
+popular data-centric programming model that is optimized for large clusters.
+Intrinsic to its popularity is the simplicity of its scheduling and data sharing
+model.  In order to facilitate the writing of programs over large datasets,
+SQL-like languages such as PigLatin~\cite{Olston:2008:PLN:1376616.1376726} have
+been developed.  PigLatin builds on top of MapReduce and allows the programmer
+to write complex data-flow graphs, raising the abstraction and easy of
+programmability of MapReduce programs.  An alternative to PigLatin/MapReduce is
+Dryad~\cite{Isard:2007:DDD:1272996.1273005} that allows programmers to design
+arbitrary computation patterns using the DAG abstraction. It combines
+computational vertices with communication channels (edges) that are
+automatically scheduled to run on multiple computers/cores.
+
+GraphLab~\cite{GraphLab2010} is a C++ framework for developing parallel machine
+learning algorithms. GraphLab allows nodes to have read/write access to
+different scopes through different concurrent access models in order to balance
+performance and data consistency.  GraphLab also provides different schedulers
+that dictate the order in which node's are computed, allowing the programmer to
+optimize the program. Later in this paper, we will show how one GraphLab
+scheduler can be implemented in CLM through the use of coordination facts.
+
+\paragraph{Coordination Languages}
 Many programming languages follow the so-called \emph{coordination
 paradigm}~\cite{Papadopoulos98coordinationmodels}, a form of distributed
 programming that divides execution in two parts: \emph{computation}, where the actual
@@ -28,19 +48,18 @@ Linda~\cite{linda} is arguably the most famous coordination model. Linda
 implements a data-driven coordination model and features a \emph{tuple space}
 that can be manipulated using the following coordination directives:
 \texttt{out(t)} to write a tuple \texttt{t} into the tuple space; \texttt{in(t)}
-to read a tuple using the template \texttt{t}; \texttt{rd(t)} to retrieve a copy of
-the tuple \texttt{t} from the tuple space; and \texttt{eval(p)} to add a process
-\texttt{p} in the tuple space and execute it in parallel. 
-Linda is be implemented on top of many
-popular languages by simply creating a communication and storage mechanism for
-the tuple space and then adding the directives as a language library.
+to read a tuple using the template \texttt{t}; \texttt{rd(t)} to retrieve a copy
+of the tuple \texttt{t} from the tuple space; and \texttt{eval(p)} to add a
+process \texttt{p} in the tuple space and execute it in parallel.  Linda is be
+implemented on top of many popular languages by simply creating a communication
+and storage mechanism for the tuple space and then adding the directives as a
+language library.
 
-Another early coordination language is Delirium~\cite{Delirium}. Unlike
-Linda which is embbeded into another language, Delirium actually embeds
-operators written in other languages inside the Delirium language.
-The advantages of Delirium are improved abstraction
-and easier debugging because sequential operators are isolated from the
-coordination language.
+Another early coordination language is Delirium~\cite{Delirium}. Unlike Linda
+which is embbeded into another language, Delirium actually embeds operators
+written in other languages inside the Delirium language.  The advantages of
+Delirium are improved abstraction and easier debugging because sequential
+operators are isolated from the coordination language.
 
 Linda and Delirium are limited in the sense that the programmer can only
 coordinate the scheduling of processing units, while the placement of data is
@@ -51,13 +70,16 @@ the program instead of focusing how processing units are used.
 Furthermore, the CLM language is both a coordination language and a computation
 language and there is no distinction between the two components.
 
+\paragraph{Forward-Chaining Logic Programming}
+
 Forward-chaining logic programming came into its own with the Datalog
 language~\cite{Ullman:1990:PDK:533142}.  Traditionally used in deductive
 databases, it is now being increasingly used in different fields such as
 distributed networking~\cite{Loo-condie-garofalakis-p2}, sensor
 nets~\cite{Chu:2007:DID:1322263.1322281} and cloud computing~\cite{alvaro:boom}.
-The LM language was inspired by Meld~\cite{ashley-rollman-iclp09}, a Datalog-like language for
-programming distributed emsembles of modular robots. Meld introduced the idea of
-sensing and action facts in order to sense and act on the outside world,
-respectively. LCM uses sensing facts to sense the underlying system that the program is running on and action facs
-act on that system.
+The LM language was inspired by Meld~\cite{ashley-rollman-iclp09}, a
+Datalog-like language for programming distributed emsembles of modular robots.
+Meld introduced the idea of sensing and action facts in order to sense and act
+on the outside world, respectively. LCM uses sensing facts to sense the
+underlying system that the program is running on and action facs act on that
+system.
