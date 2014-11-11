@@ -25,8 +25,8 @@ system_improve_belief-propagation-400.png system_belief-propagation-400.png syst
 comparison1.png: compare.txt plot_compare.py lib.py
 	python $(SCRIPT_DIR)/plot_compare.py compare.txt "" --global-only
 
-13queens.png: nqueens.txt plot_coord.py lib.py
-	python $(SCRIPT) nqueens.txt ""
+13queens.png: nqueens.txt plot_queens.py lib.py
+	python plot_queens.py nqueens.txt
 
 clean:
 	rm -f $(IMGS)

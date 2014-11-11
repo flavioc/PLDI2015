@@ -152,7 +152,7 @@ class experiment(object):
       name = prefix + self.name + ".png"
       plt.savefig(name)
 
-   def create_ht(self, coord, localonly):
+   def create_ht(self, coord, localonly, optimized):
       fig = plt.figure()
       ax = fig.add_subplot(111)
 
@@ -183,7 +183,7 @@ class experiment(object):
       ax.plot(self.x_axis(), self.linear_speedup(),
         label='Linear', linestyle='-', color=cmap(0.2))
       ax.legend([reg, coordcoord, coordreg, loreg], ["Regular/Regular",
-            "Coordinated/Coordinated", "Coordinated/Regular", "Local-Only/Regular"], loc=2, fontsize=18, markerscale=2)
+            "Coordinated/Coordinated", "Coordinated/Regular", optimized+"/Regular"], loc=2, fontsize=18, markerscale=2)
 
       setup_lines(ax, cmap)
 

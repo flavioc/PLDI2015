@@ -24,21 +24,22 @@ cache effects when prioritizing nodes in bottom rows. The N Queens program
 builds and shares lists representing valid board states and needs to iterate
 over those lists often when checking if a new position does not invalidate a state.
 We thus used coordination axioms \texttt{set-default-priority(A, X)} and \texttt{set-cpu(A,
-vertical(X, Y)}, where \texttt{X} is the row number (0 is the top row) and
+vertical(X, Y))}, where \texttt{X} is the row number (0 is the top row) and
 \texttt{Y} is the column number.
 
+Experimenta results are presented in Fig.~\ref{results:nqueens}.
 We first ran the coordinated program using dynamic partitioning (with work
-stealing) and saw some performance improvements. However, using dynamic
+stealing) and saw some performance improvements (\textbf{Coordinated}). However, using dynamic
 partitioning is bad for memory locality since threads will steal nodes often.
 We then added \texttt{set-static(A)} as a coordination axiom and saw
-performance improvement, especially when the board columns are perfectly
+performance improvement (\textbf{Static}), especially when the board columns are perfectly
 partitioned by the number of threads (in our case 13 threads).
-Figure~\ref{results:nqueens} shows the performance gains saw for the 13 Queens
-program.
 
 \begin{topfig}
    \begin{center}
-      \subfloat[]{\includegraphics[width=5.5cm]{results/13queens.png}}
+      \subfloat[]{\includegraphics[width=5.5cm]{results/8queens-13.png}}
    \end{center}
-   \scap{results:nqueens}{Experimental results for the 13 Queens program.}
+   \scap{results:nqueens}{Experimental results for the 13 Queens program.
+   Coordination works best when 1 column is assigned to one thread and bottom
+   rows have higher priority.}
 \end{topfig}

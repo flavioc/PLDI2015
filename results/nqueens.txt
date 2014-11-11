@@ -5,15 +5,29 @@
 8queens-13 th8 35115 -> 35115
 8queens-13 th10 28127 -> 28127
 8queens-13 th12 25793 -> 25793
+8queens-13 th13 23004 -> 23004
 8queens-13 th14 22811 -> 22811
 8queens-13 th16 21584 -> 21584
 
-8queens-13-coord th1 196214 -> 196214
-8queens-13-coord th2 96308 -> 96308
-8queens-13-coord th4 76439 -> 76439
-8queens-13-coord th6 38966 -> 38966
-8queens-13-coord th8 29343 -> 29343
-8queens-13-coord th10 26422 -> 26422
-8queens-13-coord th12 22043 -> 22043
-8queens-13-coord th14 17244 -> 17244
-8queens-13-coord th16 19221 -> 19221
+8queens-13-coord1 th1 196214 -> 196214
+8queens-13-coord1 th2 96308 -> 96308
+8queens-13-coord1 th4 76439 -> 76439
+8queens-13-coord1 th6 38966 -> 38966
+8queens-13-coord1 th8 29343 -> 29343
+8queens-13-coord1 th10 26422 -> 26422
+8queens-13-coord1 th12 22043 -> 22043
+8queens-13-coord1 th13 17736 -> 17736
+8queens-13-coord1 th14 17844 -> 17844
+8queens-13-coord1 th16 19821 -> 19821
+
+8queens-13-coord0 th1 194675 -> 194675
+8queens-13-coord0 th2 95248 -> 95248
+8queens-13-coord0 th4 57920 -> 57920
+8queens-13-coord0 th6 42621 -> 42621
+8queens-13-coord0 th8 33808 -> 33808
+8queens-13-coord0 th10 27705 -> 27705
+8queens-13-coord0 th12 24523 -> 24523
+8queens-13-coord0 th13 23708 -> 23708
+8queens-13-coord0 th14 21375 -> 21375
+8queens-13-coord0 th16 19695 -> 19695
+

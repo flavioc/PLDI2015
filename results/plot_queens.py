@@ -10,7 +10,7 @@ from numpy import nanmax
 from lib import name2title, experiment_set, experiment, coordinated_program
 
 if len(sys.argv) != 2:
-  print "Usage: plot_ht.py <filename>"
+  print "Usage: plot_queens.py <filename>"
   sys.exit(1)
 
 filename = sys.argv[1]
@@ -33,7 +33,7 @@ with open(filename, "r") as fp:
       time = int(vec[len(vec)-1])
       expset.add_experiment(name, threads, time)
 
-reg = expset.get_experiment('new-heat-transfer-80')
-coord = expset.get_experiment('new-heat-transfer-80-coord0')
-localonly = expset.get_experiment('new-heat-transfer-80-coord1')
-reg.create_ht(coord, localonly, "Local-Only")
+reg = expset.get_experiment('8queens-13')
+coord0 = expset.get_experiment('8queens-13-coord0')
+coord1 = expset.get_experiment('8queens-13-coord1')
+reg.create_ht(coord0, coord1, "Static")
