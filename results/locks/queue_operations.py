@@ -22,6 +22,7 @@ minmax_reg = read_experiment("minmax-reg.txt")
 minmax_coord = read_experiment("minmax-coord.txt")
 nqueens_reg = read_experiment("nqueens-reg.txt")
 nqueens_coord = read_experiment("nqueens-coord.txt")
+nqueens_static = read_experiment("nqueens-static.txt")
 
 def translate(num):
    if num > 1000000:
@@ -58,3 +59,4 @@ print "\hline"
 
 show(nqueens_reg, "N Queens - Regular")
 show(nqueens_coord, "N Queens - Coordinated")
+show(nqueens_static, "N Queens - Static")

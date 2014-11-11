@@ -11,8 +11,8 @@ sssp-locks.png: sssp.txt sssp-coord.txt plot_three.py lib.py
 minmax-locks.png: minmax-reg.txt minmax-coord.txt plot.py lib.py
 	python plot.py minmax-reg.txt minmax-coord.txt minmax-locks.png "MiniMax locks"
 
-nqueens-locks.png: nqueens-reg.txt nqueens-coord.txt lib.py plot.py
-	python plot.py nqueens-reg.txt nqueens-coord.txt nqueens-locks.png "N Queens locks"
+nqueens-locks.png: nqueens-reg.txt nqueens-coord.txt lib.py plot_three.py
+	python plot_three.py nqueens-reg.txt nqueens-coord.txt nqueens-static.txt nqueens-locks.png "N Queens locks" "Static"
 
 bp.png: bp.txt sbp.txt plot.py lib.py
 	python plot.py bp.txt sbp.txt bp.png "LBP / SBP"
