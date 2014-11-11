@@ -4,13 +4,11 @@ took advantage of the fact that CLM uses linear logic, which allows us to derive
 coordination facts that can be deleted in order to perform actions in the underlying
 runtime system. In the other hand, sensing facts allow the programmer to reason
 about locality and scheduling of computation in a data-driven fashion.
-We have presented several applications where a judicious use of coordination can lead to
-better performance behavior.
+Even though the programs are optimized, the proofs of correctness for CLM
+programs remain simple since coordination does not change the language.
 
-We would like to explore this coordination paradigm in distributed systems,
-where data locality is far more important than in shared memory systems. We also
-think that CLM may be useful as a glue distributed/parallel language since it can
-easily model any computation pattern using graphs. Furthermore, we think that
-other declarative paradigms would benefit from using a similar approach. For
-instance, in functional programming, one may consider annotation functions that
-pick the right granularity for each problem.
+We would like to explore CLM's coordination principles in distributed systems,
+where data locality is far more important than in shared memory systems.
+Furthermore, we think that other declarative paradigms would benefit
+from giving programmers the freedom to fine-tune their programs while keeping
+the program declarative and easy to reason about.
