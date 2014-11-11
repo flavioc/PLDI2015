@@ -20,6 +20,8 @@ lbp = read_experiment("bp.txt")
 sbp = read_experiment("sbp.txt")
 minmax_reg = read_experiment("minmax-reg.txt")
 minmax_coord = read_experiment("minmax-coord.txt")
+nqueens_reg = read_experiment("nqueens-reg.txt")
+nqueens_coord = read_experiment("nqueens-coord.txt")
 
 def translate(num):
    if num > 1000000:
@@ -51,3 +53,8 @@ print "\hline"
 
 show(minmax_reg, "MiniMax - Regular")
 show(minmax_coord, "MiniMax - Coordinated")
+
+print "\hline"
+
+show(nqueens_reg, "N Queens - Regular")
+show(nqueens_coord, "N Queens - Coordinated")
