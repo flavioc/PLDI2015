@@ -31,7 +31,7 @@ implicitly parallel because nodes are able to compute independently. This makes
 CLM non-deterministic since nodes can be picked to run in any order, affecting
 which rules are applied and which facts are deleted or derived.
 
-\paragraph{SSSP Example}
+\paragraph{SSSP Example}\label{sect:ssspex}
 To make these ideas concrete, we present a simple
 program: the single source shortest path program~(SSSP). Later in the paper, we
 add coordination facts to improve the execution of the program.
@@ -77,7 +77,7 @@ shortest(A, D1, P1), D1 <= D2, relax(A, D2, P2)
   \scap{code:shortest_path_program}{Single Source Shortest Path program code.}
 \end{topfig}
 
-\begin{dblfig}[ht]
+\begin{dblfig}
 \begin{center}
   \subfloat[]{\includegraphics[width=0.3\textwidth]{figures/shortest2}}
   \hspace{0.4cm}
@@ -85,9 +85,9 @@ shortest(A, D1, P1), D1 <= D2, relax(A, D2, P2)
   \hspace{0.4cm}
   \subfloat[]{\includegraphics[width=0.3\textwidth]{figures/shortest8}}
 \end{center}
-\scap{fig:shortest_path_program}{Graphical representation of the SSSP program. Figure (a) represents the
+\scap{fig:shortest_path_program}{Graphical representation of the SSSP program. (a) represents the
    program after propagating initial distance at node \texttt{@1}, followed by
-   Figure (b) where the first rule is applied in node \texttt{@3}. Figure (c)
+   (b) where the first rule is applied in node \texttt{@3}. (c)
    represents the state of the final program, where all the shortest paths
    have been computed.}
 \end{dblfig}
