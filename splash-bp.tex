@@ -44,7 +44,7 @@ Fig.~\ref{code:sbp} to a working but unoptimized version of the algorithm, every
 other rule remains the same. We add new rules that coordinate
 the creation and execution of the splash trees:
 
-\begin{description}
+\begin{tightdescription}
    \item[Tree building]: Each node has a \texttt{inactive} fact that is used to
    start the tree building process. When the highest priority node is picked, a
    \texttt{tree} is created that will navigate through the tree. In lines 15-21,
@@ -63,12 +63,12 @@ the creation and execution of the splash trees:
    \item[Second phase]: In the second phase, the computation of beliefs is
    performed from the root to the leaves and the belief values are updated a
    second time (line 42).
-\end{description}
+\end{tightdescription}
 
-Note that the \texttt{set-static} and \texttt{set-cpu} action fact are used in
-line 2 in order to (1) force nodes to stay in the thread and (2) to partition
-nodes as a grid of threads. This sets up a well defined area of nodes
-for threads to build splash trees on.
+The \texttt{set-static} and \texttt{set-cpu} action facts are used in
+line 2 to (1) force nodes to stay in the thread and (2) 
+partition nodes as a grid of threads. This sets up well defined areas
+of nodes for threads to build splash trees on.
 
 \begin{topfig}
 \scriptsize\begin{Verbatim}[numbers=left,commandchars=*\{\}]
@@ -140,16 +140,15 @@ second-phase(A, [A, B | Next], Back)
       times faster than LBP.}
 \end{dblfig}
 
-
-In this program, coordination assumes a far more important role than we have
-seen before. Coordination rules fully drive the behavior of the algorithm and
-although the final result of the algorithm is identical to the original
-algorithm (minus probabilistic errors), SBP works in a very different way.
-SBP is implemented in GraphLab~\cite{GraphLab2010}, a C++ framework for writing machine algorithms.
-GraphLab provides the splash scheduler for these types of inferences as part of
-the framework. This particular scheduler is around 350 lines of C++ code.
-With our coordination facts, it is possible to create the necessary
-patterns with only 12 simple rules.
+In this program, coordination assumes a far more important role than
+we have seen before. Coordination rules fully drive the behavior of
+the algorithm and although the final result of the algorithm is
+statistically identical to the original algorithm, SBP works very
+differently than LBP.  SBP is also implemented in
+GraphLab~\cite{GraphLab2010}, a C++ framework for writing machine
+algorithms.  GraphLab provides the splash scheduler as part its the
+framework. It is 350 lines of C++ code.  With our coordination facts,
+it is possible to create the necessary scheduling with only 12 rules.
 
 We measured the behavior of LBP and SBP for both CLM and GraphLab.
 Fig.~\ref{results:splash_bp} shows that both systems have very similar behavior
