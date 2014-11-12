@@ -24,6 +24,7 @@
 \usepackage[colorlinks=true,allcolors=blue,breaklinks,draft=false]{hyperref}   % hyperlinks, including DOIs and URLs in bibliography
 % known bug: http://tex.stackexchange.com/questions/1522/pdfendlink-ended-up-in-different-nesting-level-than-pdfstartlink
 \newcommand{\doi}[1]{doi:~\href{http://dx.doi.org/#1}{\Hurl{#1}}}   % print a hyperlinked DOI
+\usepackage{xspace}
 
 \newlength{\figcapspace}
 \setlength{\figcapspace}{-3ex plus 2pt minus 3pt}
@@ -62,6 +63,7 @@
 \vspace{\tabtopspace}}{\vspace{\tabbottomspace}
 \end{table}}
 
+\newcommand{\sectref}[1]{Sect.~\ref{#1}\xspace}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% remove notes by setting below to false
 \newif\ifnotes
