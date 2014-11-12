@@ -1,29 +1,27 @@
 Coordinated Linear Meld (CLM) is a forward-chaining linear logic programming
 language based on LM~\cite{cruz-iclp14}.
 Programs consist of a set of \emph{rules} and a \emph{database of facts}.
-Rules such as \texttt{a(X), b(Y) -o c(X, Y)} can be read as follows: if fact \texttt{a(X)}
+Rules have the form \texttt{a(X), b(Y) -o c(X, Y)} and can be read as follows: if fact \texttt{a(X)}
 and fact \texttt{b(Y)} exist in the database then \texttt{c(X, Y)} is added to
 the database. The expression \texttt{a(X), b(Y)} is called the \emph{body} of
 the rule and \texttt{c(X, Y)} is the \emph{head} of the rule.
 A fact is a predicate, e.g., \texttt{a}, \texttt{b} or \texttt{c}, and its
 associated tuple of values, e.g., the concrete values of \texttt{X} and
-\texttt{Y}, substituted for the
-arguments. Since CLM uses linear logic as its foundation, we distinguish between
+\texttt{Y}. Since CLM uses linear logic as its foundation, we distinguish between
 \emph{linear} and \emph{persistent facts}. Linear facts are deleted during the
-process of deriving rule, while persistent facts are not.
-Program execution starts by adding the \emph{axioms} (the initial facts) of the program to the database.
-Next, the rules are recursively applied and the database is updated by adding
-new facts or deleting facts used during rule derivation.
+process of deriving a rule, while persistent facts are not.
+Program execution starts by adding the \emph{axioms} (the initial facts of the
+program) to the database. Next, rules are recursively applied and the
+database is updated by adding new facts or deleting facts used during rule derivation.
 When no more rules are applicable, the program terminates.
 
-CLM has been designed for writing programs that operate on graphs. CLM partitions
-the database by using the first argument of each fact. The first argument has
-type \emph{node} and represents a node in the graph. To achieve concurrency,
-our implementation partitions the database by the first argument, e.g.,
+CLM has been designed for writing programs that operate on graphs. To achieve
+concurrency, CLM partitions the database by using the first argument of each fact. The first argument has
+type \emph{node} and represents a node in the graph. For example,
 the fact \texttt{f(@1, 2)} is stored in node \texttt{@1}, while
 fact \texttt{p(@2)} is stored in node \texttt{@2}. CLM restricts the body of
 every rule to facts with the same node so that nodes can derive rules
-independently. Although the body is restricted, the head of the rule may refer
+independently. The head of the rule may refer
 to any node as long as that node is referred to somewhere in the body. This allows
 \scare{communication} between nodes during rule derivation, since a node may
 \scare{send} a fact to another node.  Rule restrictions in turn make CLM
@@ -32,27 +30,26 @@ CLM non-deterministic since nodes can be picked to run in any order, affecting
 which rules are applied and which facts are deleted or derived.
 
 \paragraph{SSSP Example}\label{sect:ssspex}
-To make these ideas concrete, we present a simple
-program: the single source shortest path program~(SSSP). Later in the paper, we
+To make these ideas concrete, Fig.~\ref{code:shortest_path_program} presents
+a simple program: the single source shortest path program~(SSSP). Later in the paper, we
 add coordination facts to improve the execution of the program.
 
-The SSSP program in Fig.~\ref{code:shortest_path_program} starts (lines 1-3)
-with the declaration of the predicates. Predicates specify the facts
-used in the program. The first predicate, \texttt{edge}, is a persistent
-predicate that describes the relationship between the nodes of the graph,
-where the third argument represents the weight of the edge (the
-\texttt{route} modifier informs the compiler that the \texttt{edge} predicate
-determines the structure of the graph).
-The predicates \texttt{shortest} and \texttt{relax} are
-specified as linear facts and thus are deleted when deriving new facts.  The
-algorithm computes the shortest distance from node
-\texttt{@1} to all other nodes in the graph. Every node has a
-\texttt{shortest} fact that is improved with new \texttt{relax} facts.  Lines
-5-9 declare the axioms of the program: \texttt{edge} facts describe the
-graph; \texttt{shortest(A, +00, [])} is the initial shortest distance
-(infinity) for all nodes; and \texttt{relax(@1, 0, [@1])} starts the
-algorithm by setting the initial distance from \texttt{@1} to \texttt{@1} to be
-0.
+The SSSP program starts (lines 1-3) with the declaration of the predicates.
+Predicates specify the facts used in the program. The first predicate,
+\texttt{edge}, is a persistent predicate that describes the
+relationship between the nodes of the graph, where the third argument
+represents the weight of the edge (the \texttt{route} modifier
+informs the compiler that the \texttt{edge} predicate
+determines the structure of the graph).  The predicates
+\texttt{shortest} and \texttt{relax} are specified as linear facts
+and thus are deleted when deriving new facts.  The algorithm computes
+the shortest distance from node \texttt{@1} to all other nodes in the
+graph. Every node has a \texttt{shortest} fact that is improved with
+new \texttt{relax} facts.  Lines 5-9 declare the axioms of the
+program: \texttt{edge} facts describe the graph; \texttt{shortest(A,
++00, [])} is the initial shortest distance (infinity) for all
+nodes; and \texttt{relax(@1, 0, [@1])} starts the algorithm by
+setting the initial distance from \texttt{@1} to \texttt{@1} to be 0.
 
 \begin{topfig}
 \scriptsize\begin{Verbatim}[numbers=left]
@@ -99,7 +96,7 @@ The first rule of the program (lines 11-14) reads as following: if the current
 \texttt{shortest} path \texttt{P1} with distance \texttt{D1} is larger
 than a new path \texttt{relax} with distance \texttt{D2}, then replace the
 current shortest path with \texttt{D2}, delete the new \texttt{relax} path and
-propagate new paths to the neighbors (lines 14-15) using a \emph{comprehension}.
+propagate new paths to the neighbors (lines 13-14) using a \emph{comprehension}.
 The comprehension iterates over the edges of node \texttt{A} and derives a new
 \texttt{relax} fact for each node \texttt{B} with the distance \texttt{D2 + W},
 where \texttt{W} is the weight of the edge. For
@@ -110,15 +107,15 @@ applying the same rule but at node \texttt{2}.
 
 The second rule of the program (lines 16-17) is read as following: if the
 current shortest path \texttt{D1} is shorter than the new path \texttt{D2} then
-delete the new \texttt{relax} fact and keep the old shortest path.
+delete the new \texttt{relax} fact and keep the current shortest path.
 
 There are many opportunities for concurrency in the SSSP program. For instance,
 after applying rule 1 in Fig.~\ref{fig:shortest_path_program}~(a), it is
 possible to either apply rules in either node \texttt{@2} or node
-\texttt{@3}. This decision depends largely on implementation factors such as node
-partitioning and number of threads in the system.
-Still, it is easy to prove that no matter the scheduling used,
-the final result present in Fig.~\ref{fig:shortest_path_program}~(c) is achieved.
+\texttt{@3}. This decision depends largely on implementation factors such
+as node partitioning and number of threads in the system.  Still, it is
+easy to prove that no matter the scheduling used, the final result, as
+presented in Fig.~\ref{fig:shortest_path_program}~(c), is achieved.
 
 %On the other hand, CLM has no natural matching of data and computation to workers (processes, threads),
 %since nodes are a program abstraction and part of the program's logic.
