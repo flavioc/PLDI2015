@@ -10,11 +10,15 @@ nature of computation allows multiple expressions to evaluate safely in
 parallel. This has been explored in several languages such as
 NESL~\cite{Blelloch:1996:PPA:227234.227246}, Id~\cite{Nikhil93anoverview}, and
 more recently Data Parallel Haskell~\cite{nepal}.
+NESL often got good performance, but was limited to a particular
+application space. We also limit our application space, but also give the
+programmer a declarative way to coordinate computation to improve the
+performance of the program.
 
 \paragraph{Data Centric Languages}
 Recently, there has been an increasing interest in declarative data-centric
-languages.  MapReduce~\cite{Dean:2008:MSD:1327452.1327492}, for instance, is a
-popular data-centric programming model that is optimized for large clusters.
+languages. MapReduce~\cite{Dean:2008:MSD:1327452.1327492}, for instance, is a
+popular programming model that is optimized for large clusters.
 Intrinsic to its popularity is the simplicity of its scheduling and data sharing
 model.  In order to facilitate the writing of programs over large datasets,
 SQL-like languages such as PigLatin~\cite{Olston:2008:PLN:1376616.1376726} have
@@ -26,13 +30,18 @@ arbitrary computation patterns using the DAG abstraction. It combines
 computational vertices with communication channels (edges) that are
 automatically scheduled to run on multiple computers/cores.
 
-GraphLab~\cite{GraphLab2010} is a C++ framework for developing parallel machine
+GraphLab~\cite{GraphLab2010} is a C++ framework for developing graph-based parallel machine
 learning algorithms. GraphLab allows nodes to have read/write access to
 different scopes through different concurrent access models in order to balance
 performance and data consistency.  GraphLab also provides different schedulers
 that dictate the order in which node's are computed, allowing the programmer to
 optimize the program. Later in this paper, we will show how one GraphLab
 scheduler can be implemented in CLM through the use of coordination facts.
+Another, more restrictive, graph-based system is
+Pregel~\cite{Malewicz:2010:PSL:1807167.1807184}, where graph algorithms must be
+executed as a sequence of iterations of computation and message passing.
+Both those systems provide excellent performance, however they are not
+declarative and have a steep learning curve.
 
 \paragraph{Coordination Languages}
 Many programming languages follow the so-called \emph{coordination
