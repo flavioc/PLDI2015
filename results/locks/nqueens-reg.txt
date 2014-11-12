@@ -33,7 +33,7 @@ set_static_lock: 0	/	0
 set_affinity_lock: 0	/	0
 heap_operations: 0
 normal_operations: 14446
-facts_derived: 166914777
+facts_derived: 167137717
 THREAD 4
 main_db_lock: 0	/	4
 node_lock: 6	/	37230

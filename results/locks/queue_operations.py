@@ -26,9 +26,9 @@ nqueens_static = read_experiment("nqueens-static.txt")
 
 def translate(num):
    if num > 1000000:
-      return str(num/1000000) + "M"
+      return str(round(num/1000000, 1)) + "M"
    elif num > 1000:
-      return str(num/1000) + "K"
+      return str(round(num/1000, 1)) + "K"
    else:
       return str(num)
 
@@ -40,6 +40,10 @@ def show_facts_per_op(exp, name):
    instrs = exp.queue_instruction_count()
    facts = exp.facts_derived_count()
    count = [round(float(ft)/float(it), 2) for it, ft in zip(instrs, facts)]
+   print name + " & " + translate(count[0]) + " & " + translate(count[1]) + " & " + translate(count[2]) + " & " + translate(count[4]) + " & " + translate(count[8]) + " \\\\ \hline"
+
+def show_facts_derived(exp, name):
+   count = exp.facts_derived_count()
    print name + " & " + translate(count[0]) + " & " + translate(count[1]) + " & " + translate(count[2]) + " & " + translate(count[4]) + " & " + translate(count[8]) + " \\\\ \hline"
 
 def show_separated(exp, name):
@@ -83,3 +87,7 @@ print
 print
 print
 display_data(show_facts_per_op)
+print
+print
+print
+display_data(show_facts_derived)
