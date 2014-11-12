@@ -3,15 +3,14 @@ possible loss for a worst case (maximum loss) scenario in a zero sum
 game for 2 (or more) players that play in
 turns~\cite{Edwards54}.
 
-The algorithm proceeds by building a game tree, where each tree node represents a
+The algorithm builds a game tree, where each tree node represents a
 game state and the children represent the possible game moves that can
-be made by either player 1 or player 2.
-An evaluation function is used to compute the score of
-the board for each leaf of the tree. A node is a leaf when the game state can no longer be
-expanded. Finally, the
-algorithm recursively minimizes or maximizes the scores of each node.
-To select the best move for player 1, the
-algorithm picks the move maximized at the root node.
+be made by either player 1 or player 2.  An evaluation function is
+used to compute the score of the board for each leaf of the tree. A
+node is a leaf when the game state can no longer be expanded. Finally,
+the algorithm recursively minimizes or maximizes the scores of each
+node.  To select the best move for player 1, the algorithm picks the
+move maximized at the root node.
 
 In CLM, the program starts with a root node (with the initial game state)
 that is expanded with the available moves at each level. The graph of the
@@ -69,6 +68,7 @@ C <> 0
   -o expand(A, Board ++ [C], Xs, N, P, \underline{Depth}).
 \end{Verbatim}
 \scap{minimax:check-end}{MiniMax: checking if the game has ended and expanding the tree}
+\vspace*{-2ex}
 \end{topfig}
 \normalsize
 
@@ -123,6 +123,7 @@ distributed systems.
    \end{center}
    \scap{results:memory_minmax}{Memory usage and scalability of the regular and coordinated versions
       of MiniMax.}
+\vspace*{-2ex}
 \end{topfig}
 
 In Fig.~\ref{results:memory_minmax} we compare the memory usage and scalability
