@@ -1,12 +1,12 @@
-Writing parallel programs in sequential languages is hard because manipulating
+Parallel programming in sequential languages is hard because manipulating a
 shared state using multiple threads may result in data race conditions. Such
-issues are handled with low level constructs such as locks and condition
+issues are handled with low level constructs such as locks, semaphores and/or condition
 variables, requiring a fair amount of effort to get right.  Declarative
-programming has been hailed as a solution to this issue, since the problem of
+programming has been hailed as a alternative solution to this issue, since the problem of
 implementing the details of parallelism is moved from the programmer to the
-compiler and runtime. The programmer writes code without having to deal with
+compiler and runtime environment. The programmer writes code without having to deal with
 parallel programming constructs and the compiler automatically parallelizes the
-program in order to take advantage of multiple threads of execution.  The
+program in order to take advantage of multiple threads of execution.  This
 programming paradigm has been adopted with huge success in domain specific
 languages such as SQL and MapReduce~\cite{Dean:2008:MSD:1327452.1327492}.
 Although general declarative languages have yet to be as successful, the future
@@ -14,12 +14,12 @@ looks promising for this particular approach.
 
 The problem with declarative programming is that it leaves little to no
 programmer control over how execution is scheduled or how data is laid out,
-making it hard to achieve necessary efficiency. This introduces
+making it hard to improve efficiency. This introduces
 performance issues because even if the runtime system is able to
 reasonably parallelize the program using a general algorithm, there
 is a lack of specific information about the program that a compiler
 cannot easily deduce. Such information could make execution better in
-terms of run time time, memory usage, and scalability.
+terms of run time time, memory usage, and/or scalability.
 
 In this paper, we introduce Coordinated Linear Meld (CLM), a data-centric declarative
 language that extends the Linear Meld~(LM)
@@ -28,19 +28,19 @@ programmer control over scheduling and data placement. LM is a linear logic
 programming language designed for programs that operate on graphs.  The use
 of linear logic~\cite{girard-87} supports structured manipulation of mutable
 state. In LM, computation is divided so that each node of the graph computes
-independently and is allowed to \scare{communicate} with other nodes.  Both
+independently but is allowed to \scare{communicate} with other nodes.  Both
 computation and communication happen through the derivation of logical rules
 (which make up the program).
 
-The CLM language features coordination primitives that can be used in the same
-way as any other primitive, in other words, they are specified with the same
+The CLM language features two kinds of coordination primitives that can be used in the same
+way as any other primitive, i.e., they are specified with the same
 syntax and semantics as the rest of the programming language. These coordination
 primitives can be used to improve program execution based on the state of the
 program and the underlying machine. The first kind of coordination facts are
 called \emph{sensing facts} and are used to sense information about the system
 the program is running on, e.g., scheduling and node placement on threads. The
-second kind of coordination facts are \emph{action facts} that when deleted in
-rules are used to apply a scheduling operation during execution. Coordination
+second kind of coordination facts are \emph{action facts} that when detected in
+rules, are used to apply a scheduling operation during execution. Coordination
 facts allow the programmer to write logical rules that depend on the current
 state of the program and then prioritize node computation or place nodes in
 different threads.
@@ -54,5 +54,5 @@ overview of the base language, with an example. In
 \sectref{sec:coordination}, we introduce the current set of coordination
 facts, followed by a description of the changes required to implement the
 desired coordination mechanisms. In \sectref{sec:applications} we present
-several applications and show coordination can improve programs without
+several applications and show how coordination can improve programs without
 destroying clarity or provability.

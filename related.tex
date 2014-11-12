@@ -1,6 +1,6 @@
 
 \paragraph{Declarative Languages}
-Declarative programming paradigms such as \emph{logic} and \emph{functional}
+Programming paradigms such as \emph{logic} and \emph{functional}
 programming have been extensively exploited for their implicit parallelism.
 In logic languages such as Prolog, researchers took advantage of the
 non-determinism of proof-search to evaluate subgoals in parallel with models
@@ -30,7 +30,7 @@ arbitrary computation patterns using the DAG abstraction. It combines
 computational vertices with communication channels (edges) that are
 automatically scheduled to run on multiple computers/cores.
 
-GraphLab~\cite{GraphLab2010} is a C++ framework for developing graph-based parallel machine
+Another interesting system is GraphLab~\cite{GraphLab2010}, a C++ framework for developing graph-based parallel machine
 learning algorithms. GraphLab allows nodes to have read/write access to
 different scopes through different concurrent access models in order to balance
 performance and data consistency.  GraphLab also provides different schedulers
@@ -59,7 +59,7 @@ that can be manipulated using the following coordination directives:
 \texttt{out(t)} to write a tuple \texttt{t} into the tuple space; \texttt{in(t)}
 to read a tuple using the template \texttt{t}; \texttt{rd(t)} to retrieve a copy
 of the tuple \texttt{t} from the tuple space; and \texttt{eval(p)} to add a
-process \texttt{p} in the tuple space and execute it in parallel.  Linda is be
+process \texttt{p} in the tuple space and execute it in parallel.  Linda was
 implemented on top of many popular languages by simply creating a communication
 and storage mechanism for the tuple space and then adding the directives as a
 language library.
@@ -72,23 +72,21 @@ operators are isolated from the coordination language.
 
 Linda and Delirium are limited in the sense that the programmer can only
 coordinate the scheduling of processing units, while the placement of data is
-left to the implementation. But even more importantly, CLM differs from those
+left to the implementation. CLM differs from those
 languages because coordination acts on data instead of processing units.
 The abstraction is then raised by considering data and algorithmic aspects of
-the program instead of focusing how processing units are used.
+the program instead of focusing on how processing units are used.
 Furthermore, the CLM language is both a coordination language and a computation
 language and there is no distinction between the two components.
 
 \paragraph{Forward-Chaining Logic Programming}
-
-Forward-chaining logic programming came into its own with the Datalog
+This paradigm came into its own with the Datalog
 language~\cite{Ullman:1990:PDK:533142}.  Traditionally used in deductive
 databases, it is now being increasingly used in different fields such as
 distributed networking~\cite{Loo-condie-garofalakis-p2}, sensor
 nets~\cite{Chu:2007:DID:1322263.1322281} and cloud computing~\cite{alvaro:boom}.
 The LM language was inspired by Meld~\cite{ashley-rollman-iclp09}, a
 Datalog-like language for programming distributed ensembles of modular robots.
-Meld introduced the idea of sensing and action facts in order to sense and act
+Meld also introduced the idea of sensing and action facts in order to sense and act
 on the outside world, respectively. LCM uses sensing facts to sense the
-underlying system that the program is running on and action facts act on that
-system.
+underlying system and action facts to act on that system.
