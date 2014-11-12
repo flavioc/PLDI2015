@@ -1,99 +1,3 @@
-\paragraph{Locking} The CLM virtual machine uses spin-locks to protect shared data structures between
-threads. As described in \sectref{sec:implementation}, coordination
-operations require synchronization since they need to change node information
-and sometimes move nodes between the standard queue and the regular queue.
-In order to measure the locking costs of coordination, we measured the following
-statistics: \emph{basic locks}, the number of locks acquired that were already
-present in the original LM virtual machine and \emph{coordination locks}, the
-number of locks acquired for performing coordination operations. We also
-measured how often a \texttt{lock()} operation fails on the first attempt, but
-such statistics are not represented in the figures below since the values are
-too small.
-
-The first program we measured was SSSP, represented in
-Fig.~\ref{results:sssp_uspowergrid}. In addition to the Regular and
-Coordinated versions, we have the Buffered version where we
-optimized the virtual machine to buffer coordination actions before applying
-them. The idea is to avoid applying multiple \texttt{set-priority} operations to
-the same node during a single node execution. We thus gather the higher priority
-values and then perform coordination after the node has executed.
-Although the number of locks is significantly reduced, we did not see a
-similar performance improvement, since the Buffered version is only
-5\% faster than the Coordinated version.
-
-\begin{topfig}
-   \begin{center}
-      \includegraphics[width=6.5cm]{results/locks/sssp-locks.png}
-   \end{center}
-  \scap{locks:SSSP}{Locking statistics for SSSP.
-     \texttt{Coordinated} refers to the program in
-     Fig.~\ref{results:sssp_uspowergrid}, while \texttt{Buffered} is a more
-     optimized version of the same program where coordination operations are
-     buffered before application.}
-\end{topfig}
-
-In Fig.~\ref{locks:HT} we show the lock statistics for HT. We measured the
-regular version, the coordinated version and the local-only version as in
-Fig.~\ref{results:ht}. There is a slight reduction in number of locks with
-coordination and then a further reduction in the local-only version because less
-facts are exchanged between threads.
-
-\begin{topfig}
-   \begin{center}
-      \includegraphics[width=6.5cm]{results/locks/ht-locks.png}
-   \end{center}
-  \scap{locks:HT}{Locking statistics for HT. Coordination reduces
-     the overall number of locks used, while further optimization for locality
-     reduces the locks even further.}
-\end{topfig}
-
-Finally, in Fig.~\ref{locks:LBP} we present lock statistics for LBP and SBP. LBP
-is represented as the Regular bar, while SBP is represented as the Coordinated
-bar. We notice that LBP has quite a lot of locking for 1 thread since LBP
-is an asynchronous algorithm and tends to be a slow sequential algorithm,
-requiring more derivations when using 1 thread. The numbers go down as more
-threads are used. For SBP, there is a consistent amount of locking without
-little variations between the number of threads used. This is because threads
-interact very little with each other and the amount of work to do is the same
-for all threads.
-
-\begin{topfig}
-   \begin{center}
-      \includegraphics[width=6.5cm]{results/locks/bp.png}
-   \end{center}
-  \scap{locks:LBP}{Locking statistics for LBP and SBP. Locking is constant for
-     SBP because threads do not interact with each other.}
-\end{topfig}
-
-\paragraph{Queue Instructions}
-
-We also measured the number of queue instructions required to compute programs.
-While the regular queue operations have constant complexity, priority queue
-operations are usually logarithmic and require more computation. We counted the
-number of instructions required for queue operations during program execution.
-Each normal queue operation costs 1 instruction, while priority queue costs as
-many \emph{percolate-up}/\emph{percolate-down} instructions are required to maintain the heap property.
-
-Table~\ref{queue_instructions} presents the total queue instructions for several
-programs. All the coordinated programs require far more queue instructions than
-the regular version. For instance, the coordinated SSSP program requires 4 to 5
-times more instructions to perform queue operations. Interestingly, the buffered
-version requires even more instructions although it performs less overall
-coordination. It is likely that this is due to increased fact computation and
-subsequent queue manipulation because coordination operations are buffered.
-We argue that the 5\% performance improvement in the
-buffered version is due mostly to reduced locking.
-
-For the HT program, the coordinated version requires twice more queue
-instructions than the regular version. As expected, the local-only version
-requires less queue operations because the number of derived facts is reduced.
-The MiniMax program also sees twice as many queue instructions using
-coordination. This does not happen with the N Queens program, where the number
-of queue instructions is far greater when using coordination, especially when
-using a small number of threads. We argue that this happens because higher
-priority nodes at the bottom are often added to the priority queue, resulting in
-many \emph{percolate-up} operations.
-
 \begin{toptab}
 \footnotesize\begin{tabular}{ | l || c | c | c | c | c |}
 \hline
@@ -105,7 +9,7 @@ SSSP - Regular & 199K & 201K & 205K & 196K & 207K \\ \hline
 SSSP - Coordinated & 964K & 938K & 870K & 886K & 963K \\ \hline
 SSSP - Buffered & 1M & 1M & 1M & 1M & 1M \\ \hline
 \hline
-HT - Buffered & 25M & 32M & 34M & 34M & 36M \\ \hline
+HT - Regular & 25M & 32M & 34M & 34M & 36M \\ \hline
 HT - Coordinated & 51M & 55M & 85M & 80M & 72M \\ \hline
 HT - Local-Only & 51M & 55M & 79M & 74M & 68M \\ \hline
 \hline
@@ -127,9 +31,156 @@ N Queens - Static & 57M & 44M & 1M & 1M & 151K \\ \hline
    \emph{percolate-up}/\emph{percolate-down} steps performed.}
 \end{toptab}
 
+Coordination introduces overhead in two major ways.  First, in
+manipulating the priority queues which require operations on a min
+heap.  Second, in potentially requiring more lock operations as we
+move nodes between queues and within the priority queue.  As we show
+here, this overhead is minimal and the resulting improved schedules
+and improved locality more than make up for the overhead.
+
+As can be seen in Table~\ref{queue_instructions} all the coordinated
+versions of the programs require significantly more queue operations.
+The data for this table comes from recording, during execution, the
+number of normal queue operations executed (each costs 1), plus the
+number of \emph{percolate-up}/\emph{percolate-down} operations
+executed for each manipuilation of the priority queue.  As expected,
+programs which rely on prioritizing the order of execution to obtain
+better asymptotic complexity (e.g., SSSP) improve in overall running
+time at the cost of more queue operations.  In all cases, coordination
+adds a significant number of total queue operations, but the resulting
+overhead is more than compensated for by an improved schedule.  
+
+An interesting artifact of effectively parallelizing the code is that
+the priority queue on each thread is smaller, so the total number of
+priority queue operations is significantly reduced as the depth of the
+min heap on each thread is reduced.  This is particularly evident for
+the N Queens program.
+
+\begin{topfig}
+   \begin{center}
+      \includegraphics[width=6.5cm]{results/locks/sssp-locks.png}
+   \end{center}
+  \scap{locks:SSSP}{Locking statistics for SSSP.
+     \texttt{Coordinated} refers to the program in
+     Fig.~\ref{results:sssp_uspowergrid}, while \texttt{Buffered} is a more
+     optimized version of the same program where coordination operations are
+     buffered before application.}
+\end{topfig}
+
+\begin{topfig}
+   \begin{center}
+      \includegraphics[width=6.5cm]{results/locks/ht-locks.png}
+   \end{center}
+  \scap{locks:HT}{Locking statistics for HT. Coordination reduces
+     the overall number of locks used, while further optimization for locality
+     reduces the locks even further.}
+\end{topfig}
+
+We next investigate the effect of coordination on the syncronization
+overhead that comes froms from the use of more locks.  We measured the
+\emph{basic locks}, the number of locks acquired
+in the original LM virtual machine and \emph{coordination locks}, the
+number of locks acquired to perform coordination operations.  We also
+measured how often \texttt{lock()} operations that fail to acquired
+the lock on the first attempt.  Lock failures happen so infrequently
+(less than X\% \snote{please fill this in} of the time) that they
+cannot be seen on the figures.
+
+Fig.~\ref{results:sssp_uspowergrid} shows the number of locks acquired
+for the SSSP program.  The first bar in each group shows the number of
+locks acquired for the uncoordinated version of the program.  The
+second bar shows the regular and coordination locks acquired for SSSP
+when every newly derived fact and priority operation is carried out
+immediately.  This leads to a significant increase in total locks
+acquired often because the priority of a node is change many times
+before it is operated on.  The third bar shows the effect of buffering
+priority operations before applying them.  This significantly reduces
+the lock overhead, but as can be seen in
+Table~\ref{queue_instructions} increase the number of queue operations
+slightly.  This slight increase comes from the fact the buffering
+delays the change in priorities and some longer paths can sometimes be
+investigated unnecessarily.
+
+Fig.~\ref{locks:HT} shows the locking behavior of the heat transfer
+program.  The behavior is representative of the other programs.  There
+is drop in the total number of locks acquired and coordination locks
+represent a small fraction of the total locks acquired.  The locality
+coordination further reduces locking by keeping more derivation local
+to a thread.
+
+Overall, the additional overhead introduced by supporting coordination
+is more than offset by improved schedules and increased locality.
+While there are more locks to manage the total cost of lock operations
+does not change significantly (and is often reduced) when coordination
+is added.  And, although the priority coordination significantly
+increases the cost of queueing it is offset by reducing the number of
+total facts derived.
+
+
+\iffalse
+
+  The
+SSSP program is The first program we measured was SSSP, represented in
+Fig.~\ref{results:sssp_uspowergrid}. In addition to the Regular and
+Coordinated versions, we have the Buffered version where we optimized
+the virtual machine to buffer coordination actions before applying
+them. The idea is to avoid applying multiple \texttt{set-priority}
+operations to the same node during a single node execution. We thus
+gather the higher priority values and then perform coordination after
+the node has executed.  Although the number of locks is significantly
+reduced, we did not see a similar performance improvement, since the
+Buffered version is only 5\% faster than the Coordinated version.
+
+
+In Fig.~\ref{locks:HT} we show the lock statistics for HT. We measured the
+regular version, the coordinated version and the local-only version as in
+Fig.~\ref{results:ht}. There is a slight reduction in number of locks with
+coordination and then a further reduction in the local-only version because less
+facts are exchanged between threads.
+
+Finally, in Fig.~\ref{locks:LBP} we present lock statistics for LBP and SBP. LBP
+is represented as the Regular bar, while SBP is represented as the Coordinated
+bar. We notice that LBP has quite a lot of locking for 1 thread since LBP
+is an asynchronous algorithm and tends to be a slow sequential algorithm,
+requiring more derivations when using 1 thread. The numbers go down as more
+threads are used. For SBP, there is a consistent amount of locking without
+little variations between the number of threads used. This is because threads
+interact very little with each other and the amount of work to do is the same
+for all threads.
+
+\begin{topfig}
+   \begin{center}
+      \includegraphics[width=6.5cm]{results/locks/bp.png}
+   \end{center}
+  \scap{locks:LBP}{Locking statistics for LBP and SBP. Locking is constant for
+     SBP because threads do not interact with each other.}
+\end{topfig}
+
+\paragraph{Queue Instructions}
+
+Table~\ref{queue_instructions} presents the total queue instructions for several
+programs. All the coordinated programs require far more queue instructions than
+the regular version. For instance, the coordinated SSSP program requires 4 to 5
+times more instructions to perform queue operations. Interestingly, the buffered
+version requires even more instructions although it performs less overall
+coordination. It is likely that this is due to increased fact computation and
+subsequent queue manipulation because coordination operations are buffered.
+We argue that the 5\% performance improvement in the
+buffered version is due mostly to reduced locking.
+
+For the HT program, the coordinated version requires twice more queue
+instructions than the regular version. As expected, the local-only version
+requires less queue operations because the number of derived facts is reduced.
+The MiniMax program also sees twice as many queue instructions using
+coordination. This does not happen with the N Queens program, where the number
+of queue instructions is far greater when using coordination, especially when
+using a small number of threads. We argue that this happens because higher
+priority nodes at the bottom are often added to the priority queue, resulting in
+many \emph{percolate-up} operations.
+
 These experiments indicate that handling coordination has a small cost in terms
 of synchronization but some cost in terms of queue operations with
 up to 5 times more queue instructions when using priority queues.
 Since coordination reduces the number of facts derived due to better scheduling
 decisions, the costs of manipulating priority queues become irrelevant.
-
+\fi
