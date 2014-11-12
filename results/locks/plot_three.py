@@ -53,3 +53,6 @@ ax.set_xticklabels(('1', '2', '4', '6', '8', '10', '12', '14', '16'))
 ax.legend((pbasicreg, pbasicc, pcoordc, pbasico, pcoordo), ('Regular - Basic', 'Coordinated - Basic',
          'Coordinated - Coordination', opt_name + ' - Basic', opt_name + ' - Coordination'), loc=2)
 plt.savefig(output_file)
+
+print reg_exp.percent_fail()
+print coord_exp.percent_fail()

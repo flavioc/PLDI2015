@@ -87,6 +87,9 @@ class experiment(object):
    def get_coord_fail_locks(self):
       return [data.fail_coord_locks() for th, data in sorted(self.threads.iteritems())]
 
+   def percent_fail(self):
+      return [(float(data.total_fail())/float(data.total_locks())) * 100 for th, data in sorted(self.threads.iteritems())]
+
    def get_fail_locks(self):
       return [data.total_fail() for th, data in sorted(self.threads.iteritems())]
 
