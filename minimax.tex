@@ -77,7 +77,7 @@ With coordination, we set the priority of a node to be its depth
 so the tree is expanded in a depth-first fashion (lines 15 and 22),
 leading to a memory complexity of $\mathcal{O}(d t)$, where $d$
 is the depth of the tree and $t$ is the number of threads.
-Since threads prioritize deeper nodes, the scores of the first leaves are immediatelly
+Since threads prioritize deeper nodes, the scores of the first leaves are immediately
 computed and then sent to the parent node. At this point, the leaves are deleted
 and reused for other nodes in the tree, resulting in minimal memory usage.
 

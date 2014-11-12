@@ -1,4 +1,4 @@
-\paragraph{Locking} The CLM virtual machine uses spinlocks to protect shared data structures between
+\paragraph{Locking} The CLM virtual machine uses spin-locks to protect shared data structures between
 threads. As described in Section~\ref{sec:implementation}, coordination
 operations require synchronization since they need to change node information
 and sometimes move nodes between the standard queue and the regular queue.
@@ -54,7 +54,7 @@ is an asynchronous algorithm and tends to be a slow sequential algorithm,
 requiring more derivations when using 1 thread. The numbers go down as more
 threads are used. For SBP, there is a consistent amount of locking without
 little variations between the number of threads used. This is because threads
-interactly very little with each other and the amount of work to do is the same
+interact very little with each other and the amount of work to do is the same
 for all threads.
 
 \begin{topfig}
@@ -87,7 +87,7 @@ buffered version is due mostly to reduced locking.
 For the HT program, the coordinated version requires twice more queue
 instructions than the regular version. As expected, the local-only version
 requires less queue operations because the number of derived facts is reduced.
-The MiniMax program also sees twices as many queue instructions using
+The MiniMax program also sees twice as many queue instructions using
 coordination. This does not happen with the N Queens program, where the number
 of queue instructions is far greater when using coordination, especially when
 using a small number of threads. We argue that this happens because higher

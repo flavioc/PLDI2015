@@ -7,7 +7,7 @@ the database. The expression \texttt{a(X), b(Y)} is called the \emph{body} of
 the rule and \texttt{c(X, Y)} is the \emph{head} of the rule.
 A fact is a predicate, e.g., \texttt{a}, \texttt{b} or \texttt{c}, and its
 associated tuple of values, e.g., the concrete values of \texttt{X} and
-\texttt{Y}, substitued for the
+\texttt{Y}, substituted for the
 arguments. Since CLM uses linear logic as its foundation, we distinguish between
 \emph{linear} and \emph{persistent facts}. Linear facts are deleted during the
 process of deriving rule, while persistent facts are not.
@@ -24,7 +24,7 @@ the fact \texttt{f(@1, 2)} is stored in node \texttt{@1}, while
 fact \texttt{p(@2)} is stored in node \texttt{@2}. CLM restricts the body of
 every rule to facts with the same node so that nodes can derive rules
 independently. Although the body is restricted, the head of the rule may refer
-to any node as long as that node is refered to somewhere in the body. This allows
+to any node as long as that node is referred to somewhere in the body. This allows
 \scare{communication} between nodes during rule derivation, since a node may
 \scare{send} a fact to another node.  Rule restrictions in turn make CLM
 implicitly parallel because nodes are able to compute independently. This makes

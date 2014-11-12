@@ -25,7 +25,7 @@ register. Coordination facts in the head of the rule are also implemented as
 special instructions of the virtual machine, but they perform some action,
 instead of being added to the database as facts.
 Semantically, action facts are like any other. However, since they are
-immediatelly used by the machine, there is no need to store them in the
+immediately used by the machine, there is no need to store them in the
 database, therefore avoiding unnecessary allocations and deallocations.
 
 \subsection{Execution}
@@ -38,7 +38,7 @@ derived for it. When a new fact is derived for an
 inactive node, the node is made active and placed on the appropriate queue of
 the appropriate thread.  Threads do useful work by processing active nodes from their queues. Whenever a
 thread becomes idle, it attempts to steal nodes from a random thread.
-If unsucessful, the thread becomes idle and waits for program
+If unsuccessful, the thread becomes idle and waits for program
 termination while periodically attempting to steal nodes.
 
 \paragraph{Nodes} 
@@ -85,12 +85,12 @@ Fig.~\ref{fig:node_states} represents the valid state transitions of a node:
       specified by the state machine.}
 \end{topfig}
 
-Each node is protected by a main spinlock that allows threads to
+Each node is protected by a main spin-lock that allows threads to
 change node attributes: incoming facts, owner thread, state variable
-and locality information.  A database spinlock is locked whenever the
+and locality information.  A database spin-lock is locked whenever the
 node enters into the \textbf{working} state.  
 
-To avoid unneccesary copying, when a node sends facts to a node
+To avoid unnecessary copying, when a node sends facts to a node
 located in another thread, the current thread first attempts to lock
 the database lock of the target node in order to directly update its
 indexing structures, otherwise it adds the facts to the list of
@@ -140,7 +140,7 @@ other threads.
 
 \paragraph{Communication}
 
-Threads synchronize with each other using mutual exclusion. We use a spinlock in
+Threads synchronize with each other using mutual exclusion. We use a spin-lock in
 each queue to protect queue operations.
 Given threads $T_1$ and $T_2$, we enumerate the most important
 synchronization intensive places in the virtual machine:
@@ -156,7 +156,7 @@ synchronization intensive places in the virtual machine:
    \item[Node stealing:] $T_1$ synchronizes with $T_2$ when it attempts to steal
    nodes from $T_2$ by removing half of the nodes from one of $T_2$'s queues.
    \item[Coordination:] If $T_1$ needs to perform coordination operations
-   to a node in $T_2$, it may need to sychronize with $T_2$ during priority
+   to a node in $T_2$, it may need to synchronize with $T_2$ during priority
    updates in order to move the node in $T_2$'s queues.
 \end{description}
 
@@ -180,7 +180,7 @@ virtual machine.
 Fig.~\ref{results:comparison1} shows the comparison between the original virtual
 machine and the new virtual machine with coordination mechanisms. All the
 programs benchmarked do not use any kind of coordination. As hoped for, there
-is no degration of performance by adding coordination mechanisms. Since we also
+is no degradation of performance by adding coordination mechanisms. Since we also
 performed general performance improvements, programs such as PageRank and Greedy
 Graph Coloring programs now perform better than before.
 
