@@ -65,6 +65,28 @@
 
 \newcommand{\sectref}[1]{Sect.~\ref{#1}\xspace}
 
+\newenvironment{tightdescription}%
+        {\begin{list}{}{%
+                \setlength{\itemsep}{0pt}%
+                \setlength{\topsep}{0pt}%
+                \setlength{\parskip}{0pt}%
+                \setlength{\parsep}{0pt}%
+                %\setlength{\leftmargin}{-1mm}%
+        }}%
+        {\end{list}}
+
+\newenvironment{tightitemize}%
+        {\begin{list}{$\bullet$}{%
+                \setlength{\itemsep}{0ex}\setlength{\topsep}{0pt}%
+                \setlength{\parskip}{0pt}\setlength{\parsep}{0pt}%
+%                \setlength{\itemindent}{1pt}%
+                \setlength{\labelwidth}{0.25cm}%
+                \setlength{\leftmargin}{0cm}\addtolength{\leftmargin}{\labelwidth}\addtolength{\leftmargin}{\labelsep}%
+%               \setlength{\leftmargin}{1mm}%
+        }}%
+        {\end{list}}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%% remove notes by setting below to false
 \newif\ifnotes
 \notestrue

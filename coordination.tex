@@ -50,7 +50,7 @@ decisions of the system:
 
 \newcommand{\code}[1]{\texttt{\small{#1}}}
 
-\begin{itemize}
+\begin{tightitemize}
    \item \code{set-priority(node A, float F)}: This sets the
    temporary priority of \texttt{A} to \texttt{F}. If \texttt{A} has a priority
    \texttt{F'}, we only change the priority if \texttt{F} is higher. The programmer
@@ -63,7 +63,7 @@ decisions of the system:
    priority of the node.
    \item \code{stop-program(node A)}: Immediately stops the
    execution of the whole program.
-\end{itemize}
+\end{tightitemize}
 
 CLM provides the sensing fact \code{priority(node A, node B, float P)} in order to sense the
 priority \texttt{P} of node \texttt{B} (at node \texttt{A}).
@@ -83,7 +83,7 @@ We provide several coordination facts for dealing with node partitioning among
 the available threads executing the program. In terms of action
 facts, we have the following:
 
-\begin{itemize}
+\begin{tightitemize}
    \item \code{set-cpu(node A, int C)}: Moves node \texttt{A} to thread
    \texttt{C}.
    \item \code{set-affinity(node A, node B)}: Places node \texttt{B} in
@@ -92,28 +92,28 @@ facts, we have the following:
    between threads.
    \item \code{set-static(node A)}: Forces node \texttt{A} to stay in the
    same thread indefinitely.
-\end{itemize}
+\end{tightitemize}
 
 For sensing facts, we have the following set of coordination facts:
 
-\begin{itemize}
+\begin{tightitemize}
    \item \code{cpu-id(node A, node B, int C)}: Store at node \texttt{A} which
    thread, \texttt{C}, \texttt{B} is actually running on.
    \item \code{moving(node A, node B)}: Fact available at node \texttt{A} if \texttt{B} is allowed
    to move between threads.
    \item \code{static(node A, node B)}: Fact available at node \texttt{A} if \texttt{B} is not
    allowed to move between threads.
-\end{itemize}
+\end{tightitemize}
 
 \iffalse
 \subsubsection{Global Directives}
 
 We also provide a few global coordination statements:
 
-\begin{description}
+\begin{tightdescription}
    \item[\texttt{priority @order ORDER.}] \texttt{ORDER} can be either \texttt{asc} or \texttt{desc}. This defines if node's are to be selected by the smallest or the greatest priority, respectively.
    \item[\texttt{priority @initial P.}] The \texttt{initial} statement informs the runtime system that all nodes must start with priority $P$. Alternatively, the programmer can define an \texttt{set-priority(A, P)} axiom.
    \item[\texttt{priority @static.}] The \texttt{static} priority tells the runtime system that the partition of nodes among workers is to be used until the end of program. 
-\end{description}
+\end{tightdescription}
 
 \fi
