@@ -36,27 +36,40 @@ def show(exp, name):
    count = exp.queue_instruction_count()
    print name + " & " + translate(count[0]) + " & " + translate(count[1]) + " & " + translate(count[2]) + " & " + translate(count[4]) + " & " + translate(count[8]) + " \\\\ \hline"
 
-show(sssp_reg, "SSSP - Regular")
-show(sssp_coord, "SSSP - Coordinated")
-show(sssp_buffered, "SSSP - Buffered")
-print "\hline"
+def show_separated(exp, name):
+   normal = exp.normal_instruction_count()
+   prio = exp.heap_instruction_count()
+   print name + "& " + translate(normal[0]) + "+" + translate(prio[0]) + " & " + translate(normal[1]) + "+" + translate(prio[1]) + " & " + translate(normal[2]) + "+" + translate(prio[2]) + " & " + translate(normal[4]) + "+" + translate(prio[4]) + " & " + translate(normal[8]) + "+" + translate(prio[8])
 
-show(ht_reg, "HT - Buffered")
-show(ht_coord, "HT - Coordinated")
-show(ht_local_only, "HT - Local-Only")
+def display_data(fun):
+   fun(sssp_reg, "SSSP - Regular")
+   fun(sssp_coord, "SSSP - Coordinated")
+   fun(sssp_buffered, "SSSP - Buffered")
+   print "\hline"
 
-print "\hline"
+   fun(ht_reg, "HT - Regular")
+   fun(ht_coord, "HT - Coordinated")
+   fun(ht_local_only, "HT - Local-Only")
 
-show(lbp, "LBP - Regular")
-show(sbp, "SBP - Coordinated")
+   print "\hline"
 
-print "\hline"
+   fun(lbp, "LBP - Regular")
+   fun(sbp, "SBP - Coordinated")
 
-show(minmax_reg, "MiniMax - Regular")
-show(minmax_coord, "MiniMax - Coordinated")
+   print "\hline"
 
-print "\hline"
+   fun(minmax_reg, "MiniMax - Regular")
+   fun(minmax_coord, "MiniMax - Coordinated")
 
-show(nqueens_reg, "N Queens - Regular")
-show(nqueens_coord, "N Queens - Coordinated")
-show(nqueens_static, "N Queens - Static")
+   print "\hline"
+
+   fun(nqueens_reg, "N Queens - Regular")
+   fun(nqueens_coord, "N Queens - Coordinated")
+   fun(nqueens_static, "N Queens - Static")
+
+
+display_data(show)
+print
+print
+print
+display_data(show_separated)
