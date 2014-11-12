@@ -1,9 +1,9 @@
-In the Heat Transfer algorithm~(HT), we have a graph where heat values are
-exchanged between nodes. The program stops when the new heat values of every node are
-$\delta = |H_i - H_{i-1}| \le \epsilon$. The algorithm works
-asynchronously since heat values can be updated by using new partial information
-coming from neighbor nodes. This increases parallelism since nodes do not need
-to synchronize between iterations.
+In the Heat Transfer algorithm~(HT), we have a graph where heat values
+are exchanged between nodes. The program stops when the new heat
+values of every node are $\delta = |H_i - H_{i-1}| \le \epsilon$. The
+algorithm works asynchronously, i.e., heat values are updated using
+information as it arrives from neighboring nodes. This increases
+parallelism since nodes do not need to synchronize between iterations.
 
 Fig.~\ref{code:ht} shows the HT rules that send new heat values to
 neighbor nodes. In the first rule we added \texttt{add-priority} to increase the priority of the neighbor
@@ -27,10 +27,10 @@ fabs(New - Old) <= epsilon
    -o {B | !edge(A, B) |
          new-neighbor-heat(B, A, New)}.
 \end{Verbatim}
-  \scap{code:ht}{Coordination code for the Heat Transfer program. We updated the first rule
-     to increase the priority of neighbor nodes.  The code logic remains exactly
-     the same as before, however bigger changes in heat values are now
-     propagated faster.}
+  \scap{code:ht}{Coordination code for the Heat Transfer program. The
+      first rule now increases the priority of neighbor nodes.  The
+      logic remains the same as before, however bigger
+      changes in heat are now propagated faster.}
 \end{topfig}
 \normalsize
 
@@ -39,12 +39,13 @@ and coordinated version. The dataset used is a square grid with an inner square
 with high heat nodes. With 1 thread, there's a 33\% reduction in run time, while
 for 16 threads, there's a 18\% reduction.
 
-To further improve locality, we split the second rule to
-not send small $\delta$ values if the target node is in another
-thread (Fig.~\ref{code:ht_better}). The \textbf{Local-Only/Coordinated} line in
-Fig.~\ref{results:ht} shows that this new version performs better due to
-improved locality, exhibiting linear scalability over the regular version.
-However, this come at the price of increased errors in the computed heat values.
+To further improve locality, we split the second rule to avoid sending
+small $\delta$ values if the target node is in another thread
+(Fig.~\ref{code:ht_better}). The \textbf{Local-Only/Coordinated} line
+in Fig.~\ref{results:ht} shows that this performs better due to
+improved locality, exhibiting linear scalability over the regular
+version.  However, this come at the price of increased errors in the
+computed heat values.
 
 \begin{topfig}
 \scriptsize\begin{Verbatim}[numbers=left,commandchars=\\\[\]]
