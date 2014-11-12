@@ -50,7 +50,7 @@ Facts need to be stored efficiently because the virtual machine instructions
 perform searches on the database by fixing arguments of a predicate to concrete
 values. Each predicate is stored using one of the following data structures:
 
-\begin{itemize}
+\begin{tightitemize}
 \item \emph{Tries} are used exclusively to store persistent facts.
 \item \emph{Doubly Linked Lists} are used to store 
   linear facts. We use a double linked list because we need to efficiently add
@@ -60,13 +60,13 @@ values. Each predicate is stored using one of the following data structures:
   a fixed argument. The virtual machine decides which arguments are
   best to be indexed and then uses a hash table
   indexed by the appropriate argument.
-\end{itemize}
+\end{tightitemize}
 
 In order to facilitate the implementation of coordination, we added a state
 variable for each node. The state machine in
 Fig.~\ref{fig:node_states} represents the valid state transitions of a node:
 
-\begin{description}
+\begin{tightdescription}
    \item[working]: the node is executing.
    \item[inactive]: the node is inactive, i.e., it has no new facts and is not in any
    queue for processing.
@@ -75,7 +75,7 @@ Fig.~\ref{fig:node_states} represents the valid state transitions of a node:
    \item[stealing]: the node has just been stolen and is in the process of being
    moved to another thread.
    \item[coordinating]: the node is moving from one queue to another queue.
-\end{description}
+\end{tightdescription}
 
 \begin{topfig}
    \centering
@@ -146,7 +146,7 @@ each queue to protect queue operations.
 Given threads $T_1$ and $T_2$, we enumerate the most important
 synchronization intensive places in the virtual machine:
 
-\begin{description}
+\begin{tightdescription}
    \item[New facts:] When a node executes in $T_1$ and derives facts
    to a node in $T_2$, $T_1$ first buffers the facts 
    and then sends them to the target node. Here, it checks if the
@@ -159,7 +159,7 @@ synchronization intensive places in the virtual machine:
    \item[Coordination:] If $T_1$ needs to perform coordination operations
    to a node in $T_2$, it may need to synchronize with $T_2$ during priority
    updates in order to move the node in $T_2$'s queues.
-\end{description}
+\end{tightdescription}
 
 \paragraph{Garbage collection}
 
