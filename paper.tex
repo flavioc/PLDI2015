@@ -26,13 +26,18 @@
 \newcommand{\doi}[1]{doi:~\href{http://dx.doi.org/#1}{\Hurl{#1}}}   % print a hyperlinked DOI
 
 \newlength{\figcapspace}
-\setlength{\figcapspace}{-2ex plus 2pt minus 3pt}
+\setlength{\figcapspace}{-3ex plus 2pt minus 3pt}
 \newcommand{\scap}[2]{\vspace*{\figcapspace}\caption{\sl #2}\label{#1}}
 
 \newlength{\figtopspace}
 \newlength{\figbottomspace}
-\setlength{\figtopspace}{-.5ex}
-\setlength{\figbottomspace}{-.5ex plus 2pt minus 2pt}
+\setlength{\figtopspace}{-1ex}
+\setlength{\figbottomspace}{-1ex plus 2pt minus 2pt}
+
+\newlength{\tabtopspace}
+\newlength{\tabbottomspace}
+\setlength{\tabtopspace}{-1ex}
+\setlength{\tabbottomspace}{-1ex plus 2pt minus 2pt}
 
 \setcounter{topnumber}{4}
 \setcounter{bottomnumber}{4}
@@ -50,8 +55,13 @@
 \end{figure}}
 
 \newenvironment{dblfig}{\begin{figure*}[tb]
-\vspace{\figtopspace}}{\vspace{\figbottomspace}
+\vspace{\figtopspace}}{\vspace*{\figbottomspace}
 \end{figure*}}
+
+\newenvironment{toptab}{\begin{table}[tb]
+\vspace{\tabtopspace}}{\vspace{\tabbottomspace}
+\end{table}}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% remove notes by setting below to false
 \newif\ifnotes

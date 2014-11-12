@@ -94,7 +94,7 @@ using a small number of threads. We argue that this happens because higher
 priority nodes at the bottom are often added to the priority queue, resulting in
 many \emph{percolate-up} operations.
 
-\begin{topfig}
+\begin{toptab}
 \footnotesize\begin{tabular}{ | l || c | c | c | c | c |}
 \hline
 \multirow{2}{*}{\textbf{Program}} & \multicolumn{5}{c |}{\textbf{Queue
@@ -120,11 +120,12 @@ N Queens - Coordinated & 57M & 24M & 675K & 145K & 46K \\ \hline
 N Queens - Static & 57M & 44M & 1M & 1M & 151K \\ \hline
 \hline
 \end{tabular}
+\vspace*{.5ex}
 \scap{queue_instructions}{Number of queue \scare{instructions} per program. An
    operation to a regular queue counts as 1 instruction, while an operation to
    a priority queue costs the number of
    \emph{percolate-up}/\emph{percolate-down} steps performed.}
-\end{topfig}
+\end{toptab}
 
 These experiments indicate that handling coordination has a small cost in terms
 of synchronization but some cost in terms of queue operations with
