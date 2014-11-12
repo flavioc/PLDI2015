@@ -1,5 +1,5 @@
 \paragraph{Locking} The CLM virtual machine uses spin-locks to protect shared data structures between
-threads. As described in Section~\ref{sec:implementation}, coordination
+threads. As described in \sectref{sec:implementation}, coordination
 operations require synchronization since they need to change node information
 and sometimes move nodes between the standard queue and the regular queue.
 In order to measure the locking costs of coordination, we measured the following
