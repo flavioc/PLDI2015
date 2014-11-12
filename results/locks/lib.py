@@ -43,6 +43,12 @@ class dataobj(object):
    def priority_queue_operations(self):
       return self.get_total('priority_lock')
 
+   def normal_instruction_count(self):
+      return self.normal_operations
+
+   def heap_instruction_count(self):
+      return self.heap_operations
+
    def queue_instruction_count(self):
       return self.normal_operations + self.heap_operations
 
@@ -93,11 +99,11 @@ class experiment(object):
    def get_basic_locks(self):
       return [data.total_basic_locks() for th, data in sorted(self.threads.iteritems())]
 
-   def normal_queue_operations(self):
-      return [data.normal_queue_operations() for th, data in sorted(self.threads.iteritems())]
+   def normal_instruction_count(self):
+      return [data.normal_instruction_count() for th, data in sorted(self.threads.iteritems())]
 
-   def priority_queue_operations(self):
-      return [data.priority_queue_operations() for th, data in sorted(self.threads.iteritems())]
+   def heap_instruction_count(self):
+      return [data.heap_instruction_count() for th, data in sorted(self.threads.iteritems())]
 
    def queue_instruction_count(self):
       return [data.queue_instruction_count() for th, data in sorted(self.threads.iteritems())]

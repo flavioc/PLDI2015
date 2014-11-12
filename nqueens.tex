@@ -19,19 +19,18 @@ Since computation goes from the top row to the bottom row, not all
 placements of nodes to threads performane equally. This is especially
 true because the bottom rows tend to perform the most work. The best
 placement is then to split the board vertically so each thread gets
-the same number of columns. Our experiments show that, on a shared
+the same number of columns with axiom \texttt{set-cpu(A, vertical(X, Y)}, where
+\texttt{X} and \texttt{Y} are the coordinates of the board. Our experiments show that, on a shared
 memory system, it does not matter much if we start with a bad
 placement since node stealing overcomes those issues by load balancing
-dynamically. However, we noticed interesting cache effects when
-prioritizing nodes in bottom rows.\snote{Expand on this?  What are
-they?} The N Queens program builds and shares lists representing valid
-board states and needs to iterate over those lists often when checking
-if a new position does not invalidate a state.  We thus used
-coordination axioms \texttt{set-default-priority(A, X)}
-and \texttt{set-cpu(A, vertical(X, Y))}, where \texttt{X} is the row
-number (0 is the top row) \texttt{Y} is the column number to
-prioritize the evaluation of squares at the XXXX of the board and to
-keep board configurations in the same cache. \snote{check the previous}
+dynamically.  However, the N Queens program incrementally builds and shares lists representing
+valid board states that are transmitted from top to bottom.
+In order to improve memory locality we should then manipulate board
+states that share a significant number of elements because each board state
+needs to be iterated before extended with a new position.
+To accomplish this, we used coordination axioms \texttt{set-default-priority(A,
+X)}, where \texttt{X} is the row number (0 is the top row) in order to
+prioritize the evaluation of squares closer to the bottom of the board.
 
 Experimental results are presented in Fig.~\ref{results:nqueens}.  We
 first ran the coordinated program using dynamic partitioning (with
