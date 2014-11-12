@@ -17,6 +17,7 @@
 \usepackage{fancyvrb}
 \usepackage{graphicx}
 \usepackage{subfig}
+\usepackage{color}
 \usepackage{multirow}
 \usepackage{multicol}
 \usepackage{enumitem}      % adjust spacing in enums
@@ -51,6 +52,15 @@
 \newenvironment{dblfig}{\begin{figure*}[tb]
 \vspace{\figtopspace}}{\vspace{\figbottomspace}
 \end{figure*}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% remove notes by setting below to false
+\newif\ifnotes
+\notestrue
+\ifnotes
+\newcommand{\snote}[1]{{\bf\color{red} [Note: #1]}}
+\else
+\newcommand{\snote}[1]{}
+\fi
 
 %\renewcommand{\baselinestretch}{1.5} % double-spaced
 \clubpenalty 10000
