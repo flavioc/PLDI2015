@@ -36,6 +36,12 @@ def show(exp, name):
    count = exp.queue_instruction_count()
    print name + " & " + translate(count[0]) + " & " + translate(count[1]) + " & " + translate(count[2]) + " & " + translate(count[4]) + " & " + translate(count[8]) + " \\\\ \hline"
 
+def show_facts_per_op(exp, name):
+   instrs = exp.queue_instruction_count()
+   facts = exp.facts_derived_count()
+   count = [round(float(ft)/float(it), 2) for it, ft in zip(instrs, facts)]
+   print name + " & " + translate(count[0]) + " & " + translate(count[1]) + " & " + translate(count[2]) + " & " + translate(count[4]) + " & " + translate(count[8]) + " \\\\ \hline"
+
 def show_separated(exp, name):
    normal = exp.normal_instruction_count()
    prio = exp.heap_instruction_count()
@@ -73,3 +79,7 @@ print
 print
 print
 display_data(show_separated)
+print
+print
+print
+display_data(show_facts_per_op)

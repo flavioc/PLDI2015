@@ -3,12 +3,13 @@ changing the nature of the language or introducing non-declarative constructs. W
 took advantage of the fact that CLM uses linear logic, which allows us to derive
 coordination facts that can be deleted in order to perform actions in the underlying
 runtime system. In the other hand, sensing facts allow the programmer to reason
-about locality and scheduling of computation in a data-driven fashion.
-Even though the programs are optimized, the proofs of correctness for CLM
-programs remain simple since coordination does not change the language.
+about data locality and scheduling of computation in a data-driven fashion.
+Even though the programs are optimized, programs remain declarative and proving
+interesting properties of the programs remains simple because it is possible to
+reason about the logical rules that drive coordination.
 
 We would like to explore CLM's coordination principles in distributed systems,
 where data locality is far more important than in shared memory systems.
-Furthermore, we think that other declarative paradigms would benefit
-from giving programmers the freedom to fine-tune their programs while keeping
-the program declarative and easy to reason about.
+Furthermore, we think that other declarative paradigms such as functional
+programming would benefit from giving programmers the freedom to fine-tune their
+programs.

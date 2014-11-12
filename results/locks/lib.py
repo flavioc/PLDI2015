@@ -16,6 +16,9 @@ class dataobj(object):
    def set_normal_operations(self, ops):
       self.normal_operations = ops
 
+   def set_facts_derived(self, ops):
+      self.facts_derived = ops
+
    def get_total(self, name):
       return self.info_total[name]
 
@@ -51,6 +54,9 @@ class dataobj(object):
 
    def queue_instruction_count(self):
       return self.normal_operations + self.heap_operations
+
+   def facts_derived_count(self):
+      return self.facts_derived
 
    def frac_coord_locks(self):
       return (float(self.total_coord_locks()) / float(self.total_locks())) * 100
@@ -111,6 +117,9 @@ class experiment(object):
    def queue_instruction_count(self):
       return [data.queue_instruction_count() for th, data in sorted(self.threads.iteritems())]
 
+   def facts_derived_count(self):
+      return [data.facts_derived_count() for th, data in sorted(self.threads.iteritems())]
+
    def get_threads(self):
       return [th for th in sorted(self.threads.keys())]
 
@@ -153,8 +162,10 @@ def read_experiment(filename):
             total = int(resvec[0])
             if name.startswith("normal_operations"):
                data.set_normal_operations(total)
-            else:
+            elif name.startswith("heap_operations"):
                data.set_heap_operations(total)
+            else:
+               data.set_facts_derived(total)
    if data:
       exp.add_thread(thread, data)
    return exp
