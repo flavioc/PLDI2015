@@ -173,23 +173,8 @@ compared against implementations of similar programs but written in other
 languages. For instance, the LBP program was found to be around 2 times slower
 than GraphLab, while N Queens program was found to be around 10 to 15 slower
 than a sequential C implementation. Some of those programs were compared against
-a Python implementations and LM faired fairly well. In this section, we measure
-the impact of the coordination mechanisms we have implemented for the CLM
-virtual machine.
-
-Fig.~\ref{results:comparison1} shows the comparison between the original virtual
-machine and the new virtual machine with coordination mechanisms. All the
-programs benchmarked do not use any kind of coordination. As hoped for, there
-is no degradation of performance by adding coordination mechanisms. Since we also
-performed general performance improvements, programs such as PageRank and Greedy
-Graph Coloring programs now perform better than before.
-
-\begin{topfig}
-   \begin{center}
-      \subfloat[]{\includegraphics[width=8cm]{results/comparison1.png}}
-   \end{center}
-   \scap{results:comparison1}{Measuring the overhead of coordination mechanisms. The \textbf{Old}
-   bars represent the performance of the original virtual machine, while
-   \textbf{New} is the relative performance of the new version that includes
-   coordination mechanisms.}
-\end{topfig}
+a Python implementations and LM faired fairly well. We measured
+the impact of the coordination mechanisms implemented for the CLM
+virtual machine on regular LM programs and saw very little to no degration.
+Since we also performed general performance improvements, programs such as
+PageRank and Greedy Graph Coloring programs now perform better than before.
