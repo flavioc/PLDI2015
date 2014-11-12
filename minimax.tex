@@ -21,7 +21,7 @@ leaf scores are computed or when a node fully minimizes or maximizes the
 children scores. When the program ends, only the root node has facts in its
 database.
 
-The code in Fig.~\ref{minimax:check-end} shows deals with expanding the tree.
+The code in Fig.~\ref{minimax:check-end} deals with expanding the tree.
 The first three rules (lines 1-10) deal
 with the case where no children nodes are created and the last three rules
 (12-29) deal with the cases for creating new nodes.
@@ -31,11 +31,10 @@ The rule in lines 12-25 generates new nodes using the
 and kick start the expansion of that node \texttt{B} by adding a \texttt{play}
 fact.
 
-As noted before in Section~\ref{sec:fifo}, the runtime schedules nodes by
-default, which requires a complete expansion of the tree before computing the
-scores at the leaves, leading
-to a memory complexity of $\mathcal{O}(n)$, where $n$ is the number of nodes in
-the tree.
+As noted in \sectref{sec:fifo}, the default scheduler is
+breadth-first, which in this case leads to a complete expansion of the
+tree before computing the scores at the leaves.  This results in using
+$\mathcal{O}(n)$ memory, where $n$ is the number of nodes in the tree.
 
 \begin{topfig}
 \scriptsize\begin{Verbatim}[numbers=left,commandchars=\\\{\}]
@@ -107,6 +106,7 @@ stealing is fairly efficient, we expect that such coordination to be critical in
 distributed systems.
 
 \begin{topfig}
+\vspace*{-2ex}
    \begin{center}
       \subfloat[]{\small\begin{tabular}[b]{ | c | c | c |}
          \hline                       
