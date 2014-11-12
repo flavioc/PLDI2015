@@ -12,8 +12,8 @@ to exist to satisfy the rule. This procedure is executed by the virtual
 machine whenever all the facts mentioned in the body exist.
 The procedure loops over all possible combinations of the rule, retrieving facts from the
 database, performing join operations and then consuming and deriving facts.
-Optimizations such as join optimizations (to support efficient rule filtering)
-and fact updates are implemented by the compiler.
+The compiler implements join optimizations (to support efficient rule filtering)
+and fact updates (to avoid allocations).
 
 \paragraph{Coordination directives}
 Coordination directives are compiled in two different ways, depending on whether they
@@ -70,7 +70,7 @@ Fig.~\ref{fig:node_states} represents the valid state transitions of a node:
    \item[working]: the node is executing.
    \item[inactive]: the node is inactive, i.e., it has no new facts and is not in any
    queue for processing.
-   \item[queue]: the node is active with new facts and is waiting in some queue
+   \item[queue]: the node is active with new facts and is in some queue waiting
    to be processed.
    \item[stealing]: the node has just been stolen and is in the process of being
    moved to another thread.
@@ -101,21 +101,21 @@ target node.
 \paragraph{Threads}
 
 The main loop for each thread is to get an active node from one of its
-local queues and process all applicable rules for that node generating
-new facts which can result in new facts for the current node or other
-nodes.  The thread will continue processing facts for the current node
+local queues and process all applicable rules for that node, generating
+new facts, which can result in new facts for the current node or other
+nodes.  The thread continues processing facts for the current node
 until there are no new facts generated for it.  It will then pick
 another active node.  If its queues are all empty it will try to steal
 work (i.e., nodes) from another thread.
 
 To support priorities each thread has two pairs of queues: a pair of
 doubly linked lists known as the \emph{standard queue} and a pair of
-min/max heap known as the \emph{priority queue}.  The standard queue
+\emph{min/max} heap known as the \emph{priority queue}.  The standard queue
 contains nodes without priorities and supports push into tail, remove
 node from the head, remove arbitrary node, and remove first half of
 nodes.  The priority queue contains nodes with priorities and is
 implemented as a binary heap array. It supports the following
-operations: push into the heap, remove the min node, remove an
+operations: push into the heap, remove the \emph{min} node, remove an
 arbitrary node, remove half of the nodes (horizontal split), and
 priority update.  Operations for removing half of the queue are
 implemented in order to support node stealing, while operations to

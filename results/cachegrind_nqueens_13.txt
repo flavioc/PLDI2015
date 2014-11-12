@@ -22,8 +22,8 @@ DLmw  200,590,000
 
 static:
 Ir		377,633,277,665
-I1mr		783,072
-ILmr		166,777
+I1mr  783,072
+ILmr	166,777
 Dr		139,258,197,926 (Data reads)
 D1mr	2,453,322,497 (D1 cache misses)
 DLmr	843,372,554 (LL cache read misses)

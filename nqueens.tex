@@ -40,7 +40,12 @@ memory locality since threads will often steal nodes.  We then
 added \texttt{set-static(A)} as a coordination axiom and saw
 performance improvement (\textbf{Static}), especially when the board
 columns are perfectly partitioned by the number of threads (in our
-case 13 threads).
+case 13 threads). We also analyzed N Queens execution with Valgrind's
+CacheGrind~\ref{Nethercote:2007:VFH:1250734.1250746} and found that the
+\texttt{Static} version has half the number of data caches misses (last level)
+of the \texttt{Regular} version and a slight more than half of the
+\texttt{Coordinated} version. This validates our hypothesis about the
+improvement seen in the \texttt{Static} version.
 
 \begin{topfig}
    \begin{center}
