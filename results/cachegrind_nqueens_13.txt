@@ -1,0 +1,22 @@
+regular:
+
+Ir 		363,876,453,227
+I1mr 		230,414
+ILmr 		106,048
+Dr 		134,341,725,307
+D1mr 	2,415,223,241
+DLmr	1,626,049,109
+Dw		55,290,225,745
+D1mw 	260,871,759
+MLmw	211,687,714
+
+coord:
+Ir		377,633,277,665
+I1mr		783,072
+ILmr		166,777
+Dr		139,258,197,926 (Data reads)
+D1mr	2,453,322,497 (D1 cache misses)
+DLmr	843,372,554 (LL cache read misses)
+Dw		57,428,219,935
+D1mw	274,932,103 (D1 cache write misses)
+DLmw	164,759,152 (LL cache write misses)
