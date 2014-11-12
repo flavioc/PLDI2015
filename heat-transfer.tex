@@ -42,10 +42,8 @@ for 16 threads, there's a 18\% reduction.
 To further improve locality, we split the second rule to avoid sending
 small $\delta$ values if the target node is in another thread
 (Fig.~\ref{code:ht_better}). The \textbf{Local-Only/Coordinated} line
-in Fig.~\ref{results:ht} shows that this performs better due to
-improved locality, exhibiting linear scalability over the regular
-version.  However, this come at the price of increased errors in the
-computed heat values.
+in Fig.~\ref{results:ht} shows that this has the best performance.  However, this
+come at the price of increased errors in the computed heat values.
 
 \begin{topfig}
 \scriptsize\begin{Verbatim}[numbers=left,commandchars=\\\[\]]
