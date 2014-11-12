@@ -119,9 +119,9 @@ second-phase(A, [A, B | Next], Back)
    -o update(A), inactive(Back), *underline{schedule-next(B)},
       second-phase(B, [B | Next], A).
 \end{Verbatim}
-  \scap{code:sbp}{Coordination code for the Splash Belief Propagation program. CLM needs
-     50 lines of rules to implement splash trees, while GraphLab needs a
-     total of 350 lines of C++ to implement the same functionality.  Note
+  \scap{code:sbp}{Coordination code for the Splash Belief Propagation program. 
+%CLM needs 50 lines of rules to implement splash trees, while GraphLab needs a total of 350 lines of C++ to implement the same functionality.
+  Note
      that when a linear fact is prefixed by \texttt{@}, it indicates that the
      fact is going to be re-derived.}
 \end{topfig}
