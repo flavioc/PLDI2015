@@ -1,35 +1,37 @@
-\begin{toptab}
-\footnotesize\begin{tabular}{ | l || c | c | c | c | c |}
+\begin{dbltab}
+   \begin{center}
+\footnotesize\begin{tabular}{ | l || c | c | c | c | c | c | c | c | c | c |}
 \hline
 \multirow{2}{*}{\textbf{Program}} & \multicolumn{5}{c |}{\textbf{Queue
-   Instructions}} \\ \cline{2-6}
-& 1 & 2 & 4 & 8 & 16 \\ \hline
+   Instructions}} & \multicolumn{5}{c |}{\textbf{Facts Derived}} \\ \cline{2-11}
+& 1 & 2 & 4 & 8 & 16 & 1 & 2 & 4 & 8 & 16\\ \hline
 \hline
-SSSP - Regular & 199K & 201K & 205K & 196K & 207K \\
-SSSP - Coordinated & 964K & 938K & 870K & 886K & 963K \\
-SSSP - Buffered & 1M & 1M & 1M & 1M & 1M \\
+SSSP - Regular & 199.1K & 203.1K & 202.7K & 203.8K & 206.4K & 3.3M & 3.0M & 3.4M & 3.5M & 3.3M \\
+SSSP - Coordinated & 959.0K & 924.3K & 891.0K & 966.3K & 1.0M & 2.0M & 2.3M & 2.3M & 2.2M & 2.3M \\
+SSSP - Buffered & 1.0M & 1.0M & 1.1M & 1.0M & 1.1M & 2.0M & 2.1M & 2.3M & 2.3M & 2.4M \\
 \hline
-HT - Regular & 25M & 32M & 34M & 34M & 36M \\
-HT - Coordinated & 51M & 55M & 85M & 80M & 72M \\
-HT - Local-Only & 51M & 55M & 79M & 74M & 68M \\
+HT - Regular & 25.6M & 33.3M & 34.8M & 36.1M & 34.8M & 235.7M & 298.3M & 312.1M & 317.5M & 310.3M \\
+HT - Coordinated & 51.6M & 55.2M & 85.9M & 79.9M & 75.6M & 129.2M & 183.4M & 254.1M & 242.0M & 252.4M \\
+HT - Local-Only & 51.6M & 54.9M & 81.0M & 76.7M & 67.3M & 129.2M & 180.8M & 221.5M & 217.6M & 207.4M \\
 \hline
-LBP - Regular & 15M & 17M & 16M & 11M & 8M \\
-SBP - Coordinated & 96M & 97M & 87M & 83M & 77M \\
+LBP - Regular & 15.7M & 17.8M & 16.0M & 11.3M & 8.5M & 160.2M & 171.0M & 149.9M & 107.5M & 85.1M \\
+SBP - Coordinated & 97.2M & 97.4M & 90.0M & 84.3M & 79.2M & 76.8M & 80.7M & 79.2M & 79.0M & 79.3M \\
+\hline \hline
+MiniMax - Regular & 16.4M & 18.3M & 20.5M & 19.4M & 20.9M & 76.4M & 76.4M & 76.4M & 76.4M & 76.4M \\
+MiniMax - Coordinated & 52.0M & 52.0M & 52.0M & 52.0M & 52.0M & 76.4M & 76.4M & 76.4M & 76.4M & 76.4M \\
 \hline
-MiniMax - Regular & 16M & 19M & 19M & 19M & 20M \\
-MiniMax - Coordinated & 51M & 51M & 51M & 51M & 52M \\
-\hline
-N Queens - Regular & 8K & 15K & 16K & 17K & 20K \\
-N Queens - Coordinated & 57M & 24M & 675K & 145K & 46K \\
-N Queens - Static & 57M & 44M & 1M & 1M & 151K \\
+N Queens - Regular & 8.4K & 14.4K & 17.7K & 16.6K & 19.3K & 167.1M & 167.1M & 167.1M & 167.1M & 167.1M \\
+N Queens - Coordinated & 57.1M & 24.7M & 1.1M & 141.1K & 41.6K & 167.1M & 167.1M & 167.1M & 167.1M & 167.1M \\
+N Queens - Static & 57.1M & 47.2M & 3.4M & 1.5M & 209.2K & 167.1M & 167.1M & 167.1M & 167.1M & 167.1M \\
 \hline
 \end{tabular}
 \vspace*{.5ex}
-\scap{queue_instructions}{Number of queue \scare{instructions} per program. An
+\end{center}
+\scap{queue_instructions}{Total number of queue \scare{instructions} and facts derived per program. An
    operation to a regular queue counts as 1 instruction, while an operation to
    a priority queue costs the number of
    \emph{percolate-up}/\emph{percolate-down} steps performed.}
-\end{toptab}
+\end{dbltab}
 
 Coordination introduces overhead in two major ways.  First, in
 manipulating the priority queues which require operations on a min
@@ -40,15 +42,19 @@ and memory locality that more than make up for the overhead.
 
 As can be seen in Table~\ref{queue_instructions} all the coordinated
 versions of the programs require significantly more queue operations.
-The data for this table comes from recording, during execution, the
-number of normal queue operations executed (each costs 1), plus the
+The data for this table comes from recording the number of \emph{queue instructions} and the number of facts derived.
+Queue instructions represent the
+number of normal queue operations executed (each costs 1) plus the
 number of \emph{percolate-up}/\emph{percolate-down} operations
 executed for each manipulation of the priority queue.  As expected,
 programs which rely on prioritizing the order of execution to obtain
 better asymptotic complexity (e.g., SSSP) improve in overall running
 time at the cost of more queue operations.  In all cases, coordination
 adds a significant number of total queue operations, but the resulting
-overhead is more than compensated for by an improved schedule.  
+overhead is more than compensated for by an improved schedule and reduction
+in number of facts produced. For MiniMax and N Queens, the number of facts derived
+is the same for all configurations, as expected. The performance seen for those programs
+arise from reduced memory usage and improved memory locality.
 
 An interesting artifact of effectively parallelizing the code is that
 the priority queue on each thread is smaller, so the total number of
