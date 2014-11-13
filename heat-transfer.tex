@@ -6,10 +6,10 @@ information as it arrives from neighboring nodes. This increases
 parallelism since nodes do not need to synchronize between iterations.
 
 Fig.~\ref{code:ht} shows the HT rules that send new heat values to
-neighbor nodes. In the first rule we added \texttt{add-priority} to increase the priority of the neighbor
+neighbor nodes. In the first rule we added \mytt{add-priority} to increase the priority of the neighbor
 nodes if the current node has a large $\delta$. The idea is to prioritize the
-computation of heat values of nodes (using \texttt{update}) that have a neighbor
-that changed significantly. Multiple \texttt{add-priority} facts will
+computation of heat values of nodes (using \mytt{update}) that have a neighbor
+that changed significantly. Multiple \mytt{add-priority} facts will
 increase the priority of a node so that nodes with multiple large deltas will
 have more priority.
 
@@ -69,7 +69,7 @@ fabs(New - Old) <= epsilon,
 
 \begin{topfig}
    \begin{center}
-      \includegraphics[width=5.5cm]{results/new-heat-transfer-80}
+      \includegraphics[width=\figsize]{results/new-heat-transfer-80}
    \end{center}
    \scap{results:ht}{Experimental results for the HT program. The coordinated version
       is, on average, 30\% faster than the regular version although it has a

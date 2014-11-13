@@ -45,18 +45,18 @@ other rule remains the same. We add new rules that coordinate
 the creation and execution of the splash trees:
 
 \begin{tightdescription}
-   \item[Tree building]: Each node has a \texttt{inactive} fact that is used to
+   \item[Tree building]: Each node has a \mytt{inactive} fact that is used to
    start the tree building process. When the highest priority node is picked, a
-   \texttt{tree} is created that will navigate through the tree. In lines 15-21,
+   \mytt{tree} is created that will navigate through the tree. In lines 15-21,
    we use an \emph{aggregate}~\cite{cruz-iclp14} to gather all the neighbor
    nodes that have a positive priority (due to a new belief update) and are in the
-   same thread. Nodes are collected into list \texttt{L} and
-   appended to list \texttt{Next} (line 21).
+   same thread. Nodes are collected into list \mytt{L} and
+   appended to list \mytt{Next} (line 21).
    
    \item[First phase]: When the number of nodes in the tree reaches a certain
-   limit, a \texttt{first-phase} (lines 11-12) is generated to update the beliefs of
+   limit, a \mytt{first-phase} (lines 11-12) is generated to update the beliefs of
    all nodes in the tree. As the nodes are updated, starting from the leaves and
-   ending at the root, an \texttt{update} fact is derived to update the belief
+   ending at the root, an \mytt{update} fact is derived to update the belief
    values (line 35).
 
    \item[Second phase]: In the second phase, the computation of beliefs is
@@ -64,7 +64,7 @@ the creation and execution of the splash trees:
    second time (line 42).
 \end{tightdescription}
 
-The \texttt{set-static} and \texttt{set-cpu} action facts are used in
+The \mytt{set-static} and \mytt{set-cpu} action facts are used in
 line 2 to (1) force nodes to stay in the thread and (2) 
 partition nodes as a grid of threads. This sets up well defined areas
 of nodes for threads to build splash trees on.
@@ -121,16 +121,16 @@ second-phase(A, [A, B | Next], Back)
   \scap{code:sbp}{Coordination code for the Splash Belief Propagation program. 
 %CLM needs 50 lines of rules to implement splash trees, while GraphLab needs a total of 350 lines of C++ to implement the same functionality.
   Note
-     that when a linear fact is prefixed by \texttt{@}, it indicates that the
+     that when a linear fact is prefixed by \mytt{@}, it indicates that the
      fact is going to be re-derived.}
 \end{topfig}
 \normalsize
 
 \begin{dblfig}
    \begin{center}
-      \subfloat[]{\includegraphics[width=5.5cm]{results/system_belief-propagation-400.png}}
-      \subfloat[]{\includegraphics[width=5.5cm]{results/system_splash-bp-400.png}}
-      \subfloat[]{\includegraphics[width=5.5cm]{results/system_improve_belief-propagation-400.png}}
+      \subfloat[]{\includegraphics[width=\figsize]{results/system_belief-propagation-400.png}}
+      \subfloat[]{\includegraphics[width=\figsize]{results/system_splash-bp-400.png}}
+      \subfloat[]{\includegraphics[width=\figsize]{results/system_improve_belief-propagation-400.png}}
    \end{center}
    \scap{results:splash_bp}{Experimental results for LBP and SBP. (a) shows the
       scalability of LBP for both CLM and GraphLab and (b) shows the

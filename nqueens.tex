@@ -19,8 +19,8 @@ Since computation goes from the top row to the bottom row, not all
 placements of nodes to threads perform equally. This is especially
 true because the bottom rows tend to perform the most work. The best
 placement is then to split the board vertically so each thread gets
-the same number of columns with axiom \texttt{set-cpu(A, vertical(X, Y)}, where
-\texttt{X} and \texttt{Y} are the coordinates of the board. Our experiments show that, on a shared
+the same number of columns with axiom \mytt{set-cpu(A, vertical(X, Y)}, where
+\mytt{X} and \mytt{Y} are the coordinates of the board. Our experiments show that, on a shared
 memory system, it does not matter much if we start with a bad
 placement since node stealing overcomes those issues by load balancing
 dynamically.  However, the N Queens program incrementally builds and shares lists representing
@@ -28,8 +28,8 @@ valid board states that are transmitted from top to bottom.
 In order to improve memory locality we should then manipulate board
 states that share a significant number of elements because each board state
 needs to be iterated before extended with a new position.
-To accomplish this, we used coordination axioms \texttt{set-default-priority(A,
-X)}, where \texttt{X} is the row number (0 is the top row) in order to
+To accomplish this, we used coordination axioms \mytt{set-default-priority(A,
+X)}, where \mytt{X} is the row number (0 is the top row) in order to
 prioritize the evaluation of squares closer to the bottom of the board.
 
 Experimental results are presented in Fig.~\ref{results:nqueens}.  We
@@ -37,19 +37,14 @@ first ran the coordinated program using dynamic partitioning (with
 work stealing) and saw some performance improvements
 (\textbf{Coordinated}). However, using dynamic partitioning is bad for
 memory locality since threads will often steal nodes.  We then
-added \texttt{set-static(A)} as a coordination axiom and saw
-performance improvement (\textbf{Static}), especially when the board
-columns are perfectly partitioned by the number of threads (in our
-case 13 threads). We also analyzed N Queens execution with Valgrind's
-CacheGrind~\cite{Nethercote:2007:VFH:1250734.1250746} and found that the
-\texttt{Static} version has half the number of data caches misses (last level)
-of the \texttt{Regular} version and a slight more than half of the
-\texttt{Coordinated} version. This validates our hypothesis about the
-improvement seen in the \texttt{Static} version.
+added \mytt{set-static(A)} as a coordination axiom (line
+\textbf{Static/Regular}) and saw a significant drop in data cache misses and an
+improvement in performance, specially when using 13 threads (the number of
+columns).
 
 \begin{topfig}
    \begin{center}
-      \includegraphics[width=5.5cm]{results/8queens-13.png}
+      \includegraphics[width=\figsize]{results/8queens-13.png}
    \end{center}
    \scap{results:nqueens}{Experimental results for the 13 Queens program.
    Coordination works best when 1 column is assigned to one thread and bottom

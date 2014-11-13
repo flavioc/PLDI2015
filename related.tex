@@ -56,10 +56,10 @@ of communication.
 Linda~\cite{linda} is arguably the most famous coordination model. Linda
 implements a data-driven coordination model and features a \emph{tuple space}
 that can be manipulated using the following coordination directives:
-\texttt{out(t)} to write a tuple \texttt{t} into the tuple space; \texttt{in(t)}
-to read a tuple using the template \texttt{t}; \texttt{rd(t)} to retrieve a copy
-of the tuple \texttt{t} from the tuple space; and \texttt{eval(p)} to add a
-process \texttt{p} in the tuple space and execute it in parallel.  Linda was
+\mytt{out(t)} to write a tuple \mytt{t} into the tuple space; \mytt{in(t)}
+to read a tuple using the template \mytt{t}; \mytt{rd(t)} to retrieve a copy
+of the tuple \mytt{t} from the tuple space; and \mytt{eval(p)} to add a
+process \mytt{p} in the tuple space and execute it in parallel.  Linda was
 implemented on top of many popular languages by simply creating a communication
 and storage mechanism for the tuple space and then adding the directives as a
 language library.

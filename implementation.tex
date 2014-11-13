@@ -19,7 +19,7 @@ and fact updates (to avoid allocations).
 Coordination directives are compiled in two different ways, depending on whether they
 appear in the body or in the head of the rule. Coordination facts in the body
 are compiled into special instructions that inspect the state of the virtual
-machine. For example, the directive \texttt{node-priority} will inspect the
+machine. For example, the fact \mytt{priority} will inspect the
 target node, retrieve the current priority and assign the priority to a
 register. Coordination facts in the head of the rule are also implemented as
 special instructions of the virtual machine, but they perform some action,
@@ -128,7 +128,7 @@ priority node from the priority queue, it is only the highest priority
 with respect to the set of nodes owned by the thread and not the
 highest priority node in the whole program.  
 
-The \texttt{next} and \texttt{prev} pointers of the regular queue are
+The \mytt{next} and \mytt{prev} pointers of the regular queue are
 part of the node structure in order to save space. These pointers are
 also used as the index in the priority queue and current priority,
 respectively.

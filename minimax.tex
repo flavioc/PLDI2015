@@ -25,9 +25,9 @@ The first three rules (lines 1-10) deal
 with the case where no children nodes are created and the last three rules
 (12-29) deal with the cases for that create new nodes. In particular, the two
 rules in lines 12-25 generate new nodes using the
-\texttt{exists} language construct, which creates a child node 
-\texttt{B}. We link \texttt{B} with its parent (\texttt{parent(B, A)})
-and kick start the expansion of that node \texttt{B} by adding a \texttt{play}
+\mytt{exists} language construct, which creates a child node 
+\mytt{B}. We link \mytt{B} with its parent (\mytt{parent(B, A)})
+and kick start the expansion of that node \mytt{B} by adding a \mytt{play}
 fact.
 
 As noted in \sectref{sec:fifo}, the default scheduler is
@@ -99,7 +99,7 @@ children nodes and starts expanding one of the nodes in a depth-first fashion.
 \end{topfig}
 \fi
 
-We also take advantage of memory locality by using \texttt{set-static} (line
+We also take advantage of memory locality by using \mytt{set-static} (line
 14), so that nodes after a certain level are not stolen by other threads. While
 this is not critical for performance in shared memory systems where node
 stealing is fairly efficient, we expect that such coordination to be critical in

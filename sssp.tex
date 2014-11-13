@@ -1,7 +1,7 @@
 We start by adding coordination to the SSSP program described before.
 The coordinated version of the
 SSSP~(Fig.~\ref{code:shortest_path_program_coord}) uses the coordination fact
-\texttt{set-priority} (line 14) and a global program directive to order
+\mytt{set-priority} (line 14) and a global program directive to order
 priorities in ascending order (line 5).
 
 When run with one thread, the algorithm behaves like
@@ -38,8 +38,10 @@ shortest(A, D1, P1), D1 <= D2, relax(A, D2, P2)
 The most interesting property of the SSSP program presented in
 Fig.~\ref{code:shortest_path_program_coord} is that it remains provably correct,
 although it applies rules using smarter ordering and the code remains
-declarative. The derivation of \texttt{set-priority} does not change the
-behavior of the logical rules.
+declarative. The proof of correctness considers that, eventually, the shortest
+path is computed at all nodes of the graph until all shortest paths are found.
+The derivation of \mytt{set-priority} does not change this
+proof.
 
 Fig.~\ref{results:sssp_uspowergrid} shows experimental results when the
 program computes the SSSP for 20\% of the nodes of the graph.
@@ -54,7 +56,7 @@ propagated because many SSSP distances are computed at the same time.
 \begin{topfig}
 \vspace*{-5ex}
    \begin{center}
-      \includegraphics[width=5cm]{results/shortest-uspowergrid.png}
+      \includegraphics[width=\figsize]{results/shortest-uspowergrid.png}
    \end{center}
    \scap{results:sssp_uspowergrid}{Scalability results for SSSP run on the 
    US power grid network. The speedup values are computed using the

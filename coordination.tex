@@ -1,12 +1,12 @@
 The SSSP program is concise and declarative but its performance depends on the order in which nodes are
 executed. If nodes with greater distances are prioritized over other nodes, the
-program will generate more \texttt{relax} facts since it will take longer to
+program will generate more \mytt{relax} facts since it will take longer to
 reach the shortest distances. From Fig.~\ref{fig:shortest_path_program}, it is
-clear that the best scheduling is the following: \texttt{@1},
-\texttt{@3}, \texttt{@2} and then \texttt{@4}, where only 4 \texttt{relax}
+clear that the best scheduling is the following: \mytt{@1},
+\mytt{@3}, \mytt{@2} and then \mytt{@4}, where only 4 \mytt{relax}
 facts are generated. If we had decided to process nodes in order
-\texttt{@1}, \texttt{@2}, \texttt{@4}, \texttt{@3}, \texttt{@4},
-\texttt{@2}, then 6 \texttt{relax} facts would have been generated.
+\mytt{@1}, \mytt{@2}, \mytt{@4}, \mytt{@3}, \mytt{@4},
+\mytt{@2}, then 6 \mytt{relax} facts would have been generated.
 The optimal solution for SSSP is to schedule the node with the
 shortest distance, which is essentially the Dijkstra shortest path
 algorithm~\cite{Dijkstra}. Note how it is possible to change the nature of
@@ -47,19 +47,19 @@ Initially, all nodes have a default priority of $0$.
 The following list presents the action facts available to manipulate the scheduling
 decisions of the system:
 
-\newcommand{\code}[1]{\texttt{\small{#1}}}
+\newcommand{\code}[1]{\mytt{\small{#1}}}
 
 \begin{tightitemize}
    \item \code{set-priority(node A, float F)}: This sets the
-   temporary priority of \texttt{A} to \texttt{F}. If \texttt{A} has a priority
-   \texttt{F'}, we only change the priority if \texttt{F} is higher. The programmer
+   temporary priority of \mytt{A} to \mytt{F}. If \mytt{A} has a priority
+   \mytt{F'}, we only change the priority if \mytt{F} is higher. The programmer
    can decide if priorities are to be ordered in ascending or descending order.
    \item \code{add-priority(node A, float F)}: Increases,
-   temporarily, the priority of node \texttt{A} by \texttt{F}.
+   temporarily, the priority of node \mytt{A} by \mytt{F}.
    \item \code{remove-priority(node A)}: Removes the temporary priority from node
-   \texttt{A}.
+   \mytt{A}.
    \item \code{schedule-next(node A)}: Changes the temporary priority of node
-   \texttt{A} to be 1 unit higher than the current highest priority.
+   \mytt{A} to be 1 unit higher than the current highest priority.
    \item \code{set-default-priority(node, float)}: Sets the default
    priority of the node.
    \item \code{stop-program(node A)}: Immediately stops the
@@ -67,15 +67,15 @@ decisions of the system:
 \end{tightitemize}
 
 CLM provides the sensing fact \code{priority(node A, node B, float P)} in order to sense the
-priority \texttt{P} of node \texttt{B} (at node \texttt{A}).
+priority \mytt{P} of node \mytt{B} (at node \mytt{A}).
 Sensing facts are only used in the body of the rules in order
 to fetch information from the runtime system.
 Note that when sensing facts are used to prove new facts, they are re-derived automatically.
 ~\footnote{The observant reader will notice that all the coordination facts are
 linear and when created in the body of a rule will be consumed. The system
 creates the necessary code to re-derive them without programmer interaction.
-Likewise, \texttt{set-priority} and \texttt{set-default-priority} update the
-value of \texttt{priority} facts by consuming and re-deriving them but this is
+Likewise, \mytt{set-priority} and \mytt{set-default-priority} update the
+value of \mytt{priority} facts by consuming and re-deriving them but this is
 done automatically by the runtime system.}
 
 \subsection{Partitioning facts}
@@ -84,24 +84,24 @@ We provide several coordination facts for dealing with node partitioning among
 the running threads. In terms of action facts, we have the following:
 
 \begin{tightitemize}
-   \item \code{set-cpu(node A, int T)}: Moves node \texttt{A} to thread
-   \texttt{T}.
-   \item \code{set-affinity(node A, node B)}: Places node \texttt{B} in
-   the thread of node \texttt{A}.
-   \item \code{set-moving(node A)}: Allows node \texttt{A} to move freely
+   \item \code{set-cpu(node A, int T)}: Moves node \mytt{A} to thread
+   \mytt{T}.
+   \item \code{set-affinity(node A, node B)}: Places node \mytt{B} in
+   the thread of node \mytt{A}.
+   \item \code{set-moving(node A)}: Allows node \mytt{A} to move freely
    between threads.
-   \item \code{set-static(node A)}: Forces node \texttt{A} to stay in the
+   \item \code{set-static(node A)}: Forces node \mytt{A} to stay in the
    same thread indefinitely.
 \end{tightitemize}
 
 For partitioning facts, we have the following set of sensing facts:
 
 \begin{tightitemize}
-   \item \code{cpu-id(node A, node B, int T)}: Store at node \texttt{A} which
-   thread \texttt{T}, \texttt{B} is actually running on.
-   \item \code{moving(node A, node B)}: Fact available at node \texttt{A} if \texttt{B} is allowed
+   \item \code{cpu-id(node A, node B, int T)}: Store at node \mytt{A} which
+   thread \mytt{T}, \mytt{B} is actually running on.
+   \item \code{moving(node A, node B)}: Fact available at node \mytt{A} if \mytt{B} is allowed
    to move between threads.
-   \item \code{static(node A, node B)}: Fact available at node \texttt{A} if \texttt{B} is not
+   \item \code{static(node A, node B)}: Fact available at node \mytt{A} if \mytt{B} is not
    allowed to move between threads.
 \end{tightitemize}
 
@@ -111,9 +111,9 @@ For partitioning facts, we have the following set of sensing facts:
 We also provide a few global coordination statements:
 
 \begin{tightdescription}
-   \item[\texttt{priority @order ORDER.}] \texttt{ORDER} can be either \texttt{asc} or \texttt{desc}. This defines if node's are to be selected by the smallest or the greatest priority, respectively.
-   \item[\texttt{priority @initial P.}] The \texttt{initial} statement informs the runtime system that all nodes must start with priority $P$. Alternatively, the programmer can define an \texttt{set-priority(A, P)} axiom.
-   \item[\texttt{priority @static.}] The \texttt{static} priority tells the runtime system that the partition of nodes among workers is to be used until the end of program. 
+   \item[\mytt{priority @order ORDER.}] \mytt{ORDER} can be either \mytt{asc} or \mytt{desc}. This defines if node's are to be selected by the smallest or the greatest priority, respectively.
+   \item[\mytt{priority @initial P.}] The \mytt{initial} statement informs the runtime system that all nodes must start with priority $P$. Alternatively, the programmer can define an \mytt{set-priority(A, P)} axiom.
+   \item[\mytt{priority @static.}] The \mytt{static} priority tells the runtime system that the partition of nodes among workers is to be used until the end of program. 
 \end{tightdescription}
 
 \fi
