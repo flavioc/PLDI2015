@@ -26,15 +26,18 @@ nqueens_static = read_experiment("nqueens-static.txt")
 
 def translate(num):
    if num > 1000000:
-      return str(round(num/1000000, 1)) + "M"
+      return str(round(num/1000000.0, 1)) + "M"
    elif num > 1000:
-      return str(round(num/1000, 1)) + "K"
+      return str(round(num/1000.0, 1)) + "K"
    else:
       return str(num)
 
-def show(exp, name):
+def show_instructions0(exp):
    count = exp.queue_instruction_count()
-   print name + " & " + translate(count[0]) + " & " + translate(count[1]) + " & " + translate(count[2]) + " & " + translate(count[4]) + " & " + translate(count[8]) + " \\\\"
+   return translate(count[0]) + " & " + translate(count[1]) + " & " + translate(count[2]) + " & " + translate(count[4]) + " & " + translate(count[8])
+
+def show_instructions(exp, name):
+   print name + " & " + show_instructions0(exp) + " \\\\"
 
 def show_facts_per_op(exp, name):
    instrs = exp.queue_instruction_count()
@@ -42,14 +45,20 @@ def show_facts_per_op(exp, name):
    count = [round(float(ft)/float(it), 2) for it, ft in zip(instrs, facts)]
    print name + " & " + translate(count[0]) + " & " + translate(count[1]) + " & " + translate(count[2]) + " & " + translate(count[4]) + " & " + translate(count[8]) + " \\\\"
 
-def show_facts_derived(exp, name):
+def show_facts_derived0(exp):
    count = exp.facts_derived_count()
-   print name + " & " + translate(count[0]) + " & " + translate(count[1]) + " & " + translate(count[2]) + " & " + translate(count[4]) + " & " + translate(count[8]) + " \\\\"
+   return translate(count[0]) + " & " + translate(count[1]) + " & " + translate(count[2]) + " & " + translate(count[4]) + " & " + translate(count[8])
+
+def show_facts_derived(exp, name):
+   print name + " & " + show_facts_derived0(exp) + "\\\\"
 
 def show_separated(exp, name):
    normal = exp.normal_instruction_count()
    prio = exp.heap_instruction_count()
    print name + "& " + translate(normal[0]) + "+" + translate(prio[0]) + " & " + translate(normal[1]) + "+" + translate(prio[1]) + " & " + translate(normal[2]) + "+" + translate(prio[2]) + " & " + translate(normal[4]) + "+" + translate(prio[4]) + " & " + translate(normal[8]) + "+" + translate(prio[8])
+
+def show_instructions_and_facts(exp, name):
+   print name + " & " + show_instructions0(exp) + " & " + show_facts_derived0(exp) + " \\\\"
 
 def display_data(fun):
    fun(sssp_reg, "SSSP - Regular")
@@ -78,7 +87,7 @@ def display_data(fun):
    fun(nqueens_static, "N Queens - Static")
 
 
-display_data(show)
+display_data(show_instructions)
 print
 print
 print
@@ -91,3 +100,7 @@ print
 print
 print
 display_data(show_facts_derived)
+print
+print
+print
+display_data(show_instructions_and_facts)
