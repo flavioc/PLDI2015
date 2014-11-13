@@ -37,14 +37,14 @@ facts. After a node is processed, it becomes inactive until a new fact is
 derived for it. When a new fact is derived for an
 inactive node, the node is made active and placed on the appropriate queue of
 the appropriate thread.  Threads do useful work by processing active nodes from their queues. Whenever a
-thread becomes idle, it attempts to steal nodes from a random thread.
+thread does not have nodes to process, it attempts to steal nodes from a random thread.
 If unsuccessful, the thread becomes idle and waits for program
 termination while periodically attempting to steal nodes.
 
 \paragraph{Nodes} 
 A node is represented as a collection of facts (per predicate) and an indexing structure that
 keeps track of the available facts and potential candidate rules. We need
-a separate indexing structure per node since rules run local to each node.
+a separate indexing structure per node since rules are locally run.
 
 Facts need to be stored efficiently because the virtual machine instructions
 perform searches on the database by fixing arguments of a predicate to concrete
@@ -66,16 +66,16 @@ In order to facilitate the implementation of coordination, we added a state
 variable for each node. The state machine in
 Fig.~\ref{fig:node_states} represents the valid state transitions of a node:
 
-\begin{tightdescription}
-   \item[working]: the node is executing.
-   \item[inactive]: the node is inactive, i.e., it has no new facts and is not in any
+\begin{tightitemize}
+   \item \textbf{working}: the node is executing.
+   \item \textbf{inactive}: the node is inactive, i.e., it has no new facts and is not in any
    queue for processing.
-   \item[queue]: the node is active with new facts and is in some queue waiting
+   \item \textbf{queue}: the node is active with new facts and is in some queue waiting
    to be processed.
-   \item[stealing]: the node has just been stolen and is in the process of being
+   \item \textbf{stealing}: the node has just been stolen and is in the process of being
    moved to another thread.
-   \item[coordinating]: the node is moving from one queue to another.
-\end{tightdescription}
+   \item \textbf{coordinating}: the node is moving from one queue to another.
+\end{tightitemize}
 
 \begin{topfig}
    \centering
@@ -88,8 +88,8 @@ Fig.~\ref{fig:node_states} represents the valid state transitions of a node:
 
 Each node is protected by a main spin-lock that allows threads to
 change node attributes: incoming facts, owner thread, state variable
-and locality information.  A database spin-lock is locked whenever the
-node enters into the \textbf{working} state.  
+and locality information.  A database spin-lock is locked when the
+node is in the \textbf{working} state.  
 
 To avoid unnecessary copying, when a node sends facts to a node
 located in another thread, the current thread first attempts to lock
@@ -110,7 +110,7 @@ work (i.e., nodes) from another thread.
 
 To support priorities each thread has two pairs of queues: a pair of
 doubly linked lists known as the \emph{standard queue} and a pair of
-\emph{min/max} heap known as the \emph{priority queue}.  The standard queue
+\emph{min/max} heaps known as the \emph{priority queue}.  The standard queue
 contains nodes without priorities and supports push into tail, remove
 node from the head, remove arbitrary node, and remove first half of
 nodes.  The priority queue contains nodes with priorities and is
@@ -119,7 +119,7 @@ operations: push into the heap, remove the \emph{min} node, remove an
 arbitrary node, remove half of the nodes (horizontal split), and
 priority update.  Operations for removing half of the queue are
 implemented in order to support node stealing, while operations to
-remove arbitrary nodes or update the priority of nodes allows threads
+remove arbitrary nodes or update priority allows threads
 to change the priority of nodes.
 
 To minimize inter-thread communication, node priorities are
@@ -131,11 +131,9 @@ highest priority node in the whole program.
 The \mytt{next} and \mytt{prev} pointers of the regular queue are
 part of the node structure in order to save space. These pointers are
 also used as the index in the priority queue and current priority,
-respectively.
-
-Both the regular and priority queue are implemented as a pair of
-queues.  This first of the pair is the \emph{static queue} which
-contains nodes that cannot be stolen.  The other queue in each pair is
+respectively. Both the regular and priority queue are implemented as a pair of
+queues.  This first queue is the \emph{static queue} which
+contains nodes that cannot be stolen.  The other queue is
 the \emph{dynamic queue} which contains nodes which can be stolen by
 other threads.
 
@@ -143,23 +141,23 @@ other threads.
 
 Threads synchronize with each other using mutual exclusion. We use a spin-lock in
 each queue to protect queue operations.
-Given threads $T_1$ and $T_2$, we enumerate the most important
-synchronization intensive places in the virtual machine:
+Given threads $T_1$ and $T_2$, we enumerate the synchronization hotspots
+in the virtual machine:
 
-\begin{tightdescription}
-   \item[New facts:] When a node executes in $T_1$ and derives facts
+\begin{tightitemize}
+   \item \textbf{New facts}: When a node executes in $T_1$ and derives facts
    to a node in $T_2$, $T_1$ first buffers the facts 
    and then sends them to the target node. Here, it checks if the
    node is currently \textbf{idle} and then synchronizes with $T_2$ to add the
    node to the $T_2$'s queue.
-   \item[Thread activation:] If $T_2$ is inactive when adding facts to a node in
+   \item \textbf{Thread activation}: If $T_2$ is inactive when adding facts to a node in
    $T_2$, $T_1$ also synchronizes with $T_2$ to change $T_2$'s state to \emph{active}.
-   \item[Node stealing:] $T_1$ synchronizes with $T_2$ when it attempts to steal
+   \item \textbf{Node stealing}: $T_1$ synchronizes with $T_2$ when it attempts to steal
    nodes from $T_2$ by removing half of the nodes from one of $T_2$'s queues.
-   \item[Coordination:] If $T_1$ needs to perform coordination operations
+   \item \textbf{Coordination}: If $T_1$ needs to perform coordination operations
    to a node in $T_2$, it may need to synchronize with $T_2$ during priority
    updates in order to move the node in $T_2$'s queues.
-\end{tightdescription}
+\end{tightitemize}
 
 \paragraph{Garbage collection}
 
@@ -172,9 +170,10 @@ such cases.
 In the paper~\cite{cruz-ppdp14}, LM programs were compared to similar
 programs written in other languages. The Loopy Belief Propagation
 program was around 2 times slower than GraphLab, while the N Queens
-program was 10 to 15x slower than a sequential C implementation. The
-LM programs had similar performance to programs written in Python.
-The introduction of coordination in CLM has little or no impact on the
-overall performance of these programs.  In fact, due to some
+program was 10 to 15x slower than a sequential C implementation.
+Furthermore, LM programs had better performance than programs written in Python.
+We measured the impact of our implementation changes on unmodified LM programs
+and our experiments indicate that there is little to no impact on the overall
+performance of these programs. In fact, due to some
 improvements in the virtual machine, programs such as PageRank and
 Greedy Graph Coloring now perform slightly better than before.

@@ -48,7 +48,7 @@ of normal queue operations executed (each costs 1) plus the number of
 \emph{percolate-up}/\emph{percolate-down} operations executed for each
 manipulation of the priority queue.  As expected, programs which rely
 on prioritizing the order of execution to obtain better asymptotic
-complexity (e.g., SSSP) improve in overall running time at the cost of
+complexity (e.g., SSSP), improve in overall running time at the cost of
 more queue operations.  In all cases, coordination adds a significant
 number of total queue operations, but the resulting overhead is more
 than compensated for by an improved schedule and reduction in number
@@ -98,7 +98,7 @@ locks acquired for the regular version of the program.  The
 second bar shows the basic and coordination locks acquired for the coordinated
 version of SSSP when every newly derived fact and priority operation is carried out
 immediately.  This leads to a significant increase in total locks
-acquired often because the priority of a node is change many times
+acquired often because the priority of a node is changed many times
 before it is operated on.  The third bar shows the effect of buffering
 priority operations before applying them.  This significantly reduces
 the lock overhead, but as can be seen in

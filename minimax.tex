@@ -23,7 +23,7 @@ database.
 The code in Fig.~\ref{minimax:check-end} deals with the tree expansion process.
 The first three rules (lines 1-10) deal
 with the case where no children nodes are created and the last three rules
-(12-29) deal with the cases for that create new nodes. In particular, the two
+(12-29) deal with the cases that create new nodes. In particular, the two
 rules in lines 12-26 generate new nodes using the
 \mytt{exists} language construct, which creates a child node 
 \mytt{B}. We link \mytt{B} with its parent (\mytt{parent(B, A)})
@@ -73,7 +73,7 @@ expand(A, Board, [C | Xs], N, P, \underline{Depth}) C <> 0
 \normalsize
 
 With coordination, we set the priority of a node to be its depth (lines 15 and
-23) so the tree is expanded in a depth-first fashion,
+23) so that the tree is expanded in a depth-first fashion,
 leading to a memory complexity of $\mathcal{O}(d t)$, where $d$
 is the depth of the tree and $t$ is the number of threads.
 Since threads prioritize deeper nodes, the scores of the first leaves are immediately

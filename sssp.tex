@@ -6,7 +6,7 @@ priorities in ascending order (line 5).
 
 When run with one thread, the algorithm behaves like
 Dijkstra's shortest path algorithm~\cite{Dijkstra}. When using multiple
-threads, each thread will pick the smallest distance from their subset of nodes.
+threads, each thread will pick the shortest distance from their subset of nodes.
 While this does not yield the optimal program with relation to 1 thread, it
 allows for parallel execution and locally avoids unnecessary work. The result
 scales well and it is close to Dijkstra's algorithm.
@@ -38,16 +38,15 @@ shortest(A, D1, P1), D1 <= D2, relax(A, D2, P2)
 The most interesting property of the SSSP program presented in
 Fig.~\ref{code:shortest_path_program_coord} is that it remains provably correct,
 although it applies rules using smarter ordering and the code remains
-declarative. The proof of correctness considers that, eventually, the shortest
-path is computed at all nodes of the graph until all shortest paths are found.
-The derivation of \mytt{set-priority} does not change this
-proof.
+declarative. Since the proof of correctness considers that, eventually, the shortest
+path is computed at all nodes of the graph, the use of \mytt{set-priority}
+does not change this at all.
 
 Fig.~\ref{results:sssp_uspowergrid} shows experimental results when
 the program computes the SSSP for 20\% of the nodes of the graph.  The
-coordinated version scales well and compared to the regular version
-using 16 threads is 1.3 times faster.  the coordinated version
-produces 40\% fewer facts when compared to the regular version.
+coordinated version scales well and when compared to the regular version
+using 16 threads, it is 1.3 times faster. The coordinated version
+also produces 40\% fewer facts with any number of threads.
 Note that there are some situations where unnecessary facts are
 propagated because although the shortest distance is selected locally,
 sub-optimal distances may be propagated because many SSSP distances
