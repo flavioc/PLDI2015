@@ -105,6 +105,24 @@
 
 \newcommand{\figsize}{5.5cm}
 
+\makeatletter
+\renewcommand\section{\@startsection {section}{1}{\z@}%
+                                   {-1ex \@plus -1ex \@minus -.2ex}%
+                                   {1ex \@plus.2ex}%
+                                   {\normalfont\large\bfseries}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+                                     {-.9ex\@plus -1ex \@minus -.2ex}%
+                                     {1ex \@plus .2ex}%
+                                     {\normalfont\large\bfseries}}
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+                                     {-.9ex\@plus -1ex \@minus -.2ex}%
+                                     {1ex \@plus .2ex}%
+                                     {\normalfont\normalsize\bfseries}}
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+                                    {1ex \@plus1ex \@minus.2ex}%
+                                    {-1em}%
+                                    {\normalfont\normalsize\bfseries}}
+
 \begin{document}
 
 %

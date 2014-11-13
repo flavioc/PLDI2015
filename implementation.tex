@@ -7,8 +7,8 @@ changes for efficiently implementing coordination.
 
 \subsection{Compilation}
 
-The compiler translates each rule to a procedure and a list of facts that need
-to exist to satisfy the rule. This procedure is executed by the virtual
+The compiler translates each rule to a procedure and a list of facts needed
+to satisfy the rule. This procedure is executed by the virtual
 machine whenever all the facts mentioned in the body exist.
 The procedure loops over all possible combinations of the rule, retrieving facts from the
 database, performing join operations and then consuming and deriving facts.
@@ -74,7 +74,7 @@ Fig.~\ref{fig:node_states} represents the valid state transitions of a node:
    to be processed.
    \item[stealing]: the node has just been stolen and is in the process of being
    moved to another thread.
-   \item[coordinating]: the node is moving from one queue to another queue.
+   \item[coordinating]: the node is moving from one queue to another.
 \end{tightdescription}
 
 \begin{topfig}
@@ -169,13 +169,12 @@ such cases.
 
 \paragraph{Coordination overhead}
 
-In the paper~\cite{cruz-ppdp14}, the LM virtual machine was measured and
-compared against implementations of similar programs but written in other
-languages. For instance, the Loopy Belief Propagation program was found to be around 2 times slower
-than GraphLab, while the N Queens program was found to be around 10 to 15 slower
-than a sequential C implementation. Some of those programs were also compared against
-a Python implementations and LM faired fairly well. We measured
-the impact of the coordination mechanisms implemented for the CLM
-virtual machine on regular LM programs and saw very little to no degradation.
-Since we also performed general performance improvements, programs such as
-PageRank and Greedy Graph Coloring now perform slightly better than before.
+In the paper~\cite{cruz-ppdp14}, LM programs were compared to similar
+programs written in other languages. The Loopy Belief Propagation
+program was around 2 times slower than GraphLab, while the N Queens
+program was 10 to 15x slower than a sequential C implementation. The
+LM programs had similar performance to programs written in Python.
+The introduction of coordination in CLM has little or no impact on the
+overall performance of these programs.  In fact, due to some
+improvements in the virtual machine, programs such as PageRank and
+Greedy Graph Coloring now perform slightly better than before.

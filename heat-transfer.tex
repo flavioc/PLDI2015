@@ -40,11 +40,12 @@ with high heat nodes. Comparing the coordinated version with the regular
 version, with 1 thread there is a 33\% reduction in run time, while
 for 16 threads there is a 18\% reduction.
 
-To further improve locality, we have split the second rule to avoid sending
+To further improve locality, we split the second rule to avoid sending
 small $\delta$ values if the target node is in another thread
-(Fig.~\ref{code:ht_better}). The \textbf{Local-Only/Regular} line
-in Fig.~\ref{results:ht} shows that this has the best performance.  However, this
-come at the price of increased errors in the computed heat values.
+(Fig.~\ref{code:ht_better}). The \textbf{Local-Only/Regular} line in
+Fig.~\ref{results:ht} shows that this performs best.
+However, this come at the price of increased errors in the computed
+heat values.
 
 \begin{topfig}
 \scriptsize\begin{Verbatim}[numbers=left,commandchars=\\\[\]]
@@ -74,4 +75,5 @@ fabs(New - Old) <= epsilon,
    \scap{results:ht}{Experimental results for the HT program. The coordinated version
       is, on average, 30\% faster than the regular version although it has a
       slightly worse scalability due to a reduction in work available.}
+\vspace*{-2ex}
 \end{topfig}

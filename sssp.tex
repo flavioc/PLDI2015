@@ -43,15 +43,15 @@ path is computed at all nodes of the graph until all shortest paths are found.
 The derivation of \mytt{set-priority} does not change this
 proof.
 
-Fig.~\ref{results:sssp_uspowergrid} shows experimental results when the
-program computes the SSSP for 20\% of the nodes of the graph.
-The scalability results show that the coordinated
-version using 16 threads is 1.3 times faster than the regular version using 16
-threads while still showing good scaling. Overall, the coordinated version produces 40\% less facts
-derived when compared to the regular version.
-Note that there are some situations where unnecessary facts are propagated
-because although the shortest distance is selected locally, sub-optimal distances may be
-propagated because many SSSP distances are computed at the same time.
+Fig.~\ref{results:sssp_uspowergrid} shows experimental results when
+the program computes the SSSP for 20\% of the nodes of the graph.  The
+coordinated version scales well and compared to the regular version
+using 16 threads is 1.3 times faster.  the coordinated version
+produces 40\% fewer facts when compared to the regular version.
+Note that there are some situations where unnecessary facts are
+propagated because although the shortest distance is selected locally,
+sub-optimal distances may be propagated because many SSSP distances
+are computed at the same time.
 
 \begin{topfig}
 \vspace*{-5ex}

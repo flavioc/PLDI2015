@@ -127,6 +127,7 @@ second-phase(A, [A, B | Next], Back)
 \normalsize
 
 \begin{dblfig}
+\vspace*{-1ex}
    \begin{center}
       \subfloat[]{\includegraphics[width=\figsize]{results/system_belief-propagation-400.png}}
       \subfloat[]{\includegraphics[width=\figsize]{results/system_splash-bp-400.png}}
@@ -137,17 +138,18 @@ second-phase(A, [A, B | Next], Back)
       scalability of SBP. (c) presents the
       improvements seen in SBP against LBP, where SBP runs, on average, 1.5 to 2.5
       times faster than LBP.}
+\vspace*{-1ex}
 \end{dblfig}
 
 In this program, coordination assumes a far more important role than
-we have seen before. Coordination rules fully drive the behavior of
-the algorithm and although the final result of the algorithm is
-statistically identical to the original algorithm, SBP works very
-differently than LBP.  SBP is also implemented in
-GraphLab~\cite{GraphLab2010}, a C++ framework for writing machine
-algorithms.  GraphLab provides the splash scheduler as part of its the
-framework. It includes 350 lines of C++ code.  With our coordination facts,
-it is possible to create the necessary scheduling with only 12 rules.
+we have seen before. Coordination rules drive the behavior of the
+algorithm and while the result of the algorithm is statistically
+identical to the original algorithm, SBP works very differently than
+LBP.  SBP is also implemented in GraphLab~\cite{GraphLab2010}, a C++
+framework for writing machine algorithms.  GraphLab provides the
+splash scheduler as part of its the framework. It includes 350 lines
+of C++ code.  With our coordination facts, it is possible to create
+the necessary scheduling with only 12 rules.
 
 We measured the behavior of LBP and SBP for both CLM and GraphLab.
 Fig.~\ref{results:splash_bp} shows that both systems have very similar behavior
