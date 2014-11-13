@@ -36,13 +36,13 @@ In order to allow different scheduling strategies, we introduce the concept of
 and by introducing coordination facts that manipulate such priority values.
 By default, nodes have no priority and can be picked in any order. In
 our implementation, we use a FIFO approach because
-older nodes tend to a higher number of unexamined facts, from which to derive
+older nodes tend to have a higher number of unexamined facts, from which to derive
 subsequent new facts.
 
 We have two kinds of priorities: a \emph{temporary priority} and a \emph{default
 priority}. A temporary priority momentarily changes the default priority $D$ of a
 node, so that once the node is done, the priority will default back to $D$.
-Initially, all nodes have a default priority of $0$.
+Initially, all nodes have a default priority of $-\infty$.
 
 The following list presents the action facts available to manipulate the scheduling
 decisions of the system:
@@ -51,7 +51,7 @@ decisions of the system:
 
 \begin{tightitemize}
    \item \code{set-priority(node A, float F)}: This sets the
-   temporary priority of \mytt{A} to \mytt{F}. If \mytt{A} has a priority
+   temporary priority of \mytt{A} to \mytt{F}. If \mytt{A} has priority
    \mytt{F'}, we only change the priority if \mytt{F} is higher. The programmer
    can decide if priorities are to be ordered in ascending or descending order.
    \item \code{add-priority(node A, float F)}: Increases,
@@ -59,7 +59,7 @@ decisions of the system:
    \item \code{remove-priority(node A)}: Removes the temporary priority from node
    \mytt{A}.
    \item \code{schedule-next(node A)}: Changes the temporary priority of node
-   \mytt{A} to be 1 unit higher than the current highest priority.
+   \mytt{A} to be $+\infty$.
    \item \code{set-default-priority(node, float)}: Sets the default
    priority of the node.
    \item \code{stop-program(node A)}: Immediately stops the
@@ -72,7 +72,7 @@ Sensing facts are only used in the body of the rules in order
 to fetch information from the runtime system.
 Note that when sensing facts are used to prove new facts, they are re-derived automatically.
 ~\footnote{The observant reader will notice that all the coordination facts are
-linear and when created in the body of a rule will be consumed. The system
+linear and when used in the body of a rule will be consumed. The system
 creates the necessary code to re-derive them without programmer interaction.
 Likewise, \mytt{set-priority} and \mytt{set-default-priority} update the
 value of \mytt{priority} facts by consuming and re-deriving them but this is
@@ -99,9 +99,9 @@ For partitioning facts, we have the following set of sensing facts:
 \begin{tightitemize}
    \item \code{cpu-id(node A, node B, int T)}: Store at node \mytt{A} which
    thread \mytt{T}, \mytt{B} is actually running on.
-   \item \code{moving(node A, node B)}: Fact available at node \mytt{A} if \mytt{B} is allowed
+   \item \code{is-moving(node A, node B)}: Fact available at node \mytt{A} if \mytt{B} is allowed
    to move between threads.
-   \item \code{static(node A, node B)}: Fact available at node \mytt{A} if \mytt{B} is not
+   \item \code{is-static(node A, node B)}: Fact available at node \mytt{A} if \mytt{B} is not
    allowed to move between threads.
 \end{tightitemize}
 

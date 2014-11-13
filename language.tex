@@ -10,8 +10,8 @@ associated tuple of values, e.g., the concrete values of \mytt{X} and
 \mytt{Y}. Since CLM uses linear logic as its foundation, we distinguish between
 \emph{linear} and \emph{persistent facts}. Linear facts are deleted during the
 process of deriving a rule, while persistent facts are not.
-Program execution starts by adding the \emph{axioms} (the initial facts of the
-program) to the database. Next, rules are recursively applied and the
+Program execution starts by adding the \emph{axioms} (the initial facts)
+to the database. Next, rules are recursively applied and the
 database is updated by adding new facts or deleting facts used during rule derivation.
 When no more rules are applicable, the program terminates.
 
