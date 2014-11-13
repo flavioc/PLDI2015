@@ -74,17 +74,17 @@ of nodes for threads to build splash trees on.
 !coord(A, X, Y), start(A)
    -o *underline{set-static(A), set-cpu(A, grid(X, Y))}.
 
-// TREE BUILDING
-// expand tree by adding neighbor nodes
-inactive(A), tree(A, All, Next) -o expand-tree(A, All, Next).
+// TREE BUILDING: expand tree by adding nodes
+inactive(A), tree(A, All, Next)
+   -o expand-tree(A, All, Next).
 // start tree since we do not have one
 inactive(A), *underline{@priority(A, A, P)}, P > 0.0
    -o expand-tree(A, [A], [A]).
 // end tree building
-expand-tree(A, All, Next), length(All) >= maxnodes
+expand-tree(A, All, Next), len(All) >= maxnodes
    -o first-phase(A, All, reverse(All)).
 // expand tree
-expand-tree(A, All, [A | Next]), length([A | Next]) < maxnodes
+expand-tree(A, All, [A | Next]), len(Next) < maxnodes-1
    -o [collect => L | Side | !edge(A, L, Side),
          0 = count(All, L), // L is not in All
          0 = count(Next, L), // L is not in Next
@@ -155,6 +155,6 @@ We measured the behavior of LBP and SBP for both CLM and GraphLab.
 Fig.~\ref{results:splash_bp} shows that both systems have very similar behavior
 when using a variable number of threads.  The differences in performance between
 GraphLab and CLM comes mainly because GraphLab performs in-place updates of
-neighbor belief values, while CLM compiler and runtime system performs naive
+neighbor belief values, while CLM compiler and runtime system perform na\"{i}ve
 manipulation of facts by deriving rules. The in-place update could be generated
 by the compiler using smarter compilation strategies.

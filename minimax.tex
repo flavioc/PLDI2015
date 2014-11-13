@@ -24,7 +24,7 @@ The code in Fig.~\ref{minimax:check-end} deals with the tree expansion process.
 The first three rules (lines 1-10) deal
 with the case where no children nodes are created and the last three rules
 (12-29) deal with the cases for that create new nodes. In particular, the two
-rules in lines 12-25 generate new nodes using the
+rules in lines 12-26 generate new nodes using the
 \mytt{exists} language construct, which creates a child node 
 \mytt{B}. We link \mytt{B} with its parent (\mytt{parent(B, A)})
 and kick start the expansion of that node \mytt{B} by adding a \mytt{play}
@@ -48,7 +48,7 @@ expand(A, Board, [], N, P, \underline{Depth}),
 N > 0, P = player2
   -o minimize(A, N, +00, 0).
 
-expand(A, Board, [0 | Xs], N, P, Depth),
+expand(A, Board, [0 | Xs], N, P, \underline{Depth}),
 Depth >= 5
   -o exists B. (\underline{set-static(B)},
        \underline{set-default-priority(B, float(Depth + 1))},
@@ -56,15 +56,15 @@ Depth >= 5
        expand(A, Board ++ [0], Xs, N + 1, P, \underline{Depth}),
        parent(B, A)).
 
-expand(A, Board, [0 | Xs], N, P, Depth),
+expand(A, Board, [0 | Xs], N, P, \underline{Depth}),
 Depth < 5
-  -o exists B. (\underline{set-default-priority(B, float(Depth + 1))},
+  -o exists B. (
+       \underline{set-default-priority(B, float(Depth + 1))},
        play(B, Board ++ [P | Xs], next(P), \underline{Depth + 1}),
        expand(A, Board ++ [0], Xs, N + 1, P, \underline{Depth}),
        parent(B, A)).
 
-expand(A, Board, [C | Xs], N, P, \underline{Depth})
-C <> 0
+expand(A, Board, [C | Xs], N, P, \underline{Depth}) C <> 0
   -o expand(A, Board ++ [C], Xs, N, P, \underline{Depth}).
 \end{Verbatim}
 \scap{minimax:check-end}{MiniMax: checking if the game has ended and expanding the tree}
@@ -73,7 +73,7 @@ C <> 0
 \normalsize
 
 With coordination, we set the priority of a node to be its depth (lines 15 and
-22) so the tree is expanded in a depth-first fashion,
+23) so the tree is expanded in a depth-first fashion,
 leading to a memory complexity of $\mathcal{O}(d t)$, where $d$
 is the depth of the tree and $t$ is the number of threads.
 Since threads prioritize deeper nodes, the scores of the first leaves are immediately
