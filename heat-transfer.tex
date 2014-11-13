@@ -14,7 +14,7 @@ increase the priority of a node so that nodes with multiple large deltas will
 have more priority.
 
 \begin{topfig}
-\scriptsize\begin{Verbatim}[numbers=left,commandchars=\\\[\]]
+\scriptsize\begin{Verbatim}[numbers=left,xleftmargin=7mm,commandchars=\\\[\]]
 new-heat(A, New, Old),
 Delta = fabs(New - Old),
 Delta > epsilon
@@ -48,7 +48,7 @@ However, this come at the price of increased errors in the computed
 heat values.
 
 \begin{topfig}
-\scriptsize\begin{Verbatim}[numbers=left,commandchars=\\\[\]]
+\scriptsize\begin{Verbatim}[numbers=left,xleftmargin=7mm,commandchars=\\\[\]]
 new-heat(A, New, Old)
 fabs(New - Old) <= epsilon
 \underline[cpu-id(A, B, C)],
