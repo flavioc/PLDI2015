@@ -1,5 +1,4 @@
-The SSSP program present in Fig.~\ref{code:shortest_path_program} is concise and
-declarative but its performance depends on the order in which nodes are
+The SSSP program is concise and declarative but its performance depends on the order in which nodes are
 executed. If nodes with greater distances are prioritized over other nodes, the
 program will generate more \texttt{relax} facts since it will take longer to
 reach the shortest distances. From Fig.~\ref{fig:shortest_path_program}, it is
@@ -57,6 +56,8 @@ decisions of the system:
    can decide if priorities are to be ordered in ascending or descending order.
    \item \code{add-priority(node A, float F)}: Increases,
    temporarily, the priority of node \texttt{A} by \texttt{F}.
+   \item \code{remove-priority(node A)}: Removes the temporary priority from node
+   \texttt{A}.
    \item \code{schedule-next(node A)}: Changes the temporary priority of node
    \texttt{A} to be 1 unit higher than the current highest priority.
    \item \code{set-default-priority(node, float)}: Sets the default
@@ -80,25 +81,24 @@ done automatically by the runtime system.}
 \subsection{Partitioning facts}
 
 We provide several coordination facts for dealing with node partitioning among
-the available threads executing the program. In terms of action
-facts, we have the following:
+the running threads. In terms of action facts, we have the following:
 
 \begin{tightitemize}
-   \item \code{set-cpu(node A, int C)}: Moves node \texttt{A} to thread
-   \texttt{C}.
+   \item \code{set-cpu(node A, int T)}: Moves node \texttt{A} to thread
+   \texttt{T}.
    \item \code{set-affinity(node A, node B)}: Places node \texttt{B} in
-   the thread of node \texttt{B}.
+   the thread of node \texttt{A}.
    \item \code{set-moving(node A)}: Allows node \texttt{A} to move freely
    between threads.
    \item \code{set-static(node A)}: Forces node \texttt{A} to stay in the
    same thread indefinitely.
 \end{tightitemize}
 
-For sensing facts, we have the following set of coordination facts:
+For partitioning facts, we have the following set of sensing facts:
 
 \begin{tightitemize}
-   \item \code{cpu-id(node A, node B, int C)}: Store at node \texttt{A} which
-   thread, \texttt{C}, \texttt{B} is actually running on.
+   \item \code{cpu-id(node A, node B, int T)}: Store at node \texttt{A} which
+   thread \texttt{T}, \texttt{B} is actually running on.
    \item \code{moving(node A, node B)}: Fact available at node \texttt{A} if \texttt{B} is allowed
    to move between threads.
    \item \code{static(node A, node B)}: Fact available at node \texttt{A} if \texttt{B} is not

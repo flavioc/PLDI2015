@@ -1,7 +1,7 @@
-Here we add coordination to the SSSP program described in \sectref{sect:ssspex}.
+We start by adding coordination to the SSSP program described before.
 The coordinated version of the
 SSSP~(Fig.~\ref{code:shortest_path_program_coord}) uses the coordination fact
-\texttt{set-priority} (line 14). We also use a global program directive to order
+\texttt{set-priority} (line 14) and a global program directive to order
 priorities in ascending order (line 5).
 
 When run with one thread, the algorithm behaves like
@@ -37,16 +37,16 @@ shortest(A, D1, P1), D1 <= D2, relax(A, D2, P2)
 
 The most interesting property of the SSSP program presented in
 Fig.~\ref{code:shortest_path_program_coord} is that it remains provably correct,
-although it applies rules using smarter ordering. The derivation of
-\texttt{set-priority} does not change the behavior of the logical rules and the
-code remains declarative.
+although it applies rules using smarter ordering and the code remains
+declarative. The derivation of \texttt{set-priority} does not change the
+behavior of the logical rules.
 
 Fig.~\ref{results:sssp_uspowergrid} shows experimental results when the
 program computes the SSSP for 20\% of the nodes of the graph.
 There are some situations where unnecessary facts are propagated
 because although the shortest distance is selected locally, sub-optimal distances may be
 propagated because many SSSP distances are computed at the same time.
-However, we see a reduction of over 50\% in the number of
+However, we see a reduction of over 40\% in the number of
 derived facts when using the coordinated version \textbf{C} over the regular
 version \textbf{R}. The results also show that the coordinated
 version using 16 threads is 1.3 times faster than the regular version using 16

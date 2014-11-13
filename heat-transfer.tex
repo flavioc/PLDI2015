@@ -34,14 +34,15 @@ fabs(New - Old) <= epsilon
 \end{topfig}
 \normalsize
 
-Fig.~\ref{results:ht} presents the scalability results for the uncoordinated
+Fig.~\ref{results:ht} presents the scalability results for the regular
 and coordinated version. The dataset used is a square grid with an inner square
-with high heat nodes. With 1 thread, there's a 33\% reduction in run time, while
-for 16 threads, there's a 18\% reduction.
+with high heat nodes. Comparing the coordinated version with the regular
+version, with 1 thread there is a 33\% reduction in run time, while
+for 16 threads there is a 18\% reduction.
 
-To further improve locality, we split the second rule to avoid sending
+To further improve locality, we have split the second rule to avoid sending
 small $\delta$ values if the target node is in another thread
-(Fig.~\ref{code:ht_better}). The \textbf{Local-Only/Coordinated} line
+(Fig.~\ref{code:ht_better}). The \textbf{Local-Only/Regular} line
 in Fig.~\ref{results:ht} shows that this has the best performance.  However, this
 come at the price of increased errors in the computed heat values.
 

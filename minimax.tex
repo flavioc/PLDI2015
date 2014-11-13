@@ -20,11 +20,11 @@ leaf scores are computed or when a node fully minimizes or maximizes the
 children scores. When the program ends, only the root node has facts in its
 database.
 
-The code in Fig.~\ref{minimax:check-end} deals with expanding the tree.
+The code in Fig.~\ref{minimax:check-end} deals with the tree expansion process.
 The first three rules (lines 1-10) deal
 with the case where no children nodes are created and the last three rules
-(12-29) deal with the cases for creating new nodes.
-The rule in lines 12-25 generates new nodes using the
+(12-29) deal with the cases for that create new nodes. In particular, the two
+rules in lines 12-25 generate new nodes using the
 \texttt{exists} language construct, which creates a child node 
 \texttt{B}. We link \texttt{B} with its parent (\texttt{parent(B, A)})
 and kick start the expansion of that node \texttt{B} by adding a \texttt{play}
@@ -72,8 +72,8 @@ C <> 0
 \end{topfig}
 \normalsize
 
-With coordination, we set the priority of a node to be its depth
-so the tree is expanded in a depth-first fashion (lines 15 and 22),
+With coordination, we set the priority of a node to be its depth (lines 15 and
+22) so the tree is expanded in a depth-first fashion,
 leading to a memory complexity of $\mathcal{O}(d t)$, where $d$
 is the depth of the tree and $t$ is the number of threads.
 Since threads prioritize deeper nodes, the scores of the first leaves are immediately

@@ -5,23 +5,23 @@
    Instructions}} \\ \cline{2-6}
 & 1 & 2 & 4 & 8 & 16 \\ \hline
 \hline
-SSSP - Regular & 199K & 201K & 205K & 196K & 207K \\ \hline
-SSSP - Coordinated & 964K & 938K & 870K & 886K & 963K \\ \hline
-SSSP - Buffered & 1M & 1M & 1M & 1M & 1M \\ \hline
+SSSP - Regular & 199K & 201K & 205K & 196K & 207K \\
+SSSP - Coordinated & 964K & 938K & 870K & 886K & 963K \\
+SSSP - Buffered & 1M & 1M & 1M & 1M & 1M \\
 \hline
-HT - Regular & 25M & 32M & 34M & 34M & 36M \\ \hline
-HT - Coordinated & 51M & 55M & 85M & 80M & 72M \\ \hline
-HT - Local-Only & 51M & 55M & 79M & 74M & 68M \\ \hline
+HT - Regular & 25M & 32M & 34M & 34M & 36M \\
+HT - Coordinated & 51M & 55M & 85M & 80M & 72M \\
+HT - Local-Only & 51M & 55M & 79M & 74M & 68M \\
 \hline
-LBP - Regular & 15M & 17M & 16M & 11M & 8M \\ \hline
-SBP - Coordinated & 96M & 97M & 87M & 83M & 77M \\ \hline
+LBP - Regular & 15M & 17M & 16M & 11M & 8M \\
+SBP - Coordinated & 96M & 97M & 87M & 83M & 77M \\
 \hline
-MiniMax - Regular & 16M & 19M & 19M & 19M & 20M \\ \hline
-MiniMax - Coordinated & 51M & 51M & 51M & 51M & 52M \\ \hline
+MiniMax - Regular & 16M & 19M & 19M & 19M & 20M \\
+MiniMax - Coordinated & 51M & 51M & 51M & 51M & 52M \\
 \hline
-N Queens - Regular & 8K & 15K & 16K & 17K & 20K \\ \hline
-N Queens - Coordinated & 57M & 24M & 675K & 145K & 46K \\ \hline
-N Queens - Static & 57M & 44M & 1M & 1M & 151K \\ \hline
+N Queens - Regular & 8K & 15K & 16K & 17K & 20K \\
+N Queens - Coordinated & 57M & 24M & 675K & 145K & 46K \\
+N Queens - Static & 57M & 44M & 1M & 1M & 151K \\
 \hline
 \end{tabular}
 \vspace*{.5ex}
@@ -35,15 +35,15 @@ Coordination introduces overhead in two major ways.  First, in
 manipulating the priority queues which require operations on a min
 heap.  Second, in potentially requiring more lock operations as we
 move nodes between queues and within the priority queue.  As we show
-here, this overhead is minimal and the resulting improved schedules
-and improved locality more than make up for the overhead.
+next, this overhead is minimal and is compensated by the resulting improved schedules
+and memory locality that more than make up for the overhead.
 
 As can be seen in Table~\ref{queue_instructions} all the coordinated
 versions of the programs require significantly more queue operations.
 The data for this table comes from recording, during execution, the
 number of normal queue operations executed (each costs 1), plus the
 number of \emph{percolate-up}/\emph{percolate-down} operations
-executed for each manipuilation of the priority queue.  As expected,
+executed for each manipulation of the priority queue.  As expected,
 programs which rely on prioritizing the order of execution to obtain
 better asymptotic complexity (e.g., SSSP) improve in overall running
 time at the cost of more queue operations.  In all cases, coordination
@@ -77,7 +77,7 @@ the N Queens program.
 \end{topfig}
 
 We next investigate the effect of coordination on the syncronization
-overhead that comes froms from the use of more locks.  We measured the
+overhead that comes from the use of more locks.  We measured the
 \emph{basic locks}, the number of locks acquired
 in the original LM virtual machine and \emph{coordination locks}, the
 number of locks acquired to perform coordination operations.  We also
@@ -87,30 +87,30 @@ the lock on the first attempt.  Lock failures happen so infrequently
 
 Fig.~\ref{results:sssp_uspowergrid} shows the number of locks acquired
 for the SSSP program.  The first bar in each group shows the number of
-locks acquired for the uncoordinated version of the program.  The
-second bar shows the regular and coordination locks acquired for SSSP
-when every newly derived fact and priority operation is carried out
+locks acquired for the regular version of the program.  The
+second bar shows the basic and coordination locks acquired for the coordinated
+version of SSSP when every newly derived fact and priority operation is carried out
 immediately.  This leads to a significant increase in total locks
 acquired often because the priority of a node is change many times
 before it is operated on.  The third bar shows the effect of buffering
 priority operations before applying them.  This significantly reduces
 the lock overhead, but as can be seen in
-Table~\ref{queue_instructions} increase the number of queue operations
-slightly.  This slight increase comes from the fact the buffering
+Table~\ref{queue_instructions}, increases the number of queue operations
+slightly.  This slight increase comes from the fact that buffering
 delays the change in priorities and some longer paths can sometimes be
 investigated unnecessarily.
 
 Fig.~\ref{locks:HT} shows the locking behavior of the heat transfer
-program.  The behavior is representative of the other programs.  There
-is drop in the total number of locks acquired and coordination locks
-represent a small fraction of the total locks acquired.  The locality
-coordination further reduces locking by keeping more derivation local
+program.  The behavior is representative of the other programs. In general, there
+is a drop in the total number of locks acquired and coordination locks
+represent a small fraction of the total number of locks acquired.  The \textbf{Local-Only}
+version further reduces locking by keeping more derivations local
 to a thread.
 
 Overall, the additional overhead introduced by supporting coordination
 is more than offset by improved schedules and increased locality.
-While there are more locks to manage the total cost of lock operations
-does not change significantly (and is often reduced) when coordination
+While there are more locks to manage the total cost of lock operations,
+the numbers do not change significantly (and is often reduced) when coordination
 is added.  And, although the priority coordination significantly
 increases the cost of queueing it is offset by reducing the number of
 total facts derived.

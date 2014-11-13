@@ -1,7 +1,7 @@
 The N-Queens puzzle is the problem of placing N chess queens on an NxN
 chessboard so that no pair of two queens attack each
 other~\cite{8queens}. The challenge of finding all the
-distinct solutions to this problem is a good benchmark in designing
+distinct solutions to this problem is a well-known benchmark in designing
 parallel algorithms.
 
 The CLM solution considers the squares of the chess board as a graph
@@ -16,7 +16,7 @@ of the program, the squares at the bottom row will have all the valid
 configurations.
 
 Since computation goes from the top row to the bottom row, not all
-placements of nodes to threads performane equally. This is especially
+placements of nodes to threads perform equally. This is especially
 true because the bottom rows tend to perform the most work. The best
 placement is then to split the board vertically so each thread gets
 the same number of columns with axiom \texttt{set-cpu(A, vertical(X, Y)}, where
@@ -41,7 +41,7 @@ added \texttt{set-static(A)} as a coordination axiom and saw
 performance improvement (\textbf{Static}), especially when the board
 columns are perfectly partitioned by the number of threads (in our
 case 13 threads). We also analyzed N Queens execution with Valgrind's
-CacheGrind~\ref{Nethercote:2007:VFH:1250734.1250746} and found that the
+CacheGrind~\cite{Nethercote:2007:VFH:1250734.1250746} and found that the
 \texttt{Static} version has half the number of data caches misses (last level)
 of the \texttt{Regular} version and a slight more than half of the
 \texttt{Coordinated} version. This validates our hypothesis about the
