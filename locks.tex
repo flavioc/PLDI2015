@@ -42,20 +42,20 @@ and memory locality that more than make up for the overhead.
 
 As can be seen in Table~\ref{queue_instructions} all the coordinated
 versions of the programs require significantly more queue operations.
-The data for this table comes from recording the number of \emph{queue
-operations} and facts derived.
-Queue instructions represent the
-number of normal queue operations executed (each costs 1) plus the
-number of \emph{percolate-up}/\emph{percolate-down} operations
-executed for each manipulation of the priority queue.  As expected,
-programs which rely on prioritizing the order of execution to obtain
-better asymptotic complexity (e.g., SSSP) improve in overall running
-time at the cost of more queue operations.  In all cases, coordination
-adds a significant number of total queue operations, but the resulting
-overhead is more than compensated for by an improved schedule and reduction
-in number of facts produced. For MiniMax and N Queens, the number of facts derived
-is the same for all configurations, as expected. The performance seen for those programs
-arise from reduced memory usage and improved memory locality.
+The data for this table comes from recording the number of queue
+operations and facts derived.  Queue operations represent the number
+of normal queue operations executed (each costs 1) plus the number of
+\emph{percolate-up}/\emph{percolate-down} operations executed for each
+manipulation of the priority queue.  As expected, programs which rely
+on prioritizing the order of execution to obtain better asymptotic
+complexity (e.g., SSSP) improve in overall running time at the cost of
+more queue operations.  In all cases, coordination adds a significant
+number of total queue operations, but the resulting overhead is more
+than compensated for by an improved schedule and reduction in number
+of facts produced. For MiniMax and N Queens, the number of facts
+derived is the same for all configurations, as expected. The
+performance seen for those programs arise from reduced memory usage
+and improved memory locality.
 
 An interesting artifact of effectively parallelizing the code is that
 the priority queue on each thread is smaller, so the total number of
@@ -88,7 +88,7 @@ overhead that comes from the use of more locks.  We measured the
 \emph{basic locks}, the number of locks acquired
 in the original LM virtual machine and \emph{coordination locks}, the
 number of locks acquired to perform coordination operations.  We also
-measured how often \mytt{lock()} operations that fail to acquired
+measured how often \mytt{lock()} operations fail to acquire
 the lock on the first attempt.  Lock failures happen so infrequently
 (less than 1\% of the time) that they cannot be seen on the figures.
 
