@@ -7,7 +7,7 @@ require us to remove something else in the paper.  We will happily
 take advice from the committee about what we should remove to make
 room for something else.  However, our primary goal with this paper
 was to show the expressive power of making coordination a first class
-programming contruct and chose to include five examples to give
+programming construct and chose to include five examples to give
 readers a flavor of the power of CLM.  This pedagogic approach
 highlights the conciseness and expressiveness of CLM as well as the
 readability of a high-level declarative approach to fine-tuning the
@@ -18,7 +18,7 @@ Related Work:
 The reviews pointed out numerous systems that we did not cite.  Please
 note that CLM stands alone in
 - making coordination (both scheduling and partitioning) a first-class
-   programming contruct.
+   programming construct.
 - supporting data-driven dynamic (at run-time) coordination,
    particularly for irregular data structures.
 
@@ -63,7 +63,7 @@ We did compare CLM to an optimized C++ implementation of 2 programs
 but scale equally well.  Our focus was on expressiveness and
 scalability, not raw performance. (Our implementation of CLM is
 interpreted by an unoptimized virtual machine. It could even be
-compiled.)  From an expressivness point of view, the GraphLab
+compiled.)  From an expressiveness point of view, the GraphLab
 scheduler is 500 lines of customized library code.  CLM's version is
 less than 1 page!  If requested, we can also include a third-party
 solution to SSSP.  As well as including several different synthetic
@@ -74,7 +74,6 @@ We can include comparisons to sequential solutions:
 - compiled solutions in C (which is 2-10x faster depending on the
   program)
 
-=================================================================
 Other Stuff (And addressing some of the smaller, but interesting
 points taken up by the reviewers):
 
@@ -109,14 +108,14 @@ points taken up by the reviewers):
 - Program proofs: we did not include them due to lack of space.
    However, we have proven interesting properties of our programs, e.g.,
    correctness, termination, dead-lock freedom, liveness, etc.  We can
-   remove the references to program proofs in the final version. (thats
+   remove the references to program proofs in the final version. (that's
          another paper)
 - With regards to the poorly constructed sentence at the end of section
    6.3, there are no additional errors.  The values computed all meet the
    error bound, but are different for different schedulers.
-- We agree that a measure of rule compelexity would be a great thing to
+- We agree that a measure of rule complexity would be a great thing to
    have.  Any suggestions?  Obviously lines of code is not enough.  The
-   "gut" intution here is that CLM is easy to read and doesn't require
+   "gut" intuition here is that CLM is easy to read and doesn't require
    many lines of code.  A better metric would be great.
 - The difference between Coordinated/Coordinated and Coordinated/Regular:
    - Coordinated/Regular: speedup of the coordinated program on
@@ -126,17 +125,22 @@ points taken up by the reviewers):
       n-processors over the coordinated program on 1 processor.
 
 -> reviewer A and C:
-- The scalability results were not presented upto 24 threads due to an
+- The scalability results were not presented up to 24 threads due to an
 error in our presentation, that info will be in the final paper.
 (Just so you know, the graphs continue to look the same up through 24
 threads.)
 
-Finally, we note that CLM is noteworthy since it is not restricted to shared memory
-systems and can be easily extended to distributed systems. That
-simply cannot be said for most of the other systems.  The use of linear
-logic, a sound logical framework, has allowed us to easily prove
-properties about programs using coordination.
+Finally, we note that CLM is noteworthy since it is not restricted to
+shared memory systems and can be easily extended to distributed
+systems. That simply cannot be said for most of the other systems.
+The use of linear logic, a sound logical framework, has allowed us to
+easily prove properties about programs using coordination.
 
 We thank the reviewers for the time and expertise they have invested
 in these reviews.  We will of course avail ourselves of all the
-comments on presentation, grammer, etc.  Again, many thanks.
+comments on presentation, grammar, etc.  Again, many thanks.
+
+LocalWords:  Halide pragmas customizable Pingali pre GraphLab Ligra
+LocalWords:  Cilk OpenMP TBB Mea Culpa superlinear SBP scalability
+LocalWords:  unoptimized CLM's SSSP MiniMax scalable liveness
+LocalWords:  unannotated
