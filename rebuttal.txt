@@ -74,56 +74,21 @@ We can include comparisons to sequential solutions:
 - compiled solutions in C (which is 2-10x faster depending on the
   program)
 
+=================================================================
 Other Stuff (And addressing some of the smaller, but interesting
 points taken up by the reviewers):
 
-CLM's busy-wait locks are ticket locks that use atomic
-instructions. We have scalable locks but they need more testing.
-
-CLM can do synchronous or asynchronous algorithms, depending on the
-needs of the programmer.  We have implemented map-reduce style
-algorithms, asynchronous algorithms, and algorithms with mutable
-graphs.
-
-Program proofs: we did not include them due to lack of space.
-However, we have proven interesting properties of our programs, e.g.,
-correctness, termination, dead-lock freedom, liveness, etc.  We can
-remove the references to program proofs in the final version. (thats
-      another paper)
-
-Regarding the benchmark sizes, BP uses 160,000 nodes and MiniMax uses
-3,600,000 nodes. SSSP computes around 5,000,000 shortest paths.  In
-fact, we have found that the larger the data set the better the
-scaling.  We can increase the sizes by 10x if the reviews prefer.
-
-CLM is also important since it is not restricted to shared memory
-systems and can be easily extended to distributed computers. That
-simply cannot be said for most of these systems.  The use of linear
-logic, a sound logical framework, has allowed us to easily prove
-properties about programs using coordination.
-
-With regards to the poorly constructed sentence at the end of section
-6.3, there are no additional errors.  The values computed all meet the
-error bound, but are different for different schedulers.
-
-The difference between Coordinated/Coordinated and Coordinated/Regular:
-- Coordinated/Regular: speedup of the coordinated program on
-  n-processors over the unannotated (e.g., regular program) on 1
-  processor.
-- Coordinated/Coordinated: speedup of the coordinated program on
-  n-processors over the coordinated program on 1 processor.
-
-We agree that a measure of rule compelexity would be a great thing to
-have.  Any suggestions?  Obviously lines of code is not enough.  The
-"gut" intution here is that CLM is easy to read and doesn't require
-many lines of code.  A better metric would be great.
-
-The scalability results were not presented upto 24 threads due to an
-error in our presentation, that info will be in the final paper.
-(Just so you know, the graphs continue to look the same up through 24
-threads.)
-
-reviewer B:
+-> reviewer A:
+- Regarding the benchmark sizes, BP uses 160,000 nodes and MiniMax uses
+   3,600,000 nodes. SSSP computes around 5,000,000 shortest paths.  In
+   fact, we have found that the larger the data set the better the
+   scaling.  We can increase the sizes by 10x if the reviews prefer.
+- CLM's busy-wait locks are ticket locks that use atomic
+   instructions. We have scalable locks but they need more testing.
+- CLM can do synchronous or asynchronous algorithms, depending on the
+   needs of the programmer.  We have implemented map-reduce style
+   algorithms, asynchronous algorithms, and algorithms with mutable
+   graphs.
 - get-priority and set-priority are not sufficient.  The temporary
   priority is reset each time the node is processed, which comes in
   quite handy in the splash scheduler, for example.
@@ -139,6 +104,38 @@ reviewer B:
   in the graph is chosen, but overall it approaches the lower bounds
   of Dijkstra's algorithm while allowing for significantly more
   parallelism.
+
+-> reviewer B:
+- Program proofs: we did not include them due to lack of space.
+   However, we have proven interesting properties of our programs, e.g.,
+   correctness, termination, dead-lock freedom, liveness, etc.  We can
+   remove the references to program proofs in the final version. (thats
+         another paper)
+- With regards to the poorly constructed sentence at the end of section
+   6.3, there are no additional errors.  The values computed all meet the
+   error bound, but are different for different schedulers.
+- We agree that a measure of rule compelexity would be a great thing to
+   have.  Any suggestions?  Obviously lines of code is not enough.  The
+   "gut" intution here is that CLM is easy to read and doesn't require
+   many lines of code.  A better metric would be great.
+- The difference between Coordinated/Coordinated and Coordinated/Regular:
+   - Coordinated/Regular: speedup of the coordinated program on
+      n-processors over the unannotated (e.g., regular program) on 1
+      processor.
+   - Coordinated/Coordinated: speedup of the coordinated program on
+      n-processors over the coordinated program on 1 processor.
+
+-> reviewer A and C:
+- The scalability results were not presented upto 24 threads due to an
+error in our presentation, that info will be in the final paper.
+(Just so you know, the graphs continue to look the same up through 24
+threads.)
+
+Finally, we note that CLM is noteworthy since it is not restricted to shared memory
+systems and can be easily extended to distributed systems. That
+simply cannot be said for most of the other systems.  The use of linear
+logic, a sound logical framework, has allowed us to easily prove
+properties about programs using coordination.
 
 We thank the reviewers for the time and expertise they have invested
 in these reviews.  We will of course avail ourselves of all the
