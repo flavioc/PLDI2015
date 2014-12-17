@@ -3,28 +3,29 @@ interest, but need to improve the related work and experimental
 results sections.  We address both these issues below.
 
 Each reviewer asked for more (but different) information which would
-require us to remove something else in the paper.  We will happily
+require us to remove something in the paper.  We will happily
 take advice from the committee about what we should remove to make
-room for something else.  However, our primary goal with this paper
-was to show the expressive power of making coordination a first class
-programming construct and chose to include five examples to give
-readers a flavor of the power of CLM.  This pedagogic approach
-highlights the conciseness and expressiveness of CLM as well as the
-readability of a high-level declarative approach to fine-tuning the
-performance of a program.
+room for something else.  
+
+Our primary goal with this paper was to show the expressive power of
+making coordination a first class programming construct and chose to
+include five examples to give readers a flavor of the power of CLM.
+This approach highlights the conciseness and expressiveness of CLM as
+well as the readability of a high-level declarative approach to
+fine-tuning the performance of a program.
 
 Related Work:
 
 The reviews pointed out numerous systems that we did not cite.  Please
 note that CLM stands alone in
 - making coordination (both scheduling and partitioning) a first-class
-   programming construct.
+  programming construct.
 - supporting data-driven dynamic (at run-time) coordination,
-   particularly for irregular data structures.
+  particularly for irregular data structures.
 
 We do not claim novelty in the mechanisms, but rather in how they are
-integrated into a declarative language - as a first class concept.  We
-will do a better job of showing where the basic ideas come from.
+integrated into a declarative language - as a first class entity.  We
+will do a better job of showing where the ideas come from.
 
 In reference to works cited by the reviewers:
 
@@ -54,20 +55,20 @@ languages.
 
 Experiments:
 
-Mea Culpa on not explaining the superlinear speed-up.  We did not
+Mea Culpa on not explaining the superlinear speed-up.  We didn't
 implement the randomized scheduler needed for the best sequential
-implementation.  We will address this better in the final version.
+implementation.  We will address this in the final version.
 
 We did compare CLM to an optimized C++ implementation of 2 programs
-(HT and SBP in GraphLab): The CLM implementations are 1.8X-3X slower,
-but scale equally well.  Our focus was on expressiveness and
-scalability, not raw performance. (Our implementation of CLM is
-interpreted by an unoptimized virtual machine. It could even be
-compiled.)  From an expressiveness point of view, the GraphLab
-scheduler is 500 lines of customized library code.  CLM's version is
-less than 1 page!  If requested, we can also include a third-party
-solution to SSSP.  As well as including several different synthetic
-graphs to test the scalability over different data sets.
+(HT and SBP): The CLM implementations are 1.8X-3X slower, but scale
+equally well.  Our focus was on expressiveness and scalability, not
+raw performance. (CLM is currently interpreted by an
+unoptimized virtual machine. It could even be compiled.)  From an
+expressiveness point of view, the GraphLab scheduler is 500 lines of
+customized library code.  CLM's version is less than 1 page!  If
+requested, we can also include a third-party solution to SSSP.  As
+well as including several different synthetic graphs to test the
+scalability over different data sets.
 
 We can include comparisons to sequential solutions:
 - interpreted solutions (Python which is 2x-10x slower than CLM)
