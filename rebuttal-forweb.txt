@@ -58,8 +58,3 @@ Other Stuff (And addressing some of the smaller, but interesting points taken up
 - The scalability results were not presented up to 24 threads due to an error in our presentation, that info will be in the final paper. (Just so you know, the graphs continue to look the same up through 24 threads.)
 Finally, we note that CLM is noteworthy since it is not restricted to shared memory systems and can be easily extended to distributed systems. That simply cannot be said for most of the other systems. The use of linear logic, a sound logical framework, has allowed us to easily prove properties about programs using coordination.
 We thank the reviewers for the time and expertise they have invested in these reviews.  We will of course avail ourselves of all the comments on presentation, grammar, etc.  Again, many thanks.
-
-LocalWords:  Halide pragmas customizable Pingali pre GraphLab Ligra
-LocalWords:  Cilk OpenMP TBB Mea Culpa superlinear SBP scalability
-LocalWords:  unoptimized CLM's SSSP MiniMax scalable liveness
-LocalWords:  unannotated
