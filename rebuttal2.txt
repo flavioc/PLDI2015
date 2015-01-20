@@ -1,10 +1,11 @@
 Coordination is a highly important programming language design issue, specially
 when concerning declarative programming languages and parallelism. Our effort
 is not a small increment because it makes dynamic coordination a first class
-entity of a language and semantically equivalent to computation, allowing
-the programmer to write arbitrary coordination algorithms. This is a novel design
-that fits well under the scope of PLDI. Unfortunately there has been some mismatch between
-this important contribution and the reviewer's perspective on the material.
+entity of a declarative language and semantically equivalent to computation.
+Like the reviewer B said, this orthogonal design for writing coordinated
+algorithms will be of interest to many in the PLDI community.  Unfortunately,
+there has been some misunderstanding between this important
+contribution and the other reviewer's perspective on the material.
 
 We wrote the paper from a programming language perspective and thus some
 systems were unfarily neglected from the related work.
