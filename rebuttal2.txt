@@ -1,28 +1,94 @@
-We note however that coordination is a highly important programming language design issue, specially when concerning declarative programming languages and parallelism. Our effort is not a small increment because it integrates dynamic coordination into a relatively general programming language, allowing the programmer to improve execution and partitioning if so desired. Our solution to this PL design challenge fits the scope of PLDI fairly well. We think there is some mismatch between this important contribution and the reviewer’s perspective on the material. 
+Coordination is a highly important programming language design issue, specially
+when concerning declarative programming languages and parallelism. Our effort
+is not a small increment because it makes dynamic coordination a first class
+entity of a language and semantically equivalent to computation, allowing
+the programmer to improve execution if so desired. This is a novel design
+that fits well under the scope of PLDI. Unfortunately there is some mismatch between
+this important contribution and the reviewer’s perspective on the material.
 
-The implementation challenges are important but not as important from a PL perspective. While systems such as Galois and Elixir solve of those challenges, they are not programming languages on their own right and thus do not solve the programming language design issue.
+We wrote the paper from a programming language perspective and thus some
+systems were unfarily neglected from the related work.
+However, those systems are not programming languages on their own right and thus
+do not solve the programming language design issue. While we think they
+solve many of the implementation issues, the programming language
+aspect remains unsolved. CLM is a attempt to solve this issue.
 
-Another purpose of the paper is to show the expressive power of making coordination a first class programming construct and thus we chose to include five examples to give readers a flavor of the power of CLM. This approach highlights the conciseness and expressiveness of CLM as well as the readability of a high-level declarative approach to fine-tune the performance of a program. Each reviewer asked for more (but different) information which would require us to remove something in the paper.
-
-Talk about small increment?
-CLM makes scheduling and partitioning an integral part of a declarative programming language, indistinguishable and semantically equivalent to regular computation, allowing the programmer to write arbitrarily complex scheduling policies that are dynamic. Because the paper was written from this PL perspective, we unfairly neglected important related work.
-
-==> Related Work:
-
-We do not claim novelty in the mechanisms per se, but rather in how they are integrated into a declarative language - as a first class entity.
-In reference to works cited by the reviewers:
-- Halide supports distinct coordination, but only as "pragmas" in the domain of image processing, i.e., regular data-structures.
-- Galois supports a rich set of schedulers through customizable containers (see: Nguyen&Pingali), but it requires extra-language mechanisms to do things such as determining the location of data.
-- Elixir's uses a pre-defined set of schedulers and limits coordination to scheduling.
+We compare the contributions of those systems:
+- Halide supports distinct coordination, but only as "pragmas" in the domain of
+image processing, i.e., regular data-structures.
+- Galois supports a rich set of schedulers through customizable containers
+(see: Nguyen&Pingali), but it requires extra-language mechanisms to do things
+such as determining the location of data.
+- Elixir's uses a pre-defined set of schedulers and limits coordination to
+   scheduling.
 - Grace supports scheduling through priorities. (It is very much like GraphLab)
 - Ligra, also oriented towards graph processing, only handles partitioning.
-- Cilk, OpenMP and TBB all provide low-level imperative approaches for coordination.
+- Cilk, OpenMP and TBB all provide low-level imperative approaches for
+coordination.
 
-CLM integrates coordination (both scheduling and partitioning) into a declarative language as a first class entity, in particular CLM stands alone in:
-- supporting data-driven dynamic (at run-time) coordination, particularly for irregular data structures.
-- is actually a declarative programming language and not a runtime system (Galois, Elixir and others), solving both the implementation and design issues.
-- being able to specify complex coordination programs such as SBP in less than 60 lines (versus 500 in GraphLab).  It is hard (or impossible) to write it in all the above languages.
+CLM differs by integrating both scheduling and partitioning into a
+declarative language as a first class entity, in particular CLM stands alone
+in:
+- supporting data-driven dynamic (at run-time) coordination, particularly for
+   irregular data structures.
+- actually being a declarative programming language and not a runtime system
+   (Galois, Elixir and others), solving both the implementation and design issues.
+- being able to specify complex coordination programs such as SBP in less than
+   60 lines (versus 500 in GraphLab).  It is hard (or impossible) to write it in
+   all the above languages.
 
-==> Experiments: We explained the comparisons done against C++ and GraphLab and also the super linear speedup in the 1st response. Our system is competitive (2-3x) against GraphLab and performs reasonabily against C++ (2-10x). We did not include more datasets due to lack of space because we wanted to show a broad set of programs.
+To show the expressive power of making coordination a first class programming
+construct we included five examples to give readers a flavor of the power of
+CLM. This approach highlights the conciseness and expressiveness of CLM as well
+as the readability of a high-level declarative approach to fine-tune the
+performance of a program. Each reviewer asked for more (but different)
+information which would require us to remove something in the paper.
+In relation to the experiments, we explained the comparisons done against C++
+and GraphLab and also the super linear speedup in the 1st response. Our system
+is competitive (2-3x) against GraphLab and performs reasonabily against C++
+(2-10x).
 
-// include other_stuff.txt
+
+
+
+
+
+
+
+Other Stuff (And addressing some of the smaller, but interesting points taken up by the reviewers):
+
+-> reviewer A, B and C: please refer to 1st response.
+
+-> reviewer D:
+
+- Small increment over Meld: we agree that this is true on the surface since the language is actually the same, but we do not agree that this is a point against since the language is able to describe normal computation and coordination using the same constructs. However, the runtime system actually looks quite different because now we have to deal with programmable scheduling and data partitioning. These two coordination mechanisms required significant changes in the implementation and compilation with the introduction of different queues for nodes and the ability to move and pin nodes to threads.
+- CLM target: our current target is shared memory multi-cores. However the CLM programming model fits and is easily ported to clusters of computers. It’s just a matter of implementing a suitable runtime system for those architectures.
+- Contribution of CLM: Galois and many others are not declarative programming languages. CLM solves a problem of programming language design by seamlessly combining computation and coordination into a single declarative programming model. Galois is a runtime system and does not solve this particular design problem.
+- Technical challenges: there is a PL design language: how to design a declarative language that allows the programmer to dynamically coordinate execution while keeping the language declarative; we show that linear logic allows us to do this easily. There is an implementation challenge where we had to add support for all the coordination directives.
+- Proofs: for most programs they do not complicate the proofs. However, for programs such as SBP, you have to take coordination into account because it changes how the program is computed.
+
+Reviewer E:
+
+- Programming efficiency: true, but we see this as a positive point since most declarative languages do not allow such control.
+- Data layout: the data layout/node placement is changed by using action facts such as set-cpu or set-static. Set-cpu moves the node to another thread while set-static pins the node to a thread.
+- inplace update: it can be done by analyzing how facts are used in the rules. If one fact fires a rule that updates the argument of another fact, then we could compile code that would update directly the argument of such fact instead of performing standard rule derivation.
+- The difference between Regular/Regular, Coordinated/Coordinated, Coordinated/Regular:
+   - Regular/Regular: speedup of the unannotated (e.g.., regular) program on n-processors over the unannotated program on 1 processor.
+   - Coordinated/Regular: speedup of the coordinated program on       n-processors over the unannotated (e.g., regular program) on 1       processor.
+   - Coordinated/Coordinated: speedup of the coordinated program on       n-processors over the coordinated program on 1 processor.
+
+We thank the reviewers for the time and expertise they have invested in these reviews.
+We will happily take advice from the committee how we should improve our paper.
+
+
+
+
+
+
+
+
+
+
+
+
+
