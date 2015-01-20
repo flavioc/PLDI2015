@@ -1,50 +1,54 @@
-Coordination is a highly important programming language design issue, specially
-when concerning declarative programming languages and parallelism. Our effort
-is not a small increment because it makes dynamic coordination a first class
-entity of a declarative language and semantically equivalent to computation.
-Like the reviewer B said, this orthogonal design for writing coordinated
-algorithms will be of interest to many in the PLDI community.  Unfortunately,
-there has been some misunderstanding between this important
-contribution and the other reviewer's perspective on the material.
+Coordination is a highly important programming language design issue,
+specially when concerning declarative programming languages and
+parallelism. Our contribution makes dynamic coordination a first class
+entity of a declarative language and semantically equivalent to
+computation. Like reviewer B mentioned, this orthogonal design for
+writing coordinated algorithms will be of interest to many in the PLDI
+community. Unfortunately, there has been some misunderstanding between
+this important contribution and the other reviewer's perspective on
+the material.
 
-We wrote the paper from a programming language perspective and thus some
-systems were unfarily neglected from the related work.
-However, those systems are not programming languages on their own right and thus
-do not solve the programming language design issue. While we think they
+Each reviewer asked for more (but different) information which would
+require us to remove something in the paper. We could have included
+more experiments and data sets but instead we decided to include five
+programs that give readers a flavor of the power of CLM. This approach
+highlights the conciseness and expressiveness of CLM as well as the
+readability of a high-level declarative approach to fine-tune the
+performance of programs. Our results show that CLM is competitive
+(2-3x) against GraphLab and performs reasonabily well against C++
+(2-10x slower).
+
+We wrote the paper from a programming language perspective and thus
+some systems were unfarily neglected from the related work. However,
+those systems are not programming languages on their own right and
+thus do not solve the programming language design issue. While they
 solve many important implementation issues, the programming language
 aspect remains unsolved. CLM is an elegant approach to this challenge.
 
-We compare the contributions of those other systems:
-- Halide supports distinct coordination, but only as "pragmas" in the domain of
-image processing, i.e., regular data-structures.
-- Galois supports a rich set of schedulers through customizable containers
-(see: Nguyen&Pingali), but it requires extra-language mechanisms to do things
-such as determining the location of data.
-- Elixir's uses a pre-defined set of schedulers and limits coordination to
-   scheduling.
-- Grace supports scheduling through priorities. (It is very much like GraphLab)
-- Ligra, also oriented towards graph processing, only handles partitioning.
+We briefly compare the contributions of those other systems:
+- Halide supports distinct coordination, but only as "pragmas" in the
+  domain of image processing, i.e., regular data-structures.
+- Galois supports a rich set of schedulers through customizable
+  containers (see: Nguyen&Pingali), but it requires extra-language
+  mechanisms to do things such as determining the location of data.
+- Elixir's uses a pre-defined set of schedulers and limits
+  coordination to scheduling.
+- Grace supports scheduling through priorities (it is very much like
+  GraphLab).
+- Ligra, also oriented towards graph processing, only handles
+  partitioning.
 - Cilk, OpenMP and TBB all provide low-level imperative approaches for
-coordination.
+  coordination.
 
-CLM distinguishes itself by integrating both scheduling and partitioning into a
-declarative programming language as a first class entity. In particular CLM
-stands alone in:
-- supporting data-driven dynamic (at run-time) coordination, particularly for
-   irregular data structures.
-- actually being a declarative programming language and not a runtime system,
-   solving both the implementation and design issues.
-- being able to specify complex coordination programs such as SBP in less than
-   60 lines (versus 500 in GraphLab).  It is hard (or impossible) to write it in
-   all the above languages.
-
-Each reviewer asked for more (but different) information which would require us
-to remove something in the paper.  We could have included more experiments and
-data sets but instead we decided to include five programs that give readers a
-flavor of the power of CLM. This approach highlights the conciseness and
-expressiveness of CLM as well as the readability of a high-level declarative
-approach to fine-tune the performance of programs. We remind our reviewers that
-our system is competitive (2-3x) against GraphLab and performs reasonabily well
-against C++ (2-10x slower).
+CLM distinguishes itself by integrating both scheduling and
+partitioning into a declarative programming language as a first class
+entity. In particular CLM stands alone in:
+- supporting data-driven dynamic (at run-time) coordination,
+  particularly for irregular data structures.
+- actually being a declarative programming language and not a runtime
+  system, solving both the implementation and design issues.
+- being able to specify complex coordination programs such as SBP in
+  less than 60 lines (versus 500 in GraphLab). It is hard (or
+  impossible) to write it in all the above languages.
 
 % include other_stuff.txt
