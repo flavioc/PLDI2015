@@ -1,0 +1,279 @@
+===========================================================================
+                           PLDI '15 Review #28A
+                     Updated 21 Nov 2014 6:17:31am EST
+---------------------------------------------------------------------------
+   Paper #28: Declarative coordination of graph-based parallel programs
+---------------------------------------------------------------------------
+
+                      Overall merit: 1. Reject
+                         Conviction: 1. High
+
+                         ===== Paper summary =====
+
+The paper adds coordination constructs to an existing language Linear Meld for declarative specification of concurrent graph-based programs. The constructs are of two types: sensing and action, which together allow a programmer to control execution of inference rules for better parallelism. The constructs help in better scheduling of active tasks and for pinning data to threads. The expressivity of the construct is showcased using five problems: SSSP, MiniMax, HT, SBP, and NQ. For each problem, the parallel implementation obtains linear or super-linear speedups upto 16 threads.
+
+                        ===== Points in favor =====
+
+ - convincing evidence that the logic constructs and ideas help in improving concurrency and, in turn, performance.
+ - presentation of several problems with varying domains and difficulty level illustrates the expressive power of the language. I am convinced that the language is capable of expressing several graph-based computations.
+
+                        ===== Points against =====
+
+ - Experimental evaluation needs to be strengthened.
+
+                      ===== Comments for author =====
+
+The paper is well-written, with very few grammatical mistakes. The presentation is natural and easy to comprehend.
+
+The authors tackle a very timely and challenging problem of allowing control in a declarative style specification. Towards this goal, this work extends Linear Meld to include coordination related constructs. The examples taken in the manuscript progressively get complex and I enjoyed those that way. The range of problems solved clearly shows the expressivity of CLM.
+
+My concern is about the experimental section, which requires considerable improvement. First, I would have liked the evaluation to be done against an existing third-party setup, which could convince me that the baseline is not trivial. Unfortunately, that does not seem to be the case, except for HT. It is often difficult to argue about performance with confidence when the baseline is also implemented by the same authors. For instance, SSSP has been implemented in several graph-based parallel systems. Second, the number of problem instances should be at least a few. For instance, SSSP can be evaluated on multiple graphs. Third, I found the data sizes to be relatively small, considering that existing works deal with graphs with millions of vertices. The scalability problems often get uncovered at larger scales. Since the implementation of CLM deals with synchronization, it is important to use larger inputs.
+
+The overall work is quite interesting. However, I do have a concern about the novelty of the ideas. Specification of scheduling and partitioning has been done in some of the earlier works, e.g., [Elixir, Prountzos et al., OOPSLA 2012] and [Synthesizing concurrent schedulers, Nguyen+Pingali, ASPLOS 2011]. I do understand that the ideas have been implemented as part of a logic programming model here, but that, to me, appears to be an implementation effort rather than a more technical contribution. I would request the authors to make the contribution clearer in the context of the above mentioned papers and others which cite them.
+
+An important factor towards efficiency, especially in the case of fine-grained synchronization, is the use of atomic instructions instead of locks. Does CLM implementation always use busy-wait locks or can it use faster atomic instructions supported in hardware? Further, some problems can be naturally modeled using a bulk-synchronous style. Does CLM support barrier-based processing?
+
+Minor comments:
+Section 1.
+as a alternative -> an.
+time time.
+this is the first time ...: what is your opinion about cut-fail or choose-fail combination used to control the execution of logical inference?
+last paragraph: mention that the implementation is in Section 5.
+
+Section 2.
+easy of -> ease.
+node's are -> nodes.
+Both those -> Both these.
+
+Section 3.
+the single source shortest path program -> SSSP is a problem, not a program. You may say, Fig. 1 shows a program to solve SSSP.
+but at node 2 -> @2.
+possible to either apply rules in either.
+
+Section 4.
+Figure 2: Avoid splitting the text "@3" due to the vertical arrow.
+4.1 and 4.2: These are core contributions of the paper, and a reader has to maintain patience upto the fourth page to see it. I suggest the authors to reconsider reorganizing the presentation to address this.
+"By default, nodes have no priority." and then in the next paragraph "Initially, all nodes have a default priority of -\inf". Make sure they are consistent.
+once the node is done: processed?
+default priority of -\inf: Isn't this specific to an application? There must be applications where the initial priority could be 0 or 1..n, for instance.
+we only change the priority if F is higher: Isn't this restrictive? This should be left to the user rather being part of the engine.
+Looks like all the variants of action facts for changing the priority can be implemented by supporting two basic primitives: get-priority and set-priority.
+Why does stop-program require an argument?
+sense the priority P of node B (at node A): I could not understand this sentence.
+automatically.<space>\footnote: Avoid space.
+Partitioning facts: I would suggest choosing an alternative term to "partitioning" such as "task distribution".
+cpu-id(A, B, T): Doesn't this make A tied to T?
+
+Section 5.
+the node is made active: Who makes a node active? Use active voice here.
+and placed on the appropriate queue of the appropriate thread: Active voice and specifics would help here.
+separate indexing structure per node: What are the implications of such an approach?
+double linked -> doubly.
+The virtual machine decides which arguments are best to be indexed: Some more details on the implementation and thresholds would be helpful here.
+the current thread first attempts to lock: Can there be a deadlock?
+horizontal split: Horizontal split is likely to assign high priority nodes to one thread and low priority to another thread. This is likely to reduce the effectiveness of parallel execution. Instead, a vertical split could have made both the threads process nodes of various priorities that could also be nearby, leading to better concurrency. Why do you then go for horizontal split?
+the regular and priority queue -> queues.
+Here, it checks: "it" means T1? Mention it.
+Garbage collection is briefly mentioned, and its impact is unspecified. Some more explanation would be helpful. Further, if garbase collection is not in the critical path, it should be mentioned. How do threads and garbage collection work together?
+
+Section 6.
+When run with one thread: It should be mentioned that the functional behavior is similar to Dijkstra's, but clearly it would have synchronization overheads.
+it is close to Dijkstra's algorithm: Then why go for parallel, why not simply run Dijkstra's algorithm?
+Figure 5: I think the legend should be clearly mentioned first.
+Why are experiments restricted to 16 threads when there are 24 cores?
+Figure 5: Do you have an analysis for 23x speedup with 16 threads? Same, for Figure 12.
+SSSP for 20% of the nodes: This is strange. Either justify your decision of using only 20% nodes or use all the nodes.
+players that play -> who.
+kick start -> kickstart.
+Figures 5 and 7: Let the legend not overlap the line plot.
+We also take advantage of memory locality ...: This paragraph appears useless here.
+Figure 7: Is number of players 2 or more?
+Figure 10 discussion: Analysis and insights into results needed.
+Each node has a inactive -> an.
+its the framework.
+before extended -> before getting extended.
+
+Section 7.
+First, in manipulating ...: check grammar.
+Second, in potentially ...: check grammar.
+The performance seen for those programs arise -> arises.
+Lock failures happen so infrequently: This cannot be generalized for small inputs. I suggest trying larger inputs and then revisiting this claim.
+Fig. 5 shows ...: Figure 14 shows.
+Table 1: Right align numbers, use uniform number of decimals and units (either K or M).
+Figure 14: I could not understand the legend.
+Figure 15: The number of locks seems to go on increasing and then gradually reduce with increasing number of threads. Any explanation of that?
+is carried out immediately -> are.
+added. And -> Avoid "And".
+
+===========================================================================
+                           PLDI '15 Review #28B
+                     Updated 18 Jan 2015 4:18:06pm EST
+---------------------------------------------------------------------------
+   Paper #28: Declarative coordination of graph-based parallel programs
+---------------------------------------------------------------------------
+
+                      Overall merit: 2. Accept
+                         Conviction: 2. Low
+
+                         ===== Paper summary =====
+
+The paper presents a declarative coordination language for datalog-like programs written in CLM.  The coordination language enables setting priorities on nodes in the graph and indicating information about which nodes should have their facts executed with the same thread.  The coordination language has the same syntax and semantics as the original datalog-like LM language that it has been incorporated into.  The use of the coordination language results in many fewer predicates being constructed because better orderings can be specified with the priorities.  This results in much less memory usage.  The performance is somewhat competitive with that of GraphLab for Loopy Believe Propagation and Splash Belief Propagation.
+
+                        ===== Points in favor =====
+
++ Provides an interesting example of specifying program scheduling details explicitly and in a separable way from the specification of the algorithm.
+
++ The SSSP example used throughout the paper clarifies the programming model.  In general the approach is explained with enough detail that other researchers could replicate the results.
+
++ The paper indicates how CLM with no coordination compares with the same LM programs, where the LM virtual machine does not have the overhead of the coordination aspects.
+
++ Able to include 4 full example programs in paper Figures because of the succinctness of the programming model.
+
+                        ===== Points against =====
+
+- Some related work appears to be missing: specifically the Halide work out of MIT.
+
+- The performance of this approach is not compared with hand-optimized versions.  The higher-level of abstraction is great, but tell us how far that means the performance is from what others have done by hand.
+
+                      ===== Comments for author =====
+
+Overall the paper is quite interesting.  The work needs to be put in better context in terms of related work, but the approach for coordinating implementation details in an orthogonal yet semantically equivalent way that the algorithm is specified will be of interest to many in the PLDI community.
+
+More related work: (1) The Galois work out of Pingali's group that can be used to program similar graph-based computations and (2) various hand-optimized versions of the Graph 500 benchmarks, which include single source shortest path (an example in this submission) and  breadth-first search.  (3) Also, how does this work relate to the datalog-based pointer analysis work?  Couldn't some of the optimizations for those analyses also improve the performance here?
+
+Details
+
+- The fonts in Figure 2 are too small.  Also in Figure 3.
+
+- The end of the introduction and the end of Section 3 talk about program proofs, but this isn't followed up in the rest of the paper.  Then at the end of Section 6.3, the sentence "However, this comes at the price of increased errors in the computed heat values." seems to indicate that correctness needs to be defined more explicitly in the paper.
+
+- "To the best of our knowledge, this is the first time that
+a declarative language allows control over execution while
+staying declarative and without resorting to meta-language
+constructs."  See the Halide work out of MIT.  It does this.
+
+- "CLM restricts the body of every rule to facts with the same node so that nodes can derive rules independently"  Should make an analogy of this with owners-compute approach to assigning computation to processors.
+
+- The cpu-id description seems weird.  How do you store a thread at a node in the graph?
+
+- "Furthermore, LM programs had better performance than programs written in Python."  Need more info to support this comment.  Why do they have better performance?  Were the python programs hand optimized?
+
+- Did not find an explanation for the difference between Coordinated/Coordinated and Coordinated/Regular in graphs.
+
++ The underlining of the coordination code in the programs is quite helpful.
+
+- "With our coordination facts, it is possible to create the necessary scheduling with only 12 rules."  Yes, but some of those rules are quite complex.  Need to have some quantitative and/or qualitative measure of the complexity of the rules.
+
+===========================================================================
+                           PLDI '15 Review #28C
+                     Updated 9 Dec 2014 9:20:48pm EST
+---------------------------------------------------------------------------
+   Paper #28: Declarative coordination of graph-based parallel programs
+---------------------------------------------------------------------------
+
+                      Overall merit: 1. Reject
+                         Conviction: 2. Low
+
+                         ===== Paper summary =====
+
+This paper extends Linear Meld language with coordination primitives to allow the programmer to change computation scheduling and data layout. Coordination primitives include scheduling primitives and partition primitives, the former is used to manipulate the scheduling decisions, and the latter is used to deal with the relation of data and threads. So for graph-related algorithms, programmers can optionally change computation scheduling and data layout through coordination to fine tune the performance, and in the meantime enjoy the declarative merit of the logic programming language. Experimental results show that coordination improve the performance indeed.
+
+                        ===== Points in favor =====
+
+1. Sensing facts are very interesting; they are used to sense information about the runtime system to improve locality.
+
+2. Provide coordination mechanism to logic programming language, provide straightforward way to optimize program while keeping the program easy to reason about.
+
+3. For five different graph-related algorithms, the paper gives detailed description on the coordination code, optimization effects, memory usage and scalability.
+
+                        ===== Points against =====
+
+1. The contents of the coordination facts and their implementation are borrowed from other successful programming practices. The scheduling facts are quite similar to the Galois' ordered algorithm abstraction and implementation, while the partitioning mechanism are coming from more works, such as OpenMP extensions, TBB interfaces and Cilk implementation. And I cannot find enough new contributions.
+
+2. The paper neglects important references such as Pingali's papers or Galois system.
+
+                      ===== Comments for author =====
+
+1. The coordination primitives are borrowed from other successful programming practices and the implementation of CLM is similar to others. The scheduling facts are quite similar to the Galois' ordered algorithm abstraction and implementation, while the partitioning mechanism are coming from more works, such as OpenMP extensions, TBB interfaces and Cilk implementation.
+
+2. In Applications section, only one dataset is used to evaluate coordination effects for each algorithm. But the structure of input graphs, such as power-law graph or regular graph, and small or high diameter, affects the performance of runtime system. The authors should give more experiments on different graphs to evaluate their coordination.
+
+3. The experimental result needs better explanations. Why is the scalability from 1 thread to 16 threads, not to the full capacity of the machine (e.g., 24 threads) in Figure 5, 7, 10, 12? The authors should also compare the CLM system with previous works.
+
+4. The paper neglects important references, domain-specific languages for parallel graph algorithms, such as Galois, Ligra and Grace.
+
+===========================================================================
+                           PLDI '15 Review #28D
+                     Updated 16 Jan 2015 9:18:01pm EST
+---------------------------------------------------------------------------
+   Paper #28: Declarative coordination of graph-based parallel programs
+---------------------------------------------------------------------------
+
+                      Overall merit: 1. Reject
+                         Conviction: 2. Low
+
+                         ===== Paper summary =====
+
+Declarative programming is one approach to ease parallel programming and attain scalable speedups.  The paper proposes the addition of scheduling and partitioning information to the recently proposed Linear Meld language for writing graph-based programs. This information specified enables efficient orchestration of communication and partitioning by the compiler/runtime.
+
+                        ===== Points in favor =====
+
+A simple idea to add scheduling and partitioning information to MELD that provides scalability and speedups.
+
+                        ===== Points against =====
+
+A very small increment over MELD
+
+                      ===== Comments for author =====
+
+Declarative programming has the potential to ease parallel programming. Attaining scalable performance requires insights about the execution. This paper proposes providing scheduling and partitioning information in the context of MELD to improve scalability.
+The experimental evaluation demonstrates that the addition of scheduling and partitioning information provides good results.
+
+What is the intended target for C-MELD -- clusters or shared memory multi-cores? There is a brief comparison with GraphLab, Pregel and Dryad, which are frameworks to get scalable speedups for graph based algorithms on large clusters. These frameworks not only provide reasonable abstractions but also address  many engineering challenges and trade-offs  in providing good performance on clusters.
+In contrast, MELD's focus appears to be primarily shared memory programs on multi-socket machines. Hence, the comparison is not likely appropriate.
+
+This paper is a very small increment over MELD (Cruz et al). The observation that node ordering and partitioning is key to get scalable performance is well known. In the context of imperative programs, Galois runtime and many others have explored ordered vs unordered sets. Hence, the key contribution of this paper is in the context of logic programming specifically MELD.
+
+What are the technical challenges in the addition of scheduling and partitioning information to either the language or the runtime?
+
+The proofs of correctness do not require scheduling and partitioning information. Correct? It was unclear how the program proofs made use of the scheduling information and  how it would complicate proofs otherwise.
+
+===========================================================================
+                           PLDI '15 Review #28E
+                     Updated 17 Jan 2015 4:50:14pm EST
+---------------------------------------------------------------------------
+   Paper #28: Declarative coordination of graph-based parallel programs
+---------------------------------------------------------------------------
+
+                      Overall merit: 2. Accept
+                         Conviction: 2. Low
+
+                         ===== Paper summary =====
+
+Declarative programming languages hide the low level parallelization details from programmers but also make it difficult to express performance tuning strategies, for instance, computation scheduling. This paper propose a set of programming constructs that allow programmers to describe computation scheduling strategies. It is built upon a linear logic programming language LM.
+
+                        ===== Points in favor =====
+
+* The related work is described clearly.
+
+* The applications are described nicely to illustrate the usage of CLM.
+
+* Logical rules are used to specify the priority to traverse the graph. Programmers only need to write succinct rules that can effectively guide the runtime scheduling.
+
+                        ===== Points against =====
+
+* The programming efficiency depends on the expertise level of the programmers. How to set the priority of the nodes and how to partition the nodes in the graph depend on an specific application.
+
+* The abstract mentions CLM allows programmers to change computation and data layout. But I did not see how data layout can be changed using CLM programming constructs.
+
+* In the experiment results, the authors did not clearly specify which curves correspond to which cases. For instance, the "Coordinated/Regular" appear multiple times, but it is not clear what it refers to.
+
+* The paper was written a way that the technical details are described way earlier than the applications, while the technical details are being very specific. It will be good to mix the implementation details and application examples so that the readers can understand why the programming constructs are useful.
+
+                      ===== Comments for author =====
+
+My main questions are regarding the evaluation section.
+
+* What do the labels "Regular/Regular" "Coordinated/Regular" "Coordinated/Coordinated" mean exactly? I did not find a place that specifies them in the aper. I assume that the second argument is the one thread performance of the regular or coordinated version. Is it right?
+
+* For "LBP and SBP", the performance of GraphLab is better than that of CLM. The authors mentioned that it is due to "in-place update" in GraphLab. The authors also mentioned that the "in-place update" can be generated by the compiler using smarter compilation strategies. So how exactly the "in-place update" can be done in CLM compilers?
