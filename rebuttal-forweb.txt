@@ -1,0 +1,60 @@
+We greatly appreciate the reviews of our paper.  We clearly sparked interest, but need to improve the related work and experimental results sections.  We address both these issues below.
+
+Each reviewer asked for more (but different) information which would require us to remove something in the paper.  We will happily take advice from the committee about what we should remove to make room for something else.  
+
+Our primary goal with this paper was to show the expressive power of making coordination a first class programming construct and chose to include five examples to give readers a flavor of the power of CLM. This approach highlights the conciseness and expressiveness of CLM as well as the readability of a high-level declarative approach to fine-tuning the performance of a program.
+
+Related Work:
+
+The reviews pointed out numerous systems that we did not cite.  Please note that CLM stands alone in
+- making coordination (both scheduling and partitioning) a first-class programming construct.
+- supporting data-driven dynamic (at run-time) coordination, particularly for irregular data structures.
+
+We do not claim novelty in the mechanisms, but rather in how they are integrated into a declarative language - as a first class entity.  We will do a better job of showing where the ideas come from.
+
+In reference to works cited by the reviewers:
+- Halide supports distinct coordination, but only as "pragmas" in the domain of image processing, i.e., regular data-structures.
+- Galois supports a rich set of schedulers through customizable containers (see: Nguyen&Pingali), but it requires extra-language mechanisms to do things such as determining the location of data.
+- Elixir's uses a pre-defined set of schedulers and limits coordination to scheduling.
+- Grace supports scheduling through priorities.  (It is very much like GraphLab.)
+- Ligra, also oriented towards graph processing, is limited to shared memory and only handles partitioning.
+- Cilk, OpenMP and TBB all provide low-level imperative approaches for coordination.
+
+We will expand the related work section, but stress the unique nature of CLM which results in clean concise coordination, e.g., we can write the Splash scheduler used for Splash BP less than 60 lines (versus 500 in GraphLab).  It is hard (or impossible) to write in all the above languages.
+
+Experiments:
+
+Mea Culpa on not explaining the superlinear speed-up.  We didn't implement the randomized scheduler needed for the best sequential implementation.  We will address this in the final version.
+
+We did compare CLM to an optimized C++ implementation of 2 programs (HT and SBP): The CLM implementations are 1.8X-3X slower, but scale equally well.  Our focus was on expressiveness and scalability, not raw performance. (CLM is currently interpreted by an unoptimized virtual machine. It could even be compiled.)  From an expressiveness point of view, the GraphLab scheduler is 500 lines of customized library code.  CLM's version is less than 1 page!  If requested, we can also include a third-party solution to SSSP.  As well as including several different synthetic graphs to test the scalability over different data sets.
+
+We can include comparisons to sequential solutions:
+- interpreted solutions (Python which is 2x-10x slower than CLM)
+- compiled solutions in C (which is 2-10x faster depending on the program)
+
+Other Stuff (And addressing some of the smaller, but interesting points taken up by the reviewers):
+
+-> reviewer A:
+- Regarding the benchmark sizes, BP uses 160,000 nodes and MiniMax uses    3,600,000 nodes. SSSP computes around 5,000,000 shortest paths.  In    fact, we have found that the larger the data set the better the    scaling.  We can increase the sizes by 10x if the reviews prefer.
+- CLM's busy-wait locks are ticket locks that use atomic    instructions. We have scalable locks but they need more testing.
+- CLM can do synchronous or asynchronous algorithms, depending on the    needs of the programmer.  We have implemented map-reduce style    algorithms, asynchronous algorithms, and algorithms with mutable    graphs.
+- get-priority and set-priority are not sufficient.  The temporary   priority is reset each time the node is processed, which comes in   quite handy in the splash scheduler, for example.
+- The arguments to be indexed and such as described in another paper.   Happy to forward to committee (or provide the citation if needed.)
+- There was a typo in the paper.  We actually do a vertical split, not   a horizontal split when we do work stealing.
+- We do reference counting for garbage counting, but no locks are used   and the threads do it individually and do not need to stop and   collect data.
+- The implementation of SSSP devolves to Dijkstra's algorithm on 1   thread, on multiple threads there are times when a non-optimal node   in the graph is chosen, but overall it approaches the lower bounds   of Dijkstra's algorithm while allowing for significantly more   parallelism.
+
+-> reviewer B:
+
+- Program proofs: we did not include them due to lack of space.    However, we have proven interesting properties of our programs, e.g.,    correctness, termination, dead-lock freedom, liveness, etc.  We can    remove the references to program proofs in the final version. (that's another paper)
+- With regards to the poorly constructed sentence at the end of section    6.3, there are no additional errors.  The values computed all meet the    error bound, but are different for different schedulers.
+- We agree that a measure of rule complexity would be a great thing to    have.  Any suggestions?  Obviously lines of code is not enough.  The    "gut" intuition here is that CLM is easy to read and doesn't require    many lines of code.  A better metric would be great.
+- The difference between Coordinated/Coordinated and Coordinated/Regular:
+   - Coordinated/Regular: speedup of the coordinated program on       n-processors over the unannotated (e.g., regular program) on 1       processor.
+   - Coordinated/Coordinated: speedup of the coordinated program on       n-processors over the coordinated program on 1 processor.
+
+-> reviewer A and C:
+
+- The scalability results were not presented up to 24 threads due to an error in our presentation, that info will be in the final paper. (Just so you know, the graphs continue to look the same up through 24 threads.)
+Finally, we note that CLM is noteworthy since it is not restricted to shared memory systems and can be easily extended to distributed systems. That simply cannot be said for most of the other systems. The use of linear logic, a sound logical framework, has allowed us to easily prove properties about programs using coordination.
+We thank the reviewers for the time and expertise they have invested in these reviews.  We will of course avail ourselves of all the comments on presentation, grammar, etc.  Again, many thanks.
